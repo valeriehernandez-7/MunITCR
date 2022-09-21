@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8">
+        <title>MunITC</title>
+        <link rel="stylesheet" href="css/PerXProp.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="js/PerXProp.js"></script>
+    </head>
+    <body>
+        <section class= "form-usuario">
+            <h5>Persona y Propiedad</h5>
+            <input class="controls" type="number" id="idPer" value="" placeholder="ID Persona">
+            <input class="controls" type="number" id="idProp" value="" placeholder="ID Propiedad">
+            <input class="controls" type="date" id="fechaI" value="" placeholder="Fecha Inicio">
+            <input class="controls" type="date" id="fechaF" value="" placeholder="Fecha Fin">
+
+
+
+            <section>
+              <input class="buttons" type="submit" id="addBtn" value="Agregar usuario" onclick="add();">
+              <input class="buttons" type="submit" id="delBtn" value="Eliminar usuario" onclick="add();">
+              <input class="buttons" type="submit" id="upBtn" value="Actualizar usuario" onclick="add();">
+              <input class="buttons" type="submit" id="backBTN" value="Regresar" onclick="ret();">
+            </section>
+        </section>
+
+    </body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8">
+        <title>MunITC</title>
+        <link rel="stylesheet" href="css/Usuario.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="js/Usuarios.js"></script>
+    </head>
+    <body>
+        <section class= "form-usuario">
+            <h5>Usuario</h5>
+            <input class="controls" type="number" id="idUser" value="" placeholder="ID usuario">
+            <input class="controls" type="text" id="user" value="" placeholder="Nombre de Usuario">
+
+            <section>
+              <input class="controls" type="password" id="password" value="" placeholder="Contraseña">
+              <input type="checkbox" id="showPass" class="checkbox" onclick="showPass()" />
+              <label for="showPass" class="toggle">Mostrar Contraseña</label>
+            </section>
+
+            <!--usuario activo -->
+            <input type="checkbox" id="active" class="checkbox" />
+            <label for="active" class="toggle">Usuario Activo   </label>
+            <input type="checkbox" id="Admin" class="checkbox" />
+            <label for="Admin" class="toggle">Usuario Administrador</label>
+            <!--<select class="controls" name="categorias" id="categorias"><option value="Categoria">Categoría</option></select>-->
+            <section>
+              <input class="buttons" type="submit" id="addBtn" value="Agregar usuario" onclick="add();">
+              <input class="buttons" type="submit" id="delBtn" value="Eliminar usuario" onclick="add();">
+              <input class="buttons" type="submit" id="upBtn" value="Actualizar usuario" onclick="add();">
+              <input class="buttons" type="submit" id="backBTN" value="Regresar" onclick="ret();">
+            </section>
+        </section>
+
+    </body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="UTF-8">
+        <title>MunITC</title>
+        <link rel="stylesheet" href="css/Propiedades.css">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="js/Propiedades.js"></script>
+    </head>
+    <body>
+        <section class= "form-Propiedades">
+            <h5>Propiedades</h5>
+            <input class="controls" type="number" id="idUser" value="" placeholder="ID de Persona">
+            <input class="controls" type="number" id="idType" value="" placeholder="Tipo de Propiedad">
+            <input class="controls" type="number" id="idZone" value="" placeholder="Tipo de Zona">
+            <input class="controls" type="number" id="lote" value="" placeholder="Número de Lote">
+            <input class="controls" type="number" id="squareM" value="" placeholder="Número de Metros cuadrados">
+            <input class="controls" type="number" id="price" value="" placeholder="Valor de la propiedad" step="any">
+            <input class="controls" type="date" id="date" value = "2000-09-09" step="any">
+            <!--usuario activo -->
+            <input type="checkbox" id="active" class="checkbox" />
+            <label for="active" class="toggle">Propiedad Activa</label>
+            <!--<select class="controls" name="categorias" id="categorias"><option value="Categoria">Categoría</option></select>-->
+            <section>
+              <input class="buttons" type="submit" id="addBtn" value="Agregar Propiedades" onclick="add();">
+              <input class="buttons" type="submit" id="delBtn" value="Eliminar Propiedades" onclick="add();">
+              <input class="buttons" type="submit" id="upBtn" value="Actualizar Propiedades" onclick="add();">
+              <input class="buttons" type="submit" id="backBTN" value="Regresar" onclick="ret();">
+            </section>
+        </section>
+
+    </body>
+</html>
