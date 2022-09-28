@@ -4,10 +4,10 @@
 <head>
   <meta charset="utf-8">
   <title>MunITEC</title>
-  <link rel="stylesheet" href="css/listaPropiedades.css">
+  <link rel="stylesheet" href="css/listaUsuarios.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-  <script src="js/listaPropiedades.js"></script>
+  <script src="js/propVisible.js"></script>
 </head>
 <header class="container-fluid">
   <div class="row align-items-center" style="background-color: #017bab;">
@@ -15,7 +15,7 @@
       <input class="buttons" type="submit" id="githubBtn" value="MunITEC" style="font-weight: bold;" onclick="window.location.href='https://github.com/valeriehernandez-7/MunITEC';">
     </div>
     <div class="col-md-auto">
-      <input class="buttons" type="submit" id="backBTN" value="PROPIEDADES" style="font-weight: bold;" onclick="ret();">
+      <input class="buttons" type="submit" id="backBTN" value="Propiedades" style="font-weight: bold;" onclick="ret();">
     </div>
     <div class="col" style="text-align: right;">
       <input class="buttons" type="submit" id="logOutBtn" value="SALIR" style="font-weight: bold;" onclick="cerrar();">
@@ -25,10 +25,12 @@
 <body style="background-color: #b4c5cd;">
   <br><br><br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
-    <section>
-      <input class="buttons" type="submit" id="addBtn" value="Añadir Propiedad" onclick="add();">
+    <section class="filt">
+      <input class="controls" type="text" id="user" value="" placeholder="Usuario">
+      <input class="buttons" type="submit" id="descBtn" value=" Filtrar Usuario " onclick="visibles();">
     </section>
   </div>
+
   <br>
   <br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
@@ -51,6 +53,7 @@
         <td>50</td>
         <td>1200</td>
         <td>2010-01-10</td>
+
         <td>si</td>
       </tr>
       <tbody id="tableBody"></tbody>

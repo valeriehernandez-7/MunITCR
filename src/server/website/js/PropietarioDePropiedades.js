@@ -1,12 +1,8 @@
-function nomb(){
-   var nombre = $("#desc").val();
-   console.log(nombre)
+function finca(){
+  var finca = $("#finca").val();
+  console.log(finca)
 }
 
-function ident(){
-  var ident = $("#cant").val();
-  console.log(ident)
-}
 function ret() {
   var user = ''// (new URL(location.href)).searchParams.get('user')
   location.replace(' ./Consulta.html?user='+user);

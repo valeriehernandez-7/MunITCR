@@ -16,7 +16,7 @@ function personXproperty() {
 }
 function userXproperty() {
   var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./principal.html?user='+user);
+  location.replace(' ./listaUsersXprop.html?user='+user);
 }
 function consult(){
   var user = ""// (new URL(location.href)).searchParams.get('user')

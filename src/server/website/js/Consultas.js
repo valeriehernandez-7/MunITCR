@@ -2,17 +2,17 @@ function propPropi() {
   var user = ""// (new URL(location.href)).searchParams.get('user')
   location.replace(' ./propPropi.html?user='+user);
 }
-function people() {
+function propietarioProp() {
   var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaPersona.html?user='+user);
+  location.replace(' ./PropietarioDePropiedades.html?user='+user);
 }
-function property() {
+function propVisible() {
   var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaPropiedades.html?user='+user);
+  location.replace(' ./propVisible.html?user='+user);
 }
-function personXproperty() {
+function userProp() {
   var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaPerXProp.html?user='+user);
+  location.replace(' ./userProp.html?user='+user);
 }
 function ret() {
   location.replace(' ./AdminOptions.html');
