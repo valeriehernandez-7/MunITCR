@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>MunITEC</title>
+  <link rel="stylesheet" href="css/listaPropiedades.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <script src="js/listaMediciones.js"></script>
+</head>
+<header class="container-fluid">
+  <div class="row align-items-center" style="background-color: #017bab;">
+    <div class="col" style="text-align: left;">
+      <input class="buttons" type="submit" id="githubBtn" value="MunITEC" style="font-weight: bold;" onclick="window.location.href='https://github.com/valeriehernandez-7/MunITEC';">
+    </div>
+    <div class="col-md-auto">
+      <input class="buttons" type="submit" id="backBTN" value="MEDICIONES" style="font-weight: bold;" onclick="ret();">
+    </div>
+    <div class="col" style="text-align: right;">
+      <input class="buttons" type="submit" id="logOutBtn" value="SALIR" style="font-weight: bold;" onclick="cerrar();">
+    </div>
+  </div>
+</header>
+<body style="background-color: #b4c5cd;">
+  <br><br><br>
+  <br>
+  <br>
+  <div class="container-fluid" style="display: flex; justify-content: center;">
+    <table id="tablaItems" style="border: 2px solid #017bab;">
+      <tr>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">ID propiedad</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tipo Movimiento</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Lectura</th>
+      </tr>
+      <tr class="linea" id=1>
+        <td>21</td>
+        <td>2</td>
+        <td>2022-09-30</td>
+        <td>310</td>
+      </tr>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+</body>
+<footer class="container-fluid" style="background-color: #017bab;">
+  <!-- Copyright -->
+  <p style="color:#FFFFFF; text-align: center;">
+    <br>
+    <b>&copy; 2022 ✦ MunITEC</b><br>
+    <b href="https://github.com/efmz200">Erick F. Madrigal Zavala</b><br>
+    <b href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</b>
+  </p>
+  <br>
+</footer>
+</html>
