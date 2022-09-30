@@ -21,7 +21,7 @@ BEGIN
 
 		IF (@inRDSFilePath IS NULL)
 			BEGIN
-				SET @inRDSFilePath = 'D:\S3\Operaciones.xml'; /* @inRDSFilePath default value */
+				SET @inRDSFilePath = 'D:\S3\Catalogos.xml'; /* @inRDSFilePath default value */
 			END;
 
 		DECLARE
@@ -51,6 +51,7 @@ BEGIN
 			[Nombre] VARCHAR(128)
 		) AS [NewTMCA];
 
+
 		/* Temporal table to insert the "tipos de uso de propiedad" from the xml doc */
 		DECLARE @TMPTipoUsoPropiedad TABLE (
 			[TUP_Nombre] VARCHAR(128)
@@ -66,6 +67,7 @@ BEGIN
 			[Nombre] VARCHAR(128)
 		) AS [NewTUP];
 		
+
 		/* Temporal table to insert the "tipos de zona de propiedad" from the xml doc */
 		DECLARE @TMPTipoZonaPropiedad TABLE (
 			[TZP_Nombre] VARCHAR(128)
@@ -80,6 +82,7 @@ BEGIN
 		) WITH (
 			[Nombre] VARCHAR(128)
 		) AS [NewTZP];
+
 
 		/* Temporal table to insert the "tipos de documento identidad" from the xml doc */
 		DECLARE @TMPTipoDocIdentidad TABLE (
@@ -96,6 +99,7 @@ BEGIN
 			[Nombre] VARCHAR(128)
 		) AS [NewTDI];
 
+
 		/* Temporal table to insert "medios de pago" from the xml doc */
 		DECLARE @TMPMedioDePago TABLE (
 			[MP_Nombre] VARCHAR(128)
@@ -110,6 +114,7 @@ BEGIN
 		) WITH (
 			[Nombre] VARCHAR(128)
 		) AS [NewMP];
+
 
 		/* Temporal table to insert "periodos de monto de cc's" from the xml doc */
 		DECLARE @TMPPeridoMontoCC TABLE (
@@ -130,6 +135,7 @@ BEGIN
 			[QMeses] INT
 		) AS [NewPMCC];
 
+
 		/* Temporal table to insert "tipos de monto de cc" from the xml doc */
 		DECLARE @TMPTipoMontoCC TABLE (
 			[TMCC_Nombre] VARCHAR(128)
@@ -145,6 +151,7 @@ BEGIN
 			[Nombre] VARCHAR(128)
 		) AS [NewTMCC];
 
+
 		/* Temporal table to insert "tipos de parametro" from the xml doc */
 		DECLARE @TMPTipoParametro TABLE (
 			[TP_Nombre] VARCHAR(128)
@@ -159,6 +166,7 @@ BEGIN
 		) WITH (
 			[Nombre] VARCHAR(128)
 		) AS [NewTP];
+
 
 		/* Temporal table to insert "parametros" from the xml doc */
 		DECLARE @TMPParametro TABLE (
@@ -183,6 +191,17 @@ BEGIN
 			[Nombre] VARCHAR(128),
 			[Valor] VARCHAR(64)
 		) AS [NewP];
+
+		SELECT * FROM @TMPParametro; -- TO-DO: DELETE
+
+		DECLARE
+			@paramLow INT = 1,
+			@paramHigh INT;
+		SELECT @paramHigh = MAX(TPMParam.P_ID) FROM @TMPParametro AS TPMParam;
+
+		SELECT @paramLow AS paramLow, @paramHigh AS paramHigh; -- TO-DO: DELETE
+
+
 
 		/* Temporal table to insert "conceptos de cobro" from the xml doc */
 		DECLARE @TMPConceptoCobro TABLE (
@@ -239,10 +258,87 @@ BEGIN
 
 		EXECUTE SP_XML_REMOVEDOCUMENT @hdoc; -- release the memory used from xml doc
 
-		BEGIN TRANSACTION [InsertData]
-			-- INSERT INTO ...
-			SET @outResultCode = 5200; /* OK */
-		COMMIT TRANSACTION [InsertData]
+		--BEGIN TRANSACTION [InsertData]
+
+		--	INSERT INTO [dbo].[TipoMovimientoConsumoAgua] (
+		--		[Nombre]
+		--	) SELECT
+		--		[NewTMCA].[TMCA_Nombre]
+		--	FROM @TMPTipoMovimientoConsumoAgua AS [NewTMCA];
+
+		--	INSERT INTO [dbo].[TipoUsoPropiedad] (
+		--		[Nombre]
+		--	) SELECT
+		--		[NewTUP].[TUP_Nombre]
+		--	FROM @TMPTipoUsoPropiedad AS [NewTUP];
+
+		--	INSERT INTO [dbo].[TipoZonaPropiedad] (
+		--		[Nombre]
+		--	) SELECT
+		--		[NewTZP].[TZP_Nombre]
+		--	FROM @TMPTipoZonaPropiedad AS [NewTZP];
+
+		--	INSERT INTO [dbo].[TipoDocIdentidad] (
+		--		[Nombre]
+		--	) SELECT
+		--		[NewTDI].[TDI_Nombre]
+		--	FROM @TMPTipoDocIdentidad AS [NewTDI];
+
+		--	INSERT INTO [dbo].[MedioDePago] (
+		--		[Nombre]
+		--	) SELECT
+		--		[NewMP].[MP_Nombre]
+		--	FROM @TMPMedioDePago AS [NewMP];
+
+		--	INSERT INTO [dbo].[PeriodoMontoCC] (
+		--		[Nombre]
+		--	) SELECT
+		--		[NewPMCC].[PMCC_Nombre]
+		--	FROM @TMPPeridoMontoCC AS [NewPMCC];
+
+		--	INSERT INTO [dbo].[TipoMontoCC] (
+		--		[Nombre]
+		--	) SELECT
+		--		[NewTMCC].[TMCC_Nombre]
+		--	FROM @TMPTipoMontoCC AS [NewTMCC];
+
+		--	INSERT INTO [dbo].[TipoParametro] (
+		--		[Nombre]
+		--	) SELECT
+		--		[NewTP].[TP_Nombre]
+		--	FROM @TMPTipoParametro AS [NewTP];
+
+		--	WHILE (@paramLow < @paramHigh)
+		--		BEGIN
+		--			INSERT INTO dbo.Parametro (
+		--				[ID],
+		--				[IDTipoParametro],
+		--				[Descripcion]
+		--			) SELECT
+		--				[TMPP].[P_ID],
+		--				[TP].[ID],
+		--				[TMPP].[P_Descripcion]
+		--			FROM @TMPParametro AS [TMPP]
+		--				INNER JOIN [dbo].[TipoParametro] AS [TP] 
+		--				ON [TP].[Nombre] = [TMPP].[P_NombreTipoParametro]
+		--			WHERE [TMPP].[P_ID] = @paramLow;
+
+		--			INSERT INTO dbo.ParametroInteger (
+		--				[IDParametro],
+		--				[Valor]
+		--			) SELECT
+		--				[TMPP].[P_ID],
+		--				(SELECT CONVERT(INT, [TMPP].[P_Valor]))
+		--			FROM @TMPParametro AS [TMPP] 
+		--			WHERE [TMPP].[P_ID] = @paramLow AND [TMPP].[P_NombreTipoParametro] = 'int';					
+					
+		--			SET @paramLow = @paramLow + 1;
+		--		END;
+
+
+		--	SET @outResultCode = 5200; /* OK */
+
+		--COMMIT TRANSACTION [InsertData]
 	END TRY
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
