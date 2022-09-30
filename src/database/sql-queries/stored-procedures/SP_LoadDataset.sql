@@ -192,15 +192,13 @@ BEGIN
 			[Valor] VARCHAR(64)
 		) AS [NewP];
 
-		SELECT * FROM @TMPParametro; -- TO-DO: DELETE
-
 		DECLARE
 			@paramLow INT = 1,
 			@paramHigh INT;
 		SELECT @paramHigh = MAX(TPMParam.P_ID) FROM @TMPParametro AS TPMParam;
 
+		SELECT * FROM @TMPParametro; -- TO-DO: DELETE
 		SELECT @paramLow AS paramLow, @paramHigh AS paramHigh; -- TO-DO: DELETE
-
 
 
 		/* Temporal table to insert "conceptos de cobro" from the xml doc */
@@ -258,87 +256,109 @@ BEGIN
 
 		EXECUTE SP_XML_REMOVEDOCUMENT @hdoc; -- release the memory used from xml doc
 
-		--BEGIN TRANSACTION [InsertData]
+		BEGIN TRANSACTION [InsertData]
 
-		--	INSERT INTO [dbo].[TipoMovimientoConsumoAgua] (
-		--		[Nombre]
-		--	) SELECT
-		--		[NewTMCA].[TMCA_Nombre]
-		--	FROM @TMPTipoMovimientoConsumoAgua AS [NewTMCA];
+			INSERT INTO [dbo].[TipoMovimientoConsumoAgua] (
+				[Nombre]
+			) SELECT
+				[NewTMCA].[TMCA_Nombre]
+			FROM @TMPTipoMovimientoConsumoAgua AS [NewTMCA];
 
-		--	INSERT INTO [dbo].[TipoUsoPropiedad] (
-		--		[Nombre]
-		--	) SELECT
-		--		[NewTUP].[TUP_Nombre]
-		--	FROM @TMPTipoUsoPropiedad AS [NewTUP];
+			INSERT INTO [dbo].[TipoUsoPropiedad] (
+				[Nombre]
+			) SELECT
+				[NewTUP].[TUP_Nombre]
+			FROM @TMPTipoUsoPropiedad AS [NewTUP];
 
-		--	INSERT INTO [dbo].[TipoZonaPropiedad] (
-		--		[Nombre]
-		--	) SELECT
-		--		[NewTZP].[TZP_Nombre]
-		--	FROM @TMPTipoZonaPropiedad AS [NewTZP];
+			INSERT INTO [dbo].[TipoZonaPropiedad] (
+				[Nombre]
+			) SELECT
+				[NewTZP].[TZP_Nombre]
+			FROM @TMPTipoZonaPropiedad AS [NewTZP];
 
-		--	INSERT INTO [dbo].[TipoDocIdentidad] (
-		--		[Nombre]
-		--	) SELECT
-		--		[NewTDI].[TDI_Nombre]
-		--	FROM @TMPTipoDocIdentidad AS [NewTDI];
+			INSERT INTO [dbo].[TipoDocIdentidad] (
+				[Nombre]
+			) SELECT
+				[NewTDI].[TDI_Nombre]
+			FROM @TMPTipoDocIdentidad AS [NewTDI];
 
-		--	INSERT INTO [dbo].[MedioDePago] (
-		--		[Nombre]
-		--	) SELECT
-		--		[NewMP].[MP_Nombre]
-		--	FROM @TMPMedioDePago AS [NewMP];
+			INSERT INTO [dbo].[MedioDePago] (
+				[Nombre]
+			) SELECT
+				[NewMP].[MP_Nombre]
+			FROM @TMPMedioDePago AS [NewMP];
 
-		--	INSERT INTO [dbo].[PeriodoMontoCC] (
-		--		[Nombre]
-		--	) SELECT
-		--		[NewPMCC].[PMCC_Nombre]
-		--	FROM @TMPPeridoMontoCC AS [NewPMCC];
+			INSERT INTO [dbo].[PeriodoMontoCC] (
+				[Nombre]
+			) SELECT
+				[NewPMCC].[PMCC_Nombre]
+			FROM @TMPPeridoMontoCC AS [NewPMCC];
 
-		--	INSERT INTO [dbo].[TipoMontoCC] (
-		--		[Nombre]
-		--	) SELECT
-		--		[NewTMCC].[TMCC_Nombre]
-		--	FROM @TMPTipoMontoCC AS [NewTMCC];
+			INSERT INTO [dbo].[TipoMontoCC] (
+				[Nombre]
+			) SELECT
+				[NewTMCC].[TMCC_Nombre]
+			FROM @TMPTipoMontoCC AS [NewTMCC];
 
-		--	INSERT INTO [dbo].[TipoParametro] (
-		--		[Nombre]
-		--	) SELECT
-		--		[NewTP].[TP_Nombre]
-		--	FROM @TMPTipoParametro AS [NewTP];
+			INSERT INTO [dbo].[TipoParametro] (
+				[Nombre]
+			) SELECT
+				[NewTP].[TP_Nombre]
+			FROM @TMPTipoParametro AS [NewTP];
 
-		--	WHILE (@paramLow < @paramHigh)
-		--		BEGIN
-		--			INSERT INTO dbo.Parametro (
-		--				[ID],
-		--				[IDTipoParametro],
-		--				[Descripcion]
-		--			) SELECT
-		--				[TMPP].[P_ID],
-		--				[TP].[ID],
-		--				[TMPP].[P_Descripcion]
-		--			FROM @TMPParametro AS [TMPP]
-		--				INNER JOIN [dbo].[TipoParametro] AS [TP] 
-		--				ON [TP].[Nombre] = [TMPP].[P_NombreTipoParametro]
-		--			WHERE [TMPP].[P_ID] = @paramLow;
+			SELECT * FROM [dbo].[TipoParametro]; -- TO-DO: DELETE
 
-		--			INSERT INTO dbo.ParametroInteger (
-		--				[IDParametro],
-		--				[Valor]
-		--			) SELECT
-		--				[TMPP].[P_ID],
-		--				(SELECT CONVERT(INT, [TMPP].[P_Valor]))
-		--			FROM @TMPParametro AS [TMPP] 
-		--			WHERE [TMPP].[P_ID] = @paramLow AND [TMPP].[P_NombreTipoParametro] = 'int';					
+			WHILE (@paramLow <= @paramHigh)
+				BEGIN
+					SELECT -- TO-DO: DELETE
+						[TMPP].[P_ID],
+						[TP].[ID],
+						[TMPP].[P_Descripcion]
+					FROM @TMPParametro AS [TMPP]
+						INNER JOIN [dbo].[TipoParametro] AS [TP] 
+						ON [TP].[Nombre] = [TMPP].[P_NombreTipoParametro]
+					WHERE [TMPP].[P_ID] = @paramLow;
+
+					--INSERT INTO [dbo].[Parametro] (
+					--	[ID],
+					--	[IDTipoParametro],
+					--	[Descripcion]
+					--) SELECT
+					--	[TMPP].[P_ID],
+					--	[TP].[ID],
+					--	[TMPP].[P_Descripcion]
+					--FROM @TMPParametro AS [TMPP]
+					--	INNER JOIN [dbo].[TipoParametro] AS [TP] 
+					--	ON [TP].[Nombre] = [TMPP].[P_NombreTipoParametro]
+					--WHERE [TMPP].[P_ID] = @paramLow;
+
+					--SELECT * FROM [dbo].[Parametro]; -- TO-DO: DELETE
+
+					SELECT -- TO-DO: DELETE
+						[TMPP].[P_ID],
+						(SELECT CONVERT(INT, [TMPP].[P_Valor])) AS Valor
+					FROM @TMPParametro AS [TMPP] 
+					WHERE [TMPP].[P_ID] = @paramLow AND [TMPP].[P_NombreTipoParametro] = 'int';
+
+					--INSERT INTO [dbo].[ParametroInteger] (
+					--	[IDParametro],
+					--	[Valor]
+					--) SELECT
+					--	[TMPP].[P_ID],
+					--	(SELECT CONVERT(INT, [TMPP].[P_Valor]))
+					--FROM @TMPParametro AS [TMPP] 
+					--WHERE [TMPP].[P_ID] = @paramLow AND [TMPP].[P_NombreTipoParametro] = 'int';					
 					
-		--			SET @paramLow = @paramLow + 1;
-		--		END;
+					--SELECT * FROM [dbo].[ParametroInteger]; -- TO-DO: DELETE
+
+					SET @paramLow = @paramLow + 1;
+				END;
 
 
-		--	SET @outResultCode = 5200; /* OK */
+			SET @outResultCode = 5200; /* OK */
 
-		--COMMIT TRANSACTION [InsertData]
+		COMMIT TRANSACTION [InsertData]
+
 	END TRY
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
