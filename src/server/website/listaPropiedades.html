@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>MunITCR</title>
-  <link rel="stylesheet" href="css/listaPropiedades.css">
+  <link rel="stylesheet" href="css/listaUsuarios.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
   <script src="js/listaPropiedades.js"></script>
@@ -15,18 +15,23 @@
       <input class="buttons" type="submit" id="githubBtn" value="MunITCR" style="font-weight: bold;" onclick="window.location.href='https://github.com/valeriehernandez-7/MunITCR';">
     </div>
     <div class="col-md-auto">
-      <input class="buttons" type="submit" id="backBTN" value="PROPIEDADES" style="font-weight: bold;" onclick="ret();">
+      <input class="buttons" type="submit" id="backBTN" value="Opciones de Administrador" style="font-weight: bold;" onclick="ret();">
     </div>
     <div class="col" style="text-align: right;">
       <input class="buttons" type="submit" id="logOutBtn" value="SALIR" style="font-weight: bold;" onclick="cerrar();">
     </div>
+    <section class="container-fluid" style="display: flex; justify-content: center;">
+      <p style="color:#FFFFFF; text-align: center;">
+        <b>Listado de Propiedades</b><br>
+      </p>
+    </section>
   </div>
 </header>
 <body style="background-color: #b4c5cd;">
   <br><br><br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <section>
-      <input class="buttons" type="submit" id="addBtn" value="Añadir Propiedad" onclick="add();">
+      <input class="buttons" type="submit" id="addBtn" value=" Añadir Propiedad " onclick="add();">
     </section>
   </div>
   <br>
@@ -38,20 +43,23 @@
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tipo Zona</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Usuario</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Lote</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Metros cuadrados</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Área</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Valor fiscal</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Registro</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Activo</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha Registro</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Operaciones</th>
       </tr>
       <tr class="linea" id=1>
-        <td>1</td>
-        <td>1123456</td>
-        <td>2</td>
-        <td>71086099</td>
-        <td>50</td>
+        <td>Comercial</td>
+        <td>Residencial</td>
+        <td>Lacrack</td>
+        <td>32</td>
+        <td>250</td>
         <td>1200</td>
         <td>2010-01-10</td>
-        <td>si</td>
+        <td>
+          <input class="buttons" type="submit" id="addBtn" value=" Editar " onclick="edit('Comercial','Residencial','Lacrack',32,250,1200,'2010-01-10');">
+          <input class="buttons" type="submit" id="addBtn" value=" Eliminar " onclick="add();">
+        </td>
       </tr>
       <tbody id="tableBody"></tbody>
     </table>

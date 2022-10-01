@@ -15,57 +15,49 @@
       <input class="buttons" type="submit" id="githubBtn" value="MunITCR" style="font-weight: bold;" onclick="window.location.href='https://github.com/valeriehernandez-7/MunITCR';">
     </div>
     <div class="col-md-auto">
-      <input class="buttons" type="submit" id="backBTN" value="PERSONAS" style="font-weight: bold;" onclick="ret();">
+      <input class="buttons" type="submit" id="backBTN" value="Opciones de Administrador" style="font-weight: bold;" onclick="ret();">
     </div>
     <div class="col" style="text-align: right;">
       <input class="buttons" type="submit" id="logOutBtn" value="SALIR" style="font-weight: bold;" onclick="cerrar();">
     </div>
+    <section class="container-fluid" style="display: flex; justify-content: center;">
+      <p style="color:#FFFFFF; text-align: center;">
+        <b>Listado de Personas</b><br>
+      </p>
+    </section>
   </div>
 </header>
 <body style="background-color: #b4c5cd;">
   <br><br><br>
-  <div class="container-fluid" style="display: flex; justify-content: center;">
-    <!--
-    <section class="filt">
-      <input class="controls" type="text" id="desc" value="" placeholder="DESCRIPCIÓN">
-      <input class="buttons" type="submit" id="descBtn" value="Filtrar por Descripción" onclick="descfil();">
-    </section>
-    <section class="filt" style="padding-left: 1em;">
-      <select class="controls" id="cat"></select>
-      <input class="buttons" type="submit" id="catBtn" value="Filtrar por Categoría" onclick="catfil();">
-    </section>
-    <section class="filt" style="padding-left: 1em;">
-      <input class="controls" type="number" id="cant" min='1' value="" placeholder="CANTIDAD">
-      <input class="buttons" type="submit" id="catBtn" value="Mostrar Cantidad" onclick="cant();">
-    </section>
-    -->
-  </div>
+
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <section>
-      <input class="buttons" type="submit" id="addBtn" value="Añadir Persona" onclick="add();">
+      <input class="buttons" type="submit" id="addBtn" value=" Añadir Persona " onclick="add();">
     </section>
   </div>
-  <br>
   <br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <table id="tablaItems" style="border: 2px solid #017bab;">
       <tr>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Nombre</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Identificación</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tipo</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tipo Identificación</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Telefono</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Telefono 2</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Email</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Activo</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Operación</th>
       </tr>
       <tr class="linea" id="1">
         <td>Erick</td>
         <td>1123456</td>
-        <td>2</td>
+        <td>Nacional</td>
         <td>71086099</td>
         <td>88157623</td>
         <td>correo@lineacaliente.es</td>
-        <td>si</td>
+        <td>
+            <input class="buttons" type="submit" id="addBtn" value=" Editar " onclick="edit('Erick',1123456,'Nacional',71086099,88157623,'correo@lineacaliente.es');">
+            <input class="buttons" type="submit" id="addBtn" value=" Eliminar " onclick="add();">
+        </td>
       </tr>
       <tbody id="tableBody"></tbody>
     </table>

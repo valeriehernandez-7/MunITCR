@@ -10,7 +10,7 @@ body{
 }
 .form-persona {
   width: 400px;
-  height: 560px;
+  height: auto;
   background: #4e4d4d;
   margin: auto;
   margin-top: 180px;

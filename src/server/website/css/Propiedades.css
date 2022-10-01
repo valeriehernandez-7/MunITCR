@@ -10,7 +10,7 @@ body{
 }
 .form-Propiedades {
   width: 400px;
-  height: 620px;
+  height: auto;
   background: #4e4d4d;
   margin: auto;
   margin-top: 180px;
