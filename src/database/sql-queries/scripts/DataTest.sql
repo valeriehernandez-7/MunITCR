@@ -83,19 +83,7 @@ DELETE FROM [dbo].[MedioDePago];
 DBCC CHECKIDENT ('[dbo].[MedioDePago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
-DELETE FROM [dbo].[PeriodoMontoCC];
-DBCC CHECKIDENT ('[dbo].[PeriodoMontoCC]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[TipoMontoCC];
-DBCC CHECKIDENT ('[dbo].[TipoMontoCC]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
 DELETE FROM [dbo].[ParametroInteger];
-DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[Parametro];
 DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
@@ -103,34 +91,39 @@ DELETE FROM [dbo].[TipoParametro];
 DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
-DELETE FROM [dbo].[ConceptoCobro];
-DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
 DELETE FROM [dbo].[CCConsumoAgua];
-DBCC CHECKIDENT ('[dbo].[CCConsumoAgua]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[CCImpuestoPropiedad];
-DBCC CHECKIDENT ('[dbo].[CCImpuestoPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[CCBasura];
-DBCC CHECKIDENT ('[dbo].[CCBasura]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[CCPatenteComercial];
-DBCC CHECKIDENT ('[dbo].[CCPatenteComercial]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[CCReconexion];
-DBCC CHECKIDENT ('[dbo].[CCReconexion]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[CCInteresMoratorio];
-DBCC CHECKIDENT ('[dbo].[CCInteresMoratorio]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[CCMantenimientoParque];
-DBCC CHECKIDENT ('[dbo].[CCMantenimientoParque]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[ConceptoCobro];
+DBCC CHECKIDENT ('[dbo].[ConceptoCobro]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[Parametro];
+DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[PeriodoMontoCC];
+DBCC CHECKIDENT ('[dbo].[PeriodoMontoCC]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[TipoMontoCC];
+DBCC CHECKIDENT ('[dbo].[TipoMontoCC]', RESEED, 0) WITH NO_INFOMSGS;
 GO
