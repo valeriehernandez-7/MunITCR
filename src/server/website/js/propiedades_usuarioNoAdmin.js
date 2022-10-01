@@ -13,11 +13,8 @@ $( document ).ready(function() {
     });
 });
 
-function add(){
-    location.replace('./UsersXprop.html');
-}
 function ret(){
-  location.replace('./AdminOptions.html');
+  location.replace('./index.html');
 }
 function cerrar(){
   location.replace('./index.html');
