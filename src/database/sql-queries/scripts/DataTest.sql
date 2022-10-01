@@ -58,9 +58,23 @@ GO
 SELECT * FROM [dbo].[CCMantenimientoParque];
 GO
 
+SELECT * FROM [dbo].[Usuario];
+GO
+
+SELECT * FROM [dbo].[Persona];
+GO
+
 
 DELETE FROM [dbo].[ErrorLog];
 DBCC CHECKIDENT ('[dbo].[ErrorLog]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[Usuario];
+DBCC CHECKIDENT ('[dbo].[Usuario]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[Persona];
+DBCC CHECKIDENT ('[dbo].[Persona]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[TipoMovimientoConsumoAgua];
@@ -84,7 +98,6 @@ DBCC CHECKIDENT ('[dbo].[MedioDePago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[ParametroInteger];
-DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[TipoParametro];
@@ -117,7 +130,6 @@ DBCC CHECKIDENT ('[dbo].[ConceptoCobro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[Parametro];
-DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[PeriodoMontoCC];
