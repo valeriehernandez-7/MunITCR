@@ -18,7 +18,6 @@ function add(){
 }
 function edit(nombre,user,pass,admin){
   let url = './UsuarioEdit.html?add=0'
-  alert('hola');
   url+='&nombre='+nombre
   url+='&user='+user
   url+='&password='+pass

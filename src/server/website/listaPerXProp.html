@@ -15,18 +15,23 @@
       <input class="buttons" type="submit" id="githubBtn" value="MunITCR" style="font-weight: bold;" onclick="window.location.href='https://github.com/valeriehernandez-7/MunITCR';">
     </div>
     <div class="col-md-auto">
-      <input class="buttons" type="submit" id="backBTN" value="PERSONASxPROPIEDADES" style="font-weight: bold;" onclick="ret();">
+      <input class="buttons" type="submit" id="backBTN" value="Opciones de Administrador" style="font-weight: bold;" onclick="ret();">
     </div>
     <div class="col" style="text-align: right;">
       <input class="buttons" type="submit" id="logOutBtn" value="SALIR" style="font-weight: bold;" onclick="cerrar();">
     </div>
+    <section class="container-fluid" style="display: flex; justify-content: center;">
+      <p style="color:#FFFFFF; text-align: center;">
+        <b>Asociones Personas/Propiedades</b><br>
+      </p>
+    </section>
   </div>
 </header>
 <body style="background-color: #b4c5cd;">
   <br><br><br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <section>
-      <input class="buttons" type="submit" id="addBtn" value="Vincular Persona y Propiedad" onclick="add();">
+      <input class="buttons" type="submit" id="addBtn" value=" Vincular Persona y Propiedad " onclick="add();">
     </section>
   </div>
   <br>
@@ -35,16 +40,22 @@
     <table id="tablaItems" style="border: 2px solid #017bab;">
       <tr>
 
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">ID Persona</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">ID Propiedad</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha Inicio</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha Fin</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Nombre</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Lote</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha Asociación</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha Desasociación</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Operación</th>
+
       </tr>
       <tr class="linea" id=1>
-        <td>123</td>
+        <td>mazae</td>
         <td>112</td>
         <td>2010-01-10</td>
         <td>2021-01-10</td>
+        <td>
+          <input class="buttons" type="submit" id="addBtn" value=" Editar " onclick="edit('mazae',112,'2010-01-10','2021-01-10');">
+          <input class="buttons" type="submit" id="addBtn" value=" Eliminar " onclick="add();">
+        </td>
       </tr>
       <tbody id="tableBody"></tbody>
     </table>

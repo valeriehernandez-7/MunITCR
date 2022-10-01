@@ -20,6 +20,11 @@
     <div class="col" style="text-align: right;">
       <input class="buttons" type="submit" id="logOutBtn" value="SALIR" style="font-weight: bold;" onclick="cerrar();">
     </div>
+    <section class="container-fluid" style="display: flex; justify-content: center;">
+      <p style="color:#FFFFFF; text-align: center;">
+        <b>Asociones Personas/Propiedades</b><br>
+      </p>
+    </section>
   </div>
 </header>
 <body style="background-color: #b4c5cd;">
@@ -36,9 +41,14 @@
       <tr>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Usuario</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Número de Lote</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Operacion</th>
       <tr class="linea" id="1">
         <td>madrilag</td>
         <td>4325</td>
+        <td>
+          <input class="buttons" type="submit" id="addBtn" value=" Editar " onclick="edit('madrilag',123);">
+          <input class="buttons" type="submit" id="addBtn" value=" Eliminar " onclick="add();">
+        </td>
       </tr>
       <tbody id="tableBody"></tbody>
     </table>

@@ -41,7 +41,7 @@ th, td {
   font-weight: bold;
 }
 .buttons{
-  width: 250px;
+  width: auto;
   height: 40px;
   background: #017bab;
   border: none;

@@ -12,7 +12,12 @@ $( document ).ready(function() {
         location.replace(url+usuario+lote);
     });
 });
-
+function edit(usuario,lote){
+  let url = './UserXpropEdit.html?add=0'
+  url+='&usuario='+usuario
+  url+='&lote='+lote
+  location.replace(url);
+}
 function add(){
     location.replace('./UsersXprop.html');
 }

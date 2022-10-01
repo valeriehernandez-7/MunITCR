@@ -1,28 +1,7 @@
-//$( document ).ready(function() {
-//    $('.linea').click(function() {
-//        $('#home').html('<embed src="./files/'+this.id+'_4b/'+this.id+'_ejemplo.pdf" type="application/pdf" width="100%" height="400px" class="margenfilemodal" />');
-//        //alert(this);
-//        let elementos = this.getElementsByTagName("td")
-//
-//
-//        let url = './Propiedades.html?add=0'
-//
-//        let uso = '&uso='+ elementos[0].innerHTML
-//        let zona = '&zona='+ elementos[1].innerHTML
-//        let user = '&user='+ elementos[2].innerHTML
-//        let lote = '&lote='+ elementos[3].innerHTML
-//        let m2 = '&m2='+ elementos[4].innerHTML
-//        let valorFiscal = '&valorFiscal='+ elementos[5].innerHTML
-//        let registro = '&registro='+ elementos[6].innerHTML
-//        let activo = '&activo='+ elementos[7].innerHTML
-//        location.replace(url+uso+zona+user+lote+m2+valorFiscal+registro+activo);
-//    });
-//});
-function edit(uso,zona,user,lote,m2,valorFiscal,registro){
+function edit(uso,zona,lote,m2,valorFiscal,registro){
   let url = './PropiedadesEdit.html?add=0'
   url+='&uso='+uso
   url+='&zona='+zona
-  url+='&user='+user
   url+='&lote='+lote
   url+='&m2='+m2
   url+='&valorFiscal='+valorFiscal
