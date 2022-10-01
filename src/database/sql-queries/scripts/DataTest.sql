@@ -1,4 +1,5 @@
-SELECT * FROM information_schema.tables;
+SELECT * FROM information_schema.tables ORDER BY table_name;
+GO
 
 SELECT * FROM [dbo].[ErrorLog];
 GO
@@ -31,6 +32,30 @@ SELECT * FROM [dbo].[Parametro];
 GO
 
 SELECT * FROM [dbo].[ParametroInteger];
+GO
+
+SELECT * FROM [dbo].[ConceptoCobro];
+GO
+
+SELECT * FROM [dbo].[CCConsumoAgua];
+GO
+
+SELECT * FROM [dbo].[CCImpuestoPropiedad];
+GO
+
+SELECT * FROM [dbo].[CCBasura];
+GO
+
+SELECT * FROM [dbo].[CCPatenteComercial];
+GO
+
+SELECT * FROM [dbo].[CCReconexion];
+GO
+
+SELECT * FROM [dbo].[CCInteresMoratorio];
+GO
+
+SELECT * FROM [dbo].[CCMantenimientoParque];
 GO
 
 
@@ -76,4 +101,36 @@ GO
 
 DELETE FROM [dbo].[TipoParametro];
 DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[ConceptoCobro];
+DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[CCConsumoAgua];
+DBCC CHECKIDENT ('[dbo].[CCConsumoAgua]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[CCImpuestoPropiedad];
+DBCC CHECKIDENT ('[dbo].[CCImpuestoPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[CCBasura];
+DBCC CHECKIDENT ('[dbo].[CCBasura]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[CCPatenteComercial];
+DBCC CHECKIDENT ('[dbo].[CCPatenteComercial]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[CCReconexion];
+DBCC CHECKIDENT ('[dbo].[CCReconexion]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[CCInteresMoratorio];
+DBCC CHECKIDENT ('[dbo].[CCInteresMoratorio]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[CCMantenimientoParque];
+DBCC CHECKIDENT ('[dbo].[CCMantenimientoParque]', RESEED, 0) WITH NO_INFOMSGS;
 GO
