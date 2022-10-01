@@ -27,6 +27,13 @@ GO
 SELECT * FROM [dbo].[TipoParametro];
 GO
 
+SELECT * FROM [dbo].[Parametro];
+GO
+
+SELECT * FROM [dbo].[ParametroInteger];
+GO
+
+
 DELETE FROM [dbo].[ErrorLog];
 DBCC CHECKIDENT ('[dbo].[ErrorLog]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -57,6 +64,14 @@ GO
 
 DELETE FROM [dbo].[TipoMontoCC];
 DBCC CHECKIDENT ('[dbo].[TipoMontoCC]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[ParametroInteger];
+DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[Parametro];
+DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[TipoParametro];
