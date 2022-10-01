@@ -15,11 +15,16 @@
       <input class="buttons" type="submit" id="githubBtn" value="MunITCR" style="font-weight: bold;" onclick="window.location.href='https://github.com/valeriehernandez-7/MunITCR';">
     </div>
     <div class="col-md-auto">
-      <input class="buttons" type="submit" id="backBTN" value="Propietarios" style="font-weight: bold;" onclick="ret();">
+      <input class="buttons" type="submit" id="backBTN" value="Consultas Administrador" style="font-weight: bold;" onclick="ret();">
     </div>
     <div class="col" style="text-align: right;">
       <input class="buttons" type="submit" id="logOutBtn" value="SALIR" style="font-weight: bold;" onclick="cerrar();">
     </div>
+    <section class="container-fluid" style="display: flex; justify-content: center;">
+      <p style="color:#FFFFFF; text-align: center;">
+        <b>Propietarios de Propiedades</b><br>
+      </p>
+    </section>
   </div>
 </header>
 <body style="background-color: #b4c5cd;">
@@ -44,17 +49,15 @@
     <table id="tablaItems" style="border: 2px solid #017bab;">
       <tr>
 
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">ID Persona</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Nombre</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Usuario</th>
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Contraseña</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Admin</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Activo 2</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tipo Usuario</th>
       <tr class="linea" id="1">
-        <td>231</td>
+        <td>Erick</td>
         <td>Pedrito</td>
         <td>contrasena</td>
-        <td>si</td>
-        <td>si</td>
+        <td>Regular</td>
       </tr>
       <tbody id="tableBody"></tbody>
     </table>
