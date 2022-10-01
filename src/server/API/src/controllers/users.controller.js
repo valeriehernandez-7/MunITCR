@@ -6,15 +6,16 @@ export const login = async (req, res) => {
     //const {username, password} = req.body; 
     var username = req.query.usuario;
     var password = req.query.pass;
+    var bit = req.query.bit; 
     if (username==null || password==null){
         console.log("bad data")
     } 
     const result= await pool.request()
                     .input('inUsername', sql.NVARCHAR(64),username)
-                    .input('inPassword', sql.NVARCHAR(64),password)                    
+                    .input('inPassword', sql.NVARCHAR(64),password) 
+                    .input('inAdmin',sql.Bit,parseInt(bit))                     
                     .output('outResultCode', sql.Int).
                     execute('SP_Login');
     console.log(result.output.outResultCode);
-    res.json(result.output.outResultCode);
-        
+    res.json(result.output.outResultCode);        
 }
