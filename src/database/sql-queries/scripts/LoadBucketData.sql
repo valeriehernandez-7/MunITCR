@@ -1,3 +1,6 @@
+USE [MunITCR]
+GO
+
 EXECUTE MSDB.DBO.RDS_DOWNLOAD_FROM_S3
       @s3_arn_of_file='arn:aws:s3:::datasetbases1/Catalogos.xml',
       @rds_file_path='D:\S3\Catalogos.xml',

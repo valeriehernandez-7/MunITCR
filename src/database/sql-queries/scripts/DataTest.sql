@@ -64,7 +64,6 @@ GO
 SELECT * FROM [dbo].[Persona];
 GO
 
-
 DELETE FROM [dbo].[ErrorLog];
 DBCC CHECKIDENT ('[dbo].[ErrorLog]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -75,6 +74,9 @@ GO
 
 DELETE FROM [dbo].[Persona];
 DBCC CHECKIDENT ('[dbo].[Persona]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[Parametro];
 GO
 
 DELETE FROM [dbo].[TipoMovimientoConsumoAgua];
@@ -127,9 +129,6 @@ GO
 
 DELETE FROM [dbo].[ConceptoCobro];
 DBCC CHECKIDENT ('[dbo].[ConceptoCobro]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[Parametro];
 GO
 
 DELETE FROM [dbo].[PeriodoMontoCC];
