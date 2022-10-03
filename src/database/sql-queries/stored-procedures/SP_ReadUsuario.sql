@@ -23,7 +23,7 @@ BEGIN
 		FROM [dbo].[Usuario] AS [U]
 			LEFT JOIN [dbo].[Persona] AS [P]
 			ON [U].[IDPersona] = [P].[ID]
-		WHERE [P].[Activo] = 1;
+		WHERE [U].[Activo] = 1 AND [P].[Activo] = 1;
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH

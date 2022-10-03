@@ -3,14 +3,12 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadUsuarioXPropiedadIn
+	@proc_name SP_ReadUsuarioUsername
 	@proc_description
-	@proc_param inPropiedad
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadUsuarioXPropiedadIn]
-	@inPropiedad CHAR(32),
+CREATE OR ALTER PROCEDURE [SP_ReadUsuarioUsername]
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -18,11 +16,10 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT [U].[Username] AS [Usuario]
-		FROM [dbo].[Propiedad] AS [P]
-			LEFT JOIN [dbo].[Usuario] AS [U]
-			ON [U].[ID] = [P].[IDUsuario] 
-		WHERE [U].[Activo] = 1 AND [P].[Activo] = 1 
-		AND [P].[Lote] = @inPropiedad;
+		FROM [dbo].[Usuario] AS [U]
+			LEFT JOIN [dbo].[Persona] AS [P]
+			ON [U].[IDPersona] = [P].[ID]
+		WHERE [U].[Activo] = 1 AND [P].[Activo] = 1;
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH
