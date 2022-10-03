@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    var url = "http://localhost:8000/ReadPersonaIdentificacion"
+  var url = "http://localhost:8000/ReadPersonaIdentificacion"
   const $select = $("#nombre")
   const options = {
     method: "get",
@@ -25,14 +25,18 @@ $(document).ready(function(){
     const $select2 = $("#lote")
     fetch(url, options).then(response => response.json())
     .then(response => {
-    console.log(response);
     for (var i = 0; i < response.length; i++) {
-      valor=response[i].Propiedad;
+      valor=parseInt(response[i].Propiedad);
       $select2.append($("<option>", {
         value: valor,
         text: valor
       }));
-    }})
+    }
+    if(add== "0")
+      document.getElementById('lote').value = idProp;
+    }).catch(e => {
+      console.log(e);
+  })
 
     var add = (new URL(location.href)).searchParams.get('add')
     if(add== "0"){
@@ -44,6 +48,54 @@ $(document).ready(function(){
       lote.value =idProp
     }
 })
+
+async function add() {
+  var url = "http://localhost:8000/CreatePersonaXPropiedad"
+  var iden = $("#nombre").val()
+  var lote = $("#lote").val();
+  var fecha = $("#date").val();
+  const body={
+    iden: iden,
+    lote:lote,
+    fecha: fecha
+  }
+  const options = {
+  method: "post",
+  body: JSON.stringify(body),
+  headers: {"Content-Type": "application/json"},
+  };
+  //Petición HTTP
+  console.log(body)
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+      console.log(response);
+      if(response == 5404){
+        window.alert("El tipo de Identificación no existe");
+        return
+      }
+      if(response == 5406){
+        window.alert("La persona ya está asociada con la propiedad");
+        return
+      }
+      if(response == 5404){
+        window.alert("No se puede asociar porque no existe la propiedad o la persona");
+        return
+      }
+      if(response == 5400){
+        window.alert("Los parametros no deben ser null");
+        return
+      }
+      if(response == 5200){
+        window.alert("La asociacion fue ingresada con exito");
+        return
+      }else {
+        window.alert("Ocurrio un error al ingresar el dato");
+      }
+    }
+    ).catch(e => {
+      console.log(e);
+    });
+}               
 
 function ret() {
   var user = ''// (new URL(location.href)).searchParams.get('user')

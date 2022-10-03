@@ -39,6 +39,8 @@ $(document).ready(function(){
     }).catch(e => {
       console.log(e);
     });
+    
+
     var add = (new URL(location.href)).searchParams.get('add')
     if(add== "0"){
       var uso = (new URL(location.href)).searchParams.get('uso')
@@ -54,6 +56,61 @@ $(document).ready(function(){
       document.getElementById('date').value =registro;
     }
 })
+
+async function add() {
+  var url = "http://localhost:8000/CreatePropiedad"
+  var uso = $("#idType").val()
+  var zona = $("#idZone").val();
+  var lote = $("#lote").val();
+  var m2 = $("#squareM").val();
+  var valorFiscal = $("#price").val();
+  var registro = $("#date").val();
+  const body={
+    uso: uso,
+    zona: zona,
+    lote:lote,
+    m2: m2,
+    valorFiscal: valorFiscal,
+    registro: registro
+  }
+  const options = {
+  method: "post",
+  body: JSON.stringify(body),
+  headers: {"Content-Type": "application/json"},
+  };
+  //Petición HTTP
+  console.log(body)
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+      console.log(response);
+      if(response == 5404){
+        window.alert("El tipo de Identificación no existe");
+        return
+      }
+      if(response == 5406){
+        window.alert("Ya existe este lote");
+        return
+      }
+      if(response == 5404){
+        window.alert("Tipo de uso de propiedad no registrado");
+        return
+      }
+      if(response == 5400){
+        window.alert("Los parametros no deben ser null");
+        return
+      }
+      if(response == 5200){
+        window.alert("Propiedad ingresada con exito");
+        return
+      }else {
+        window.alert("Ocurrio un error al ingresar el dato");
+      }
+    }
+    ).catch(e => {
+      console.log(e);
+    });
+}
+
 
 
 function ret() {

@@ -12,13 +12,20 @@ $(document).ready(function(){
       var perXprop = response [i];      
       var Propietario = perXprop.Propietario;
       var Propiedad = perXprop.Propiedad;
-      var FechaAsociación = perXprop.FechaAsociación ;
+      var FechaAsociación = perXprop.FechadeAsociación ;
+      FechaAsociación=FechaAsociación.substring(0,10);
       var FechaDesasociación = perXprop.FechaDesasociación;
       var tabla = "<tr><td> ";
-      tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + FechaDesasociación + "</td>"
+      if(FechaDesasociación==undefined){
+        tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + "</td>"
+      }else{
+        FechaDesasociación = FechaDesasociación.substring(0,10)
+        tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + FechaDesasociación + "</td>"
+      } 
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit("+ Propietario +"," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
+      var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"edit("+ Propietario +"," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       //se debe cambiar el otro boton
-      tabla+= "<td>"+ boton + boton + "</td></tr>"
+      tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       $("#tablaItems ").append(tabla);
     }
 
@@ -33,7 +40,11 @@ function edit(nombre,lote,fechaI,fechaF){
   url+='&nombre='+nombre
   url+='&lote='+lote
   url+='&fechaI='+fechaI
-  url+='&fechaF='+fechaF
+  if(fechaF==undefined){
+    url+='&fechaF='+'null'
+  }else{
+    url+='&fechaF='+fechaF
+  }  
   location.replace(url);
 }
 function add(){

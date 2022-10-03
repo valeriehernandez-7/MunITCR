@@ -88,6 +88,58 @@ async function add() {
     });
 }
 
+async function update() {
+  var url = "http://localhost:8000/UpdatePersona"
+  var id = (new URL(location.href)).searchParams.get('id')
+  var name = $("#name").val()
+  var TipoID = $("#TipoID").val();
+  var idNumber = $("#idNumber").val();
+  var phone1 = $("#phone1").val();
+  var phone2 = $("#phone2").val();
+  var email = $("#email").val();
+  const body={
+    oldId:  id,
+    nombre: name,
+    tipoID: TipoID,
+    Ident:  idNumber,
+    tel1:   phone1,
+    tel2:   phone2,
+    email:  email
+  }
+  const options = {
+  method: "post",
+  body: JSON.stringify(body),
+  headers: {"Content-Type": "application/json"},
+  };
+  //Petición HTTP
+  console.log(body)
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+      console.log(response);
+      if(response == 5404){
+        window.alert("El tipo de Identificación no existe");
+        return
+      }
+      if(response == 5406){
+        window.alert("La identifacion ingresada no existe");
+        return
+      }
+      if(response == 5400){
+        window.alert("Error al actualizar la persona");
+        return
+      }
+      if(response == 5200){
+        window.alert("Persona actualizada con exito");
+        return
+      }else {
+        window.alert("Ocurrio un error al actualizar los daots");
+      }
+    }
+    ).catch(e => {
+      console.log(e);
+    });
+}
+
 function ret() {
   var user = ''// (new URL(location.href)).searchParams.get('user')
   location.replace(' ./listaPersona.html?user='+user);

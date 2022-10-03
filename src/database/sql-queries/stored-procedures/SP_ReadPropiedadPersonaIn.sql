@@ -3,29 +3,39 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadPersonaXPropiedad
+	@proc_name SP_ReadPropiedadPersonaIn
 	@proc_description
+	@proc_param inPersonaIdentificacion person associated with the properties
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadPersonaXPropiedad]
+CREATE OR ALTER PROCEDURE [SP_ReadPropiedadPersonaIn]
+	@inPersonaIdentificacion VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
-		SELECT  
-			[Per].[ValorDocIdentidad] AS [Propietario],
+		SELECT	
 			[Pro].[Lote] AS [Propiedad],
-			[PxP].[FechaInicio] AS [FechadeAsociación],
-			[PxP].[FechaFin] AS [FechadeDesasociación]
-		FROM [dbo].[PersonaXPropiedad] AS [PxP]
-			LEFT JOIN [dbo].[Persona] AS [Per]
-			ON [PxP].[IDPersona] = [Per].[ID]
-			LEFT JOIN [dbo].[Propiedad] AS [Pro]
-			ON [PxP].[IDPropiedad] =  [Pro].[ID]
-		WHERE [Per].[Activo] = 1 AND [Pro].[Activo] = 1;
+			[TU].[Nombre] AS [UsodePropiedad], 
+			[TZ].[Nombre] AS [ZonadePropiedad],
+			[Pro].[MetrosCuadrados] AS [Territorio],
+			[Pro].[ValorFiscal] AS [ValorFiscal], 
+			[Pro].[FechaRegistro] AS [FechadeRegistro]
+		FROM [dbo].[Propiedad] AS [Pro]
+			INNER JOIN [dbo].[TipoUsoPropiedad] AS [TU]
+			ON [TU].[ID] = [Pro].[IDTipoUsoPropiedad]
+			INNER JOIN [dbo].[TipoZonaPropiedad] AS [TZ]
+			ON [TZ].[ID] = [Pro].[IDTipoZonaPropiedad]
+			INNER JOIN [dbo].[PersonaXPropiedad] AS [PXP]
+			ON [PXP].[IDPropiedad] = [Pro].[ID]
+			INNER JOIN [dbo].[Persona] AS [Per]
+			ON [Per].[ID] = [PXP].[IDPersona]
+		WHERE [Pro].[Activo] = 1 AND [Per].[Activo] = 1
+		AND [Per].[ValorDocIdentidad] = @inPersonaIdentificacion
+		ORDER BY [Pro].[Lote];
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH

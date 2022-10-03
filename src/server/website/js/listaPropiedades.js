@@ -13,10 +13,11 @@ $(document).ready(function(){
       var uso = propiedad.UsodePropiedad;
       var zona = propiedad.ZonadePropiedad ;
       var area = propiedad.Territorio;
-      var valorFiscal = propiedad.valorFiscal;
+      var valorFiscal = propiedad.ValorFiscal;
       var fechaRegistro = propiedad.FechadeRegistro;
+      fechaRegistro = fechaRegistro.substring(0,10);
       var tabla = "<tr><td> ";
-      tabla += lote + "</td><td>" + zona + "</td><td>" + uso + "</td><td>" + area + "</td><td>" + valorFiscal + "</td><td>" + fechaRegistro + "</td>"
+      tabla += uso + "</td><td>" + zona + "</td><td>" + lote + "</td><td>" + area + "</td><td>" + valorFiscal + "</td><td>" + fechaRegistro + "</td>"
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit(\'"+ uso +"\',\'" + zona +"\',"+ lote + "," + area + ","+ valorFiscal + ",\'" + fechaRegistro+"\');\" >"
       //se debe cambiar el otro boton
       tabla+= "<td>"+ boton + boton + "</td></tr>"
@@ -28,6 +29,7 @@ $(document).ready(function(){
   });
 
 })
+
 function edit(uso,zona,lote,m2,valorFiscal,registro){
   let url = './PropiedadesEdit.html?add=0'
   url+='&uso='+uso

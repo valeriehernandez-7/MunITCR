@@ -1,17 +1,30 @@
-//$( document ).ready(function() {
-//    $('.linea').click(function() {
-//        $('#home').html('<embed src="./files/'+this.id+'_4b/'+this.id+'_ejemplo.pdf" type="application/pdf" width="100%" height="400px" class="margenfilemodal" />');
-//        //alert(this);
-//        let elementos = this.getElementsByTagName("td")
-//
-//
-//        let url = './UsersXprop.html?add=0'
-//
-//        let usuario = '&usuario='+ elementos[0].innerHTML
-//        let lote = '&lote='+ elementos[1].innerHTML
-//        location.replace(url+usuario+lote);
-//    });
-//});
+$(document).ready(function(){
+  var url = "http://localhost:8000/ReadPropiedadXUsuario"
+  const options = {
+  method: "get",
+  headers: {"Content-Type": "application/json"},
+  };
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+    $("#tableBody > tbody").empty();
+    for (var i = 0; i < response.length; i++) {
+      var propiedad = response [i];      
+      var lote = propiedad.Propiedad;
+      var user = propiedad.Usuario;    
+      var tabla = "<tr><td> ";
+      tabla += user + "</td><td>" + lote + "</td>"
+      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit(\'"+ user +"\',"+ lote +");\" >"
+      var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"edit(\'"+ user +"\',"+ lote +");\" >"
+      //se debe cambiar el otro boton
+      tabla+= "<td>"+ boton + boton2 + "</td></tr>"
+      $("#tablaItems ").append(tabla);
+    }
+
+  }).catch(e => {
+      console.log(e);
+  });
+
+})
 function edit(usuario,lote){
   let url = './UserXpropEdit.html?add=0'
   url+='&usuario='+usuario

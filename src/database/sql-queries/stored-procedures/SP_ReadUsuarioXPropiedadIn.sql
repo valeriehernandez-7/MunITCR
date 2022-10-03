@@ -17,12 +17,19 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
-		SELECT [U].[Username] AS [Usuario]
-		FROM [dbo].[Propiedad] AS [P]
-			LEFT JOIN [dbo].[Usuario] AS [U]
-			ON [U].[ID] = [P].[IDUsuario] 
-		WHERE [U].[Activo] = 1 AND [P].[Activo] = 1 
-		AND [P].[Lote] = @inPropiedad;
+		SELECT 
+			[Per].[ValorDocIdentidad] AS [Persona],
+			[U].[Username] AS [Usuario], 
+			[U].[Password] AS [Contraseña],
+			[U].[Administrador] AS [TipodeUsuario]
+		FROM [dbo].[Propiedad] AS [Pro]
+			INNER JOIN [dbo].[Usuario] AS [U]
+			ON [U].[ID] = [Pro].[IDUsuario]
+			INNER JOIN [dbo].[Persona] AS [Per]
+			ON [Per].[ID] = [U].[IDPersona]
+		WHERE [U].[Activo] = 1 AND [Pro].[Activo] = 1 
+		AND [Pro].[Lote] = @inPropiedad
+		ORDER BY [U].[Username];
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH

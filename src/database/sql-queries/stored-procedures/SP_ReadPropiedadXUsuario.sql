@@ -3,29 +3,25 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadPersonaXPropiedad
+	@proc_name SP_ReadPropiedadXUsuario
 	@proc_description
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadPersonaXPropiedad]
+CREATE OR ALTER PROCEDURE [SP_ReadPropiedadXUsuario]
 	@outResultCode INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
-		SELECT  
-			[Per].[ValorDocIdentidad] AS [Propietario],
-			[Pro].[Lote] AS [Propiedad],
-			[PxP].[FechaInicio] AS [FechadeAsociación],
-			[PxP].[FechaFin] AS [FechadeDesasociación]
-		FROM [dbo].[PersonaXPropiedad] AS [PxP]
-			LEFT JOIN [dbo].[Persona] AS [Per]
-			ON [PxP].[IDPersona] = [Per].[ID]
-			LEFT JOIN [dbo].[Propiedad] AS [Pro]
-			ON [PxP].[IDPropiedad] =  [Pro].[ID]
-		WHERE [Per].[Activo] = 1 AND [Pro].[Activo] = 1;
+		SELECT	
+			[P].[Lote] AS [Propiedad],
+			[U].[Username] AS [Usuario]
+		FROM [dbo].[Propiedad] AS [P]
+			INNER JOIN [dbo].[Usuario] AS [U]
+			ON [U].[ID] = [P].[IDUsuario]
+		WHERE [P].[Activo] = 1 AND [U].[Activo] = 1;
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH

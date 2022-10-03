@@ -15,8 +15,14 @@ import {ReadPersona,
         ReadTipoMontoCC,
         ReadUsuarioXPropiedadIn,
         ReadPropiedadLote,
+        ReadPropiedadXUsuario,
+        ReadPersonaInXPropiedad,
         CreatePersona,
-        CreateUsuario
+        CreateUsuario,
+        CreatePropiedad,
+        CreatePersonaXPropiedad,
+        CreateUsuarioXPropiedad,
+        UpdatePersona
         } from '../controllers/controller'
 
 //lista de personas     
@@ -64,11 +70,29 @@ router.get('/ReadUsuarioXPropiedadIn',ReadUsuarioXPropiedadIn)
 //listas propiedades por usuario
 router.get('/ReadPropiedadLote',ReadPropiedadLote)
 
+//listas usuarios / propiedades
+router.get('/ReadPropiedadXUsuario',ReadPropiedadXUsuario)
+
+//listas propiedades de un usuario por ID
+router.post('/ReadPersonaInXPropiedad',ReadPersonaInXPropiedad)
+
 //Agrega una persona a la BD
 router.post('/CreatePersona',CreatePersona)
 
 //Agrega un usuario a la BD
 router.post('/CreateUsuario',CreateUsuario)
+
+//Agrega una propiedad a la BD
+router.post('/CreatePropiedad',CreatePropiedad)
+
+//Agrega una asociacion persona/propiedad a la BD
+router.post('/CreatePersonaXPropiedad',CreatePersonaXPropiedad)
+
+//Agrega una asociacion persona/propiedad a la BD
+router.post('/CreateUsuarioXPropiedad',CreateUsuarioXPropiedad)
+
+//Agrega una asociacion persona/propiedad a la BD
+router.post('/UpdatePersona',UpdatePersona)
 
 
 export default router
