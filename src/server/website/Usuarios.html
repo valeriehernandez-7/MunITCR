@@ -11,8 +11,8 @@
     <body>
         <section class= "form-usuario">
             <h5>Usuario</h5>
-            Identificación
-            <input class="controls" type="number" id="nombre" value="" placeholder="Nombre">
+            Identificación           
+            <select class="controls" name="ident" id="ident"><option value="Identificacion">Identificación</option></select>
             Nombre de Usuario
             <input class="controls" type="text" id="user" value="" placeholder="Nombre de Usuario">
 
@@ -24,13 +24,13 @@
 
             </section>
 
-            <!--usuario activo -->
+            <!--usuario admin -->
             <section>
               <br>
               <input type="checkbox" id="Admin" class="checkbox" />
               <label for="Admin" class="toggle">Usuario Administrador</label>
             </section>
-            <!--<select class="controls" name="categorias" id="categorias"><option value="Categoria">Categoría</option></select>-->
+
             <section>
               <input class="buttons" type="submit" id="addBtn" value="Agregar usuario" onclick="add();">
               <input class="buttons" type="submit" id="backBTN" value="Regresar" onclick="ret();">

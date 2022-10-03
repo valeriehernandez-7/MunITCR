@@ -15,7 +15,8 @@ import {ReadPersona,
         ReadTipoMontoCC,
         ReadUsuarioXPropiedadIn,
         ReadPropiedadLote,
-        CreatePersona
+        CreatePersona,
+        CreateUsuario
         } from '../controllers/controller'
 
 //lista de personas     
@@ -65,6 +66,9 @@ router.get('/ReadPropiedadLote',ReadPropiedadLote)
 
 //Agrega una persona a la BD
 router.post('/CreatePersona',CreatePersona)
+
+//Agrega un usuario a la BD
+router.post('/CreateUsuario',CreateUsuario)
 
 
 export default router

@@ -151,3 +151,17 @@ export const CreatePersona=  async (req, res) => {
                 .execute('SP_CreatePersona');
         res.json(result.output.outResultCode);    
     }
+
+export const CreateUsuario =  async (req, res) => {
+    const pool= await getConection()
+    const {ident,user,password,admin} = req.body;
+    console.log(ident,user,password,admin)
+    const result= await pool.request()
+                .input('inIdentificacionPersona', sql.VARCHAR(64),ident)
+                .input('inUsername', sql.VARCHAR(16),user)
+                .input('inPassword', sql.VARCHAR(16),password)
+                .input('inTipoUsuario', sql.VARCHAR(16),admin)
+                .output('outResultCode', sql.Int)
+                .execute('SP_CreateUsuario');
+        res.json(result.output.outResultCode);    
+    }

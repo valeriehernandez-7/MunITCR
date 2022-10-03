@@ -13,8 +13,8 @@ $(document).ready(function(){
       var identificacion = persona.Persona ;
       var usuario = persona.Usuario;
       var pass = persona.Contraseña ;      
-      var tipoUser = persona.TipoUsuario;
-      if (tipoUser==true){
+      var tipoUser = persona.TipodeUsuario;
+      if (tipoUser== true ){
         tipoUser = 'Administrador' 
       }else{
         tipoUser =  'Regular'
