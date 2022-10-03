@@ -2,26 +2,26 @@
 <Catalogo>
     <TipodeMovimientoLecturadeMedidores>
         <TipodeMovimientoLecturadeMedidor id="1" Nombre="Lectura" />
-        <TipodeMovimientoLecturadeMedidor id="2" Nombre="Ajuste Crédito" />
-        <TipodeMovimientoLecturadeMedidor id="3" Nombre="Ajuste Débito" />
+        <TipodeMovimientoLecturadeMedidor id="2" Nombre="Ajuste Credito" />
+        <TipodeMovimientoLecturadeMedidor id="3" Nombre="Ajuste Debito" />
     </TipodeMovimientoLecturadeMedidores>
     <TipoUsoPropiedades>
-        <TipoUsoPropiedad id="1" Nombre="Habitación" />
+        <TipoUsoPropiedad id="1" Nombre="Habitacion" />
         <TipoUsoPropiedad id="2" Nombre="Comercial" />
         <TipoUsoPropiedad id="3" Nombre="Industrial" />
-        <TipoUsoPropiedad id="4" Nombre="Lote Baldío" />
-        <TipoUsoPropiedad id="5" Nombre="Agrícola" />
+        <TipoUsoPropiedad id="4" Nombre="Lote Baldio" />
+        <TipoUsoPropiedad id="5" Nombre="Agricola" />
     </TipoUsoPropiedades>
     <TipoZonaPropiedades>
         <TipoZonaPropiedad id="1" Nombre="Residencial" />
-        <TipoZonaPropiedad id="2" Nombre="Agrícola" />
+        <TipoZonaPropiedad id="2" Nombre="Agricola" />
         <TipoZonaPropiedad id="3" Nombre="Bosque" />
         <TipoZonaPropiedad id="4" Nombre="Zona Industrial" />
         <TipoZonaPropiedad id="5" Nombre="Zona Comercial" />
     </TipoZonaPropiedades>
     <TipoDocumentoIdentidades>
-        <TipoDocumentoIdentidad id="1" Nombre="Cédula CR" />
-        <TipoDocumentoIdentidad id="2" Nombre="Persona Jurídica CR" />
+        <TipoDocumentoIdentidad id="1" Nombre="Cedula CR" />
+        <TipoDocumentoIdentidad id="2" Nombre="Persona Juridica CR" />
         <TipoDocumentoIdentidad id="3" Nombre="Pasaporte CR" />
     </TipoDocumentoIdentidades>
     <TipoMedioPagos>
@@ -34,7 +34,7 @@
         <PeriodoMontoCC id="2" Nombre="Trimestral" QMeses="3" />
         <PeriodoMontoCC id="3" Nombre="Semestral" QMeses="6" />
         <PeriodoMontoCC id="4" Nombre="Anual" QMeses="12" />
-        <PeriodoMontoCC id="5" Nombre="Único no recurrente" QMeses="1" />
+        <PeriodoMontoCC id="5" Nombre="Unico no recurrente" QMeses="1" />
     </PeriodoMontoCCs>
     <TipoMontoCCs>
         <TipoMontoCC id="1" Nombre="Fijo" />
@@ -66,16 +66,16 @@
         <TipoParametro id="22" Nombre="varbinary" />
     </TipoParametroSistema>
     <ParametrosSistema>
-        <ParametroSistema id="1" Nombre="Cantidad de días de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
-        <ParametroSistema id="2" Nombre="Cantidad de días para cálculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
+        <ParametroSistema id="1" Nombre="Cantidad de dias de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
+        <ParametroSistema id="2" Nombre="Cantidad de dias para calculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
     </ParametrosSistema>
     <CCs>
         <CC id="1" Nombre="Consumo de agua" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="300" ValorMinimoM3="30" Valorm3="" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
         <CC id="2" Nombre="Impuesto sobre propiedad" TipoMontoCC="3" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="3" Nombre="Recolección de basura y limpieza de caños" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="150" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
+        <CC id="3" Nombre="Recoleccion de basura y limpieza de canos" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="150" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
         <CC id="4" Nombre="Patente comercial" TipoMontoCC="1" PeriodoMontoCC="3" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="5" Nombre="Reconexión de agua" TipoMontoCC="1" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC id="5" Nombre="Reconexion de agua" TipoMontoCC="1" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
         <CC id="6" Nombre="Intereses moratorios" TipoMontoCC="3" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="7" Nombre="Mantenimiento de parques y alumbrado público" TipoMontoCC="1" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC id="7" Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="1" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
     </CCs>
 </Catalogo>

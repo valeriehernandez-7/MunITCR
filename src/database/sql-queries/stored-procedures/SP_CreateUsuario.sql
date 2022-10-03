@@ -4,8 +4,11 @@ GO
 
 /* 
 	@proc_name SP_CreateUsuario
-	@proc_description
-	@proc_param 
+	@proc_description 
+	@proc_param inIdentificacionPersona 
+	@proc_param inUsername 
+	@proc_param inPassword 
+	@proc_param inTipoUsuario 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */

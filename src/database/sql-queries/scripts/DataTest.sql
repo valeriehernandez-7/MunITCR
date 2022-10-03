@@ -7,6 +7,12 @@ GO
 SELECT * FROM [dbo].[TipoMovimientoConsumoAgua];
 GO
 
+SELECT * FROM [dbo].[PropiedadXConceptoCobro];
+GO
+
+SELECT * FROM [dbo].[Propiedad];
+GO
+
 SELECT * FROM [dbo].[TipoUsoPropiedad];
 GO
 
@@ -68,6 +74,14 @@ DELETE FROM [dbo].[ErrorLog];
 DBCC CHECKIDENT ('[dbo].[ErrorLog]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
+DELETE FROM [dbo].[PropiedadXConceptoCobro];
+DBCC CHECKIDENT ('[dbo].[PropiedadXConceptoCobro]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[Propiedad];
+DBCC CHECKIDENT ('[dbo].[Propiedad]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
 DELETE FROM [dbo].[Usuario];
 DBCC CHECKIDENT ('[dbo].[Usuario]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -76,7 +90,15 @@ DELETE FROM [dbo].[Persona];
 DBCC CHECKIDENT ('[dbo].[Persona]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
+DELETE FROM [dbo].[ParametroInteger];
+GO
+
 DELETE FROM [dbo].[Parametro];
+DBCC CHECKIDENT ('[dbo].[Parametro]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[TipoParametro];
+DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[TipoMovimientoConsumoAgua];
@@ -97,13 +119,6 @@ GO
 
 DELETE FROM [dbo].[MedioDePago];
 DBCC CHECKIDENT ('[dbo].[MedioDePago]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[ParametroInteger];
-GO
-
-DELETE FROM [dbo].[TipoParametro];
-DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[CCConsumoAgua];
