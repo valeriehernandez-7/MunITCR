@@ -70,12 +70,12 @@
         <ParametroSistema id="2" Nombre="Cantidad de días para cálculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
     </ParametrosSistema>
     <CCs>
-        <CC id="1" Nombre="Consumo de Agua" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="300" ValorMinimoM3="30" Valorm3="" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
-        <CC id="2" Nombre="Impuesto a Propiedad" TipoMontoCC="3" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="3" Nombre="Recolección de Basura" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="150" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
-        <CC id="4" Nombre="Patente Comercial" TipoMontoCC="1" PeriodoMontoCC="3" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="5" Nombre="Reconexión" TipoMontoCC="1" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="6" Nombre="Intereses Moratorios" TipoMontoCC="3" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="7" Nombre="Mantenimiento de Parques" TipoMontoCC="1" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC id="1" Nombre="Consumo de agua" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="300" ValorMinimoM3="30" Valorm3="" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
+        <CC id="2" Nombre="Impuesto sobre propiedad" TipoMontoCC="3" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC id="3" Nombre="Recolección de basura y limpieza de caños" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="150" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
+        <CC id="4" Nombre="Patente comercial" TipoMontoCC="1" PeriodoMontoCC="3" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC id="5" Nombre="Reconexión de agua" TipoMontoCC="1" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC id="6" Nombre="Intereses moratorios" TipoMontoCC="3" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC id="7" Nombre="Mantenimiento de parques y alumbrado público" TipoMontoCC="1" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
     </CCs>
 </Catalogo>
