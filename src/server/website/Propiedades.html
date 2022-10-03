@@ -11,11 +11,17 @@
     <body>
         <section class= "form-Propiedades">
             <h5>Propiedades</h5>
-            <input class="controls" type="number" id="idType" value="" placeholder="Tipo de Propiedad">
-            <input class="controls" type="number" id="idZone" value="" placeholder="Tipo de Zona">
+            Tipo de Propiedad
+            <select class="controls" name="idType" id="idType"><option value="tipo">Tipo de Propiedad</option></select>
+            Tipo de Zona
+            <select class="controls" name="idZone" id="idZone"><option value="tipo">Tipo de Zona</option></select>
+            Número de Lote
             <input class="controls" type="number" id="lote" value="" placeholder="Número de Lote">
-            <input class="controls" type="number" id="squareM" value="" placeholder="Número de Metros cuadrados">
+            Metros cuadrados
+            <input class="controls" type="number" id="squareM" value="" placeholder="Metros cuadrados">
+            Valor de la propiedad
             <input class="controls" type="number" id="price" value="" placeholder="Valor de la propiedad" step="any">
+            Fecha de Registro
             <input class="controls" type="date" id="date" value = "2000-09-09" step="any">
             <section>
               <input class="buttons" type="submit" id="addBtn" value="Agregar Propiedades" onclick="add();">

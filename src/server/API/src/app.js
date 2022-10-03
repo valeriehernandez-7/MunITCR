@@ -4,6 +4,7 @@ import config from './config'
 
 import itemsRoutes from './routes/items.routes'
 import usersRoutes from './routes/users.routes'
+import Routes from './routes/routes'
 
 
 
@@ -19,4 +20,5 @@ app.use(express.urlencoded({extended: false}));
 
 app.use(itemsRoutes);
 app.use(usersRoutes);
+app.use(Routes);
 export default app ;

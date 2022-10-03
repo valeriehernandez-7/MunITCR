@@ -5,7 +5,7 @@ $(document).ready(function(){
       var nombre = (new URL(location.href)).searchParams.get('nombre')
       var user = (new URL(location.href)).searchParams.get('user')
       var pass = (new URL(location.href)).searchParams.get('password')
-      if ((new URL(location.href)).searchParams.get('admin') == 'Regular'){
+      if ((new URL(location.href)).searchParams.get('admin') == 'Administrador'){
           var admin = 1
       }
 

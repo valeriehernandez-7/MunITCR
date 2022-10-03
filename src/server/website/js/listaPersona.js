@@ -1,20 +1,34 @@
-//$( document ).ready(function() {
-//    $('.linea').click(function() {
-//        $('#home').html('<embed src="./files/'+this.id+'_4b/'+this.id+'_ejemplo.pdf" type="application/pdf" width="100%" height="400px" class="margenfilemodal" />');
-//        //alert(this);
-//        let url = './Persona.html?add=0'
-//        let elementos = this.getElementsByTagName("td")
-//        let nombre ='&nombre='+elementos[0].innerHTML
-//        let id = '&id='+ elementos[1].innerHTML
-//        let tipo = '&tipo='+ elementos[2].innerHTML
-//        let tel = '&tel='+ elementos[3].innerHTML
-//        let tel2 = '&tel2='+ elementos[4].innerHTML
-//        let email = '&email='+ elementos[5].innerHTML
-//        let activo = '&activo='+ elementos[6].innerHTML
-//        location.replace(url+nombre+id+tipo+tel+tel2+email+activo);
-//
-//    });
-//});
+$(document).ready(function(){
+  console.log('cargando')
+  var url = "http://localhost:8000/ReadPersona"
+  const options = {
+  method: "get",
+  headers: {"Content-Type": "application/json"},
+  };
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+    $("#tableBody > tbody").empty();
+    for (var i = 0; i < response.length; i++) {
+      var persona = response [i];      
+      var nombre = persona.Nombre;
+      var IDKind = persona.TipodeIdentificación;
+      var ID = persona.Identificación ;
+      var tel1 = persona.Teléfono1;
+      var tel2 = persona.Teléfono2;
+      var email = persona.CorreoElectrónico;
+      var tabla = "<tr><td> ";
+      tabla += nombre + "</td><td>" + ID + "</td><td>" + IDKind + "</td><td>" + tel1 + "</td><td>" + tel2 + "</td><td>" + email + "</td>"
+      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit(\'"+nombre+"\'," + ID +",\'"+IDKind + "\'," + tel1+ ","+ tel2+ ",\'" +email+"\');\" >"
+      //se debe cambiar el otro boton
+      tabla+= "<td>"+ boton + boton + "</td></tr>"
+      $("#tablaItems ").append(tabla);
+    }
+
+  }).catch(e => {
+      console.log(e);
+  });
+
+})
 
 function add(){
     location.replace('./Persona.html');

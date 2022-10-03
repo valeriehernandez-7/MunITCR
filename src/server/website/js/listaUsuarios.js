@@ -1,18 +1,38 @@
-//$( document ).ready(function() {
-//    $('.linea').click(function() {
-//        $('#home').html('<embed src="./files/'+this.id+'_4b/'+this.id+'_ejemplo.pdf" type="application/pdf" width="100%" height="400px" class="margenfilemodal" />');
-//        //alert(this);
-//        let url = './Usuarios.html?add=0'
-//
-//        let elementos = this.getElementsByTagName("td")
-//        let idPersona = '&idPersona='+ elementos[0].innerHTML
-//        let user = '&user='+ elementos[1].innerHTML
-//        let pass = '&pass='+ elementos[2].innerHTML
-//        let admin = '&admin='+ elementos[3].innerHTML
-//        let activo = '&activo='+ elementos[4].innerHTML
-//        location.replace(url+idPersona+user+pass+admin+activo);
-//    });
-//});
+$(document).ready(function(){
+  var url = "http://localhost:8000/ReadUsuario"
+  const options = {
+  method: "get",
+  headers: {"Content-Type": "application/json"},
+  };
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+    $("#tableBody > tbody").empty();
+    console.log(response)
+    for (var i = 0; i < response.length; i++) {
+      var persona = response [i];      
+      var identificacion = persona.Persona ;
+      var usuario = persona.Usuario;
+      var pass = persona.Contraseña ;      
+      var tipoUser = persona.TipoUsuario;
+      if (tipoUser==true){
+        tipoUser = 'Administrador' 
+      }else{
+        tipoUser =  'Regular'
+      }
+      var tabla = "<tr><td> ";
+      tabla += identificacion + "</td><td>" + usuario + "</td><td>" + pass + "</td><td>" + tipoUser + "</td>"
+      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit("+ identificacion +",\'" + usuario +"\',\'"+ pass + "\',\'" + tipoUser+"\');\" >"
+      //se debe cambiar el otro boton
+      tabla+= "<td>"+ boton + boton + "</td></tr>"
+      $("#tablaItems ").append(tabla);
+    }
+
+  }).catch(e => {
+      console.log(e);
+  });
+
+})
+
 function add(){
     location.replace('./Usuarios.html');
 }
