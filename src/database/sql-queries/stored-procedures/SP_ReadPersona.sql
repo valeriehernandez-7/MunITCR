@@ -17,11 +17,11 @@ BEGIN
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT	
 			[P].[Nombre], 
-			[DI].[Nombre] AS [Tipo de Identificación],
+			[DI].[Nombre] AS [TipodeIdentificación],
 			[P].[ValorDocIdentidad] AS [Identificación],
-			[P].[Telefono1] AS [Teléfono 1],
-			[P].[Telefono2] AS [Teléfono 2], 
-			[P].[CorreoElectronico] AS [Correo Electrónico]
+			[P].[Telefono1] AS [Teléfono1],
+			[P].[Telefono2] AS [Teléfono2], 
+			[P].[CorreoElectronico] AS [CorreoElectrónico]
 		FROM [dbo].[Persona] AS [P]
 			LEFT JOIN [dbo].[TipoDocIdentidad] AS [DI]
 			ON [P].[IdTipoDocIdentidad] = [DI].[ID]

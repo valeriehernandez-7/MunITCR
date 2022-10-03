@@ -19,11 +19,11 @@ BEGIN
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT	
 			[P].[Lote] AS [Propiedad],
-			[TU].[Nombre] AS [Uso de Propiedad], 
-			[TZ].[Nombre] AS [Zona de Propiedad],
+			[TU].[Nombre] AS [UsodePropiedad], 
+			[TZ].[Nombre] AS [ZonadePropiedad],
 			[P].[MetrosCuadrados] AS [Territorio],
-			[P].[ValorFiscal] AS [Valor Fiscal], 
-			[P].[FechaRegistro] AS [Fecha de Registro]
+			[P].[ValorFiscal] AS [ValorFiscal], 
+			[P].[FechaRegistro] AS [FechadeRegistro]
 		FROM [dbo].[Propiedad] AS [P]
 			LEFT JOIN [dbo].[TipoUsoPropiedad] AS [TU]
 			ON [TU].[ID] = [P].[IDTipoUsoPropiedad]

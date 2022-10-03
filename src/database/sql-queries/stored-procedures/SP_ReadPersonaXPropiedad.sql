@@ -18,8 +18,8 @@ BEGIN
 		SELECT  
 			[Per].[ValorDocIdentidad] AS [Propietario],
 			[Pro].[Lote] AS [Propiedad],
-			[PxP].[FechaInicio] AS [Fecha de Asociación],
-			[PxP].[FechaFin] AS [Fecha de Desasociación]
+			[PxP].[FechaInicio] AS [FechadeAsociación],
+			[PxP].[FechaFin] AS [FechadeDesasociación]
 		FROM [dbo].[PersonaXPropiedad] AS [PxP]
 			LEFT JOIN [dbo].[Persona] AS [Per]
 			ON [PxP].[IDPropiedad] = [Per].[ID]

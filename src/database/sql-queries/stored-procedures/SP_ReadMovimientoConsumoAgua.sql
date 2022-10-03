@@ -23,7 +23,7 @@ BEGIN
 		WHERE [P].[Lote] = @inPropiedad;
 
 		IF (@idPropiedad IS NOT NULL)
-			BEGIN
+			BEGIN 
 				SELECT 
 					[MCCA].[Fecha] AS [Fecha],
 					[TMCA].[Nombre] AS [Tipo],
@@ -34,6 +34,9 @@ BEGIN
 					ON [TMCA].[ID] = [MCCA].[IDTipoMovimientoConsumoAgua]
 					INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
 					ON [PXCA].[IDPropiedadXCC] = [MCCA].[IDPropiedadXCCConsumoAgua]
+					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+					ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
+				WHERE [PXCC].[IDPropiedad] = @idPropiedad
 				ORDER BY [MCCA].[Fecha];
 				SET @outResultCode = 5200; /* OK */
 			END;
