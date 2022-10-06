@@ -147,16 +147,6 @@ export const ReadPropiedadXUsuarioIn=  async (req, res) => {
 }
 
 
-export const ReadPersonaInXPropiedad =  async (req, res) => {
-    const pool= await getConection()
-    const ident = req.body.ident;
-    const result= await pool.request()
-                .input('inPersona', sql.VARCHAR(64),ident.toString())
-                .output('outResultCode', sql.Int)
-                .execute('SP_ReadPersonaInXPropiedad');
-        res.json(result.recordset);    
-    }
-
 export const CreatePersona=  async (req, res) => {
     const pool= await getConection()
     const {nombre,tipoID,Ident,tel1,tel2,email} = req.body;
@@ -241,3 +231,45 @@ export const UpdatePersona =  async (req, res) => {
                 .execute('SP_UpdatePersona');
         res.json(result.output.outResultCode);    
     }
+
+export const ReadPropiedadPersonaIn =  async (req, res) => {
+    const pool= await getConection()
+    const ident = req.body.ident;
+    console.log(ident)
+    const result= await pool.request() 
+                .input('inPersonaIdentificacion', sql.VARCHAR(64),ident)
+                .output('outResultCode', sql.Int)
+                .execute('SP_ReadPropiedadPersonaIn');
+        res.json(result.recordset);    
+    }
+
+export const ReadPropiedadInPersona =  async (req, res) => {
+    const pool= await getConection()
+    const lote = req.body.lote;
+    const result= await pool.request() 
+                .input('inPropiedadLote', sql.CHAR(32),lote)
+                .output('outResultCode', sql.Int)
+                .execute('SP_ReadPropiedadInPersona');
+        res.json(result.recordset);    
+    }
+
+export const ReadUsuarioInXPropiedad =  async (req, res) => {
+    const pool= await getConection()
+    const user = req.body.user;
+    const result= await pool.request() 
+                .input('inUsuarioUsername', sql.VARCHAR(16),user)
+                .output('outResultCode', sql.Int)
+                .execute('SP_ReadUsuarioInXPropiedad');
+        res.json(result.recordset);    
+    }
+
+export const SP_ReadUsuarioXPropiedadIn =  async (req, res) => {
+    const pool= await getConection()
+    const user = req.body.user;
+    const result= await pool.request() 
+                .input('inUsuarioUsername', sql.VARCHAR(16),user)
+                .output('outResultCode', sql.Int)
+                .execute('SP_ReadUsuarioXPropiedadIn');
+        res.json(result.recordset);    
+    }
+
