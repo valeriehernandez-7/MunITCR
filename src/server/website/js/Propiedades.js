@@ -111,7 +111,53 @@ async function add() {
     });
 }
 
-
+async function update() {
+  var url = "http://localhost:8000/UpdatePropiedad"
+  var lote = (new URL(location.href)).searchParams.get('lote')
+  var uso = $("#idType").val()
+  var zona = $("#idZone").val();
+  var lote = $("#lote").val();
+  var m2 = $("#squareM").val();
+  var valorFiscal = $("#price").val();
+  var registro = $("#date").val();
+  const body={
+    oldLote:lote,
+    uso: uso,
+    zona: zona,
+    lote:lote,
+    m2: m2,
+    valorFiscal: valorFiscal,
+    registro: registro
+  }
+  const options = {
+  method: "post",
+  body: JSON.stringify(body),
+  headers: {"Content-Type": "application/json"},
+  };
+  //Petición HTTP
+  console.log(body)
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+      console.log(response);
+      if(response == 5404){
+        window.alert("El tipo de propiedad no existe");
+        return
+      }      
+      if(response == 5400){
+        window.alert("Error al actualizar la propiedad");
+        return
+      }
+      if(response == 5200){
+        window.alert("Propiedad actualizada con exito");
+        return
+      }else {
+        window.alert("Ocurrio un error al actualizar los daots");
+      }
+    }
+    ).catch(e => {
+      console.log(e);
+    });
+}
 
 function ret() {
   var user = ''// (new URL(location.href)).searchParams.get('user')

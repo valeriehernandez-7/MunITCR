@@ -19,8 +19,9 @@ $(document).ready(function(){
       var tabla = "<tr><td> ";
       tabla += uso + "</td><td>" + zona + "</td><td>" + lote + "</td><td>" + area + "</td><td>" + valorFiscal + "</td><td>" + fechaRegistro + "</td>"
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit(\'"+ uso +"\',\'" + zona +"\',"+ lote + "," + area + ","+ valorFiscal + ",\'" + fechaRegistro+"\');\" >"
+      var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"edit(\'"+ uso +"\',\'" + zona +"\',"+ lote + "," + area + ","+ valorFiscal + ",\'" + fechaRegistro+"\');\" >"
       //se debe cambiar el otro boton
-      tabla+= "<td>"+ boton + boton + "</td></tr>"
+      tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       $("#tablaItems ").append(tabla);
     }
 

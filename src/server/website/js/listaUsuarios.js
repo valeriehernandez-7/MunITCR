@@ -22,8 +22,9 @@ $(document).ready(function(){
       var tabla = "<tr><td> ";
       tabla += identificacion + "</td><td>" + usuario + "</td><td>" + pass + "</td><td>" + tipoUser + "</td>"
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit("+ identificacion +",\'" + usuario +"\',\'"+ pass + "\',\'" + tipoUser+"\');\" >"
+      var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"edit("+ identificacion +",\'" + usuario +"\',\'"+ pass + "\',\'" + tipoUser+"\');\" >"
       //se debe cambiar el otro boton
-      tabla+= "<td>"+ boton + boton + "</td></tr>"
+      tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       $("#tablaItems ").append(tabla);
     }
 

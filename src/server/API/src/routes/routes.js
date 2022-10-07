@@ -24,7 +24,9 @@ import {ReadPersona,
         UpdatePersona,
         ReadPropiedadPersonaIn,
         ReadPropiedadInPersona,
-        ReadUsuarioInXPropiedad
+        ReadUsuarioInXPropiedad,
+        UpdateUsuario,
+        UpdatePropiedad
         } from '../controllers/controller'
 
 //lista de personas     
@@ -66,8 +68,6 @@ router.get('/ReadTipoMovimientoConsumoAgua',ReadTipoMovimientoConsumoAgua)
 //listas de tipos de monto CC
 router.get('/ReadTipoMontoCC',ReadTipoMontoCC)
 
-//listas UsuariosXPropiedad por lote
-router.get('/ReadUsuarioXPropiedadIn',ReadUsuarioXPropiedadIn)
 
 //listas propiedades por usuario
 router.get('/ReadPropiedadLote',ReadPropiedadLote)
@@ -100,14 +100,18 @@ router.post('/ReadPropiedadPersonaIn',ReadPropiedadPersonaIn)
 //lista personas por lote
 router.post('/ReadPropiedadInPersona',ReadPropiedadInPersona)
 
-//lista de propiedades visibles para usuario
-router.post('/ReadUsuarioInXPropiedad',ReadUsuarioInXPropiedad)
-
-//lista de propiedades visibles para usuario
-router.post('/ReadUsuarioInXPropiedad',ReadUsuarioInXPropiedad)
 
 //lista de usuarios por propiedad
 router.post('/ReadUsuarioInXPropiedad',ReadUsuarioInXPropiedad)
+
+//lista de usuarios por propiedad
+router.post('/ReadUsuarioXPropiedadIn',ReadUsuarioXPropiedadIn)
+
+//update usuario
+router.post('/UpdateUsuario',UpdateUsuario)
+
+//update propiedad
+router.post('/UpdatePropiedad',UpdatePropiedad)
 
 
 export default router

@@ -107,15 +107,7 @@ export const ReadTipoMontoCC = async (req, res) => {
 }
 
 
-export const ReadUsuarioXPropiedadIn=  async (req, res) => {
-    const pool= await getConection()
-    var lote = req.query.lote;
-    const result= await pool.request()
-                    .input('inPropiedad', sql.Int,lote).
-                    output('outResultCode', sql.Int).
-                    execute('SP_ReadUsuarioXPropiedadIn');
-        res.json(result.recordset);    
-}
+
 
 export const ReadPropiedadLote=  async (req, res) => {
     const pool= await getConection() 
@@ -256,20 +248,56 @@ export const ReadPropiedadInPersona =  async (req, res) => {
 export const ReadUsuarioInXPropiedad =  async (req, res) => {
     const pool= await getConection()
     const user = req.body.user;
+    console.log(user)
     const result= await pool.request() 
                 .input('inUsuarioUsername', sql.VARCHAR(16),user)
                 .output('outResultCode', sql.Int)
                 .execute('SP_ReadUsuarioInXPropiedad');
-        res.json(result.recordset);    
+        res.json(result.recordset);     
     }
 
-export const SP_ReadUsuarioXPropiedadIn =  async (req, res) => {
+export const ReadUsuarioXPropiedadIn =  async (req, res) => {
     const pool= await getConection()
-    const user = req.body.user;
+    const lote = req.body.lote;
+    console.log(lote)
     const result= await pool.request() 
-                .input('inUsuarioUsername', sql.VARCHAR(16),user)
+                .input('inPropiedad', sql.CHAR(32),lote)
                 .output('outResultCode', sql.Int)
                 .execute('SP_ReadUsuarioXPropiedadIn');
         res.json(result.recordset);    
     }
+
+export const UpdateUsuario =  async (req, res) => {
+    const pool= await getConection()
+    const {oldID,ident,user,password,admin} = req.body;
+    console.log(oldID,ident,user,password,admin)
+    const result= await pool.request()
+                .input('inOldUsername', sql.VARCHAR(64),oldID)
+                .input('inIdentificacionPersona', sql.VARCHAR(64),ident)
+                .input('inUsername', sql.VARCHAR(16),user)
+                .input('inPassword', sql.VARCHAR(16),password)
+                .input('inTipoUsuario', sql.VARCHAR(16),admin)
+                .output('outResultCode', sql.Int)
+                .execute('SP_UpdateUsuario');
+        res.json(result.output.outResultCode);    
+    }
+
+export const UpdatePropiedad =  async (req, res) => {
+    const pool= await getConection()
+    const {oldLote,uso,zona,lote,m2,valorFiscal,registro} = req.body;
+    console.log(oldLote,uso,zona,lote,m2,valorFiscal,registro)
+    const result= await pool.request()
+                .input('inOldLote', sql.CHAR(32),oldLote)
+                .input('inUsoPropiedad', sql.VARCHAR(128),uso)
+                .input('inZonaPropiedad', sql.VARCHAR(128),zona)
+                .input('inLote', sql.CHAR(32),lote)
+                .input('inMetrosCuadrados', sql.BIGINT,m2)
+                .input('inValorFiscal', sql.MONEY,valorFiscal)
+                .input('inFechaRegistro', sql.DATE,registro)
+                .output('outResultCode', sql.Int)
+                .execute('SP_UpdatePropiedad');
+        res.json(result.output.outResultCode);    
+    }
+
+
 
