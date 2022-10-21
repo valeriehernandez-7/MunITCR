@@ -29,16 +29,16 @@ function login(bit) {
       
       if (response == 5200){
         if (bit==0){
-          location.replace(' ./propiedades_usuarioNoAdmin.html?usuario='+user);
+          location.replace(' ./propiedades_usuarioNoAdmin.html?uss='+user);
           return
         }
         if (bit ==1 ){
-          location.replace(' ./AdminOptions.html?usuario='+user);
+          location.replace(' ./AdminOptions.html?uss='+user);
           return
         }        
     }
     if (response == 5403){
-      window.alert("Su usuario no cuenta con los permiso de Administrador");
+      window.alert("Su usuario no esta autorizado");
       return 
     }else{
       window.alert("Usuario o contraseña invalidos");
@@ -60,5 +60,5 @@ function loginAdmin() {
     window.alert("No debe incluir ; en el usuario o la conreaseña");
     return;
     }
-  location.replace(' ./AdminOptions.html?');
+  location.replace(' ./AdminOptions.html?uss='+user);
 }

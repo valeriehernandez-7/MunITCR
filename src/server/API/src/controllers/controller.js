@@ -157,7 +157,6 @@ export const CreatePersona=  async (req, res) => {
 export const CreateUsuario =  async (req, res) => {
     const pool= await getConection()
     const {ident,user,password,admin} = req.body;
-    console.log(ident,user,password,admin)
     const result= await pool.request()
                 .input('inIdentificacionPersona', sql.VARCHAR(64),ident)
                 .input('inUsername', sql.VARCHAR(16),user)
@@ -199,7 +198,6 @@ export const CreatePersonaXPropiedad =  async (req, res) => {
 export const CreateUsuarioXPropiedad =  async (req, res) => {
     const pool= await getConection()
     const {user,lote} = req.body;
-    console.log(user,lote)
     const result= await pool.request() 
                 .input('inUsuarioUsername', sql.VARCHAR(16),user)
                 .input('inPropiedadLote', sql.CHAR(32),lote)
@@ -227,7 +225,6 @@ export const UpdatePersona =  async (req, res) => {
 export const ReadPropiedadPersonaIn =  async (req, res) => {
     const pool= await getConection()
     const ident = req.body.ident;
-    console.log(ident)
     const result= await pool.request() 
                 .input('inPersonaIdentificacion', sql.VARCHAR(64),ident)
                 .output('outResultCode', sql.Int)
@@ -248,7 +245,6 @@ export const ReadPropiedadInPersona =  async (req, res) => {
 export const ReadUsuarioInXPropiedad =  async (req, res) => {
     const pool= await getConection()
     const user = req.body.user;
-    console.log(user)
     const result= await pool.request() 
                 .input('inUsuarioUsername', sql.VARCHAR(16),user)
                 .output('outResultCode', sql.Int)
@@ -259,7 +255,6 @@ export const ReadUsuarioInXPropiedad =  async (req, res) => {
 export const ReadUsuarioXPropiedadIn =  async (req, res) => {
     const pool= await getConection()
     const lote = req.body.lote;
-    console.log(lote)
     const result= await pool.request() 
                 .input('inPropiedad', sql.CHAR(32),lote)
                 .output('outResultCode', sql.Int)
@@ -270,7 +265,6 @@ export const ReadUsuarioXPropiedadIn =  async (req, res) => {
 export const UpdateUsuario =  async (req, res) => {
     const pool= await getConection()
     const {oldID,ident,user,password,admin} = req.body;
-    console.log(oldID,ident,user,password,admin)
     const result= await pool.request()
                 .input('inOldUsername', sql.VARCHAR(64),oldID)
                 .input('inIdentificacionPersona', sql.VARCHAR(64),ident)
@@ -285,7 +279,6 @@ export const UpdateUsuario =  async (req, res) => {
 export const UpdatePropiedad =  async (req, res) => {
     const pool= await getConection()
     const {oldLote,uso,zona,lote,m2,valorFiscal,registro} = req.body;
-    console.log(oldLote,uso,zona,lote,m2,valorFiscal,registro)
     const result= await pool.request()
                 .input('inOldLote', sql.CHAR(32),oldLote)
                 .input('inUsoPropiedad', sql.VARCHAR(128),uso)
