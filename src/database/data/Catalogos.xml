@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Catalogo>
+    <EventosBitacora>
+        <EventoBitacora Nombre="Create" />
+        <EventoBitacora Nombre="Read" />
+        <EventoBitacora Nombre="Update" />
+        <EventoBitacora Nombre="Delete" />
+    </EventosBitacora>
+    <EntidadesBitacora>
+        <EntidadBitacora Nombre="Persona" />
+        <EntidadBitacora Nombre="Usuario" />
+        <EntidadBitacora Nombre="Propiedad" />
+        <EntidadBitacora Nombre="Propietario de Propiedad" />
+        <EntidadBitacora Nombre="Usuario de Propiedad" />
+    </EntidadesBitacora>
     <TipodeMovimientoLecturadeMedidores>
         <TipodeMovimientoLecturadeMedidor Nombre="Lectura" />
         <TipodeMovimientoLecturadeMedidor Nombre="Ajuste Credito" />
@@ -79,14 +92,10 @@
         <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
         <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
     </CCs>
-    <EstadoDeFacturas>
-        <EstadoFactura EstadoFactura="Pago pendiente" />
-        <EstadoFactura EstadoFactura="Pago realizado" />
-        <EstadoFactura EstadoFactura="Arreglo de pago" />
-        <EstadoFactura EstadoFactura="Anulada" />
-    </EstadoDeFacturas>
-    <EstadoOrdenesDeCorta>
-        <EstadoOrdenes EstadoOrdenes="Pago pendiente" />
-        <EstadoOrdenes EstadoOrdenes="Pago realizado" />
-    </EstadoOrdenesDeCorta>
+    <EstadosFactura>
+        <EstadoFactura Nombre="Pago pendiente" />
+        <EstadoFactura Nombre="Pago realizado" />
+        <EstadoFactura Nombre="Arreglo de pago" />
+        <EstadoFactura Nombre="Anulada" />
+    </EstadosFactura>
 </Catalogo>

@@ -4,6 +4,15 @@ GO
 SELECT * FROM [dbo].[ErrorLog];
 GO
 
+SELECT * FROM [dbo].[EventLog];
+GO
+
+SELECT * FROM [dbo].[EventType];
+GO
+
+SELECT * FROM [dbo].[EntityType];
+GO
+
 SELECT * FROM [dbo].[TipoMovimientoConsumoAgua];
 GO
 
@@ -28,12 +37,6 @@ GO
 SELECT * FROM [dbo].[TipoDocIdentidad];
 GO
 
-SELECT * FROM [dbo].[PeriodoMontoCC];
-GO
-
-SELECT * FROM [dbo].[TipoMontoCC];
-GO
-
 SELECT * FROM [dbo].[TipoParametro];
 GO
 
@@ -41,6 +44,12 @@ SELECT * FROM [dbo].[Parametro];
 GO
 
 SELECT * FROM [dbo].[ParametroInteger];
+GO
+
+SELECT * FROM [dbo].[PeriodoMontoCC];
+GO
+
+SELECT * FROM [dbo].[TipoMontoCC];
 GO
 
 SELECT * FROM [dbo].[ConceptoCobro];
@@ -85,8 +94,22 @@ GO
 SELECT * FROM [dbo].[MedioPago];
 GO
 
+-- *************************************************************
+
 DELETE FROM [dbo].[ErrorLog];
 DBCC CHECKIDENT ('[dbo].[ErrorLog]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[EventLog];
+DBCC CHECKIDENT ('[dbo].[EventLog]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[EventType];
+DBCC CHECKIDENT ('[dbo].[EventType]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[EntityType];
+DBCC CHECKIDENT ('[dbo].[EntityType]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[PersonaXPropiedad];
