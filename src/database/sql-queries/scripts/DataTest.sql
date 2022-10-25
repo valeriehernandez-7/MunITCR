@@ -13,6 +13,12 @@ GO
 SELECT * FROM [dbo].[Propiedad];
 GO
 
+SELECT * FROM [dbo].[Usuario];
+GO
+
+SELECT * FROM [dbo].[Persona];
+GO
+
 SELECT * FROM [dbo].[TipoUsoPropiedad];
 GO
 
@@ -20,9 +26,6 @@ SELECT * FROM [dbo].[TipoZonaPropiedad];
 GO
 
 SELECT * FROM [dbo].[TipoDocIdentidad];
-GO
-
-SELECT * FROM [dbo].[MedioDePago];
 GO
 
 SELECT * FROM [dbo].[PeriodoMontoCC];
@@ -64,14 +67,30 @@ GO
 SELECT * FROM [dbo].[CCMantenimientoParque];
 GO
 
-SELECT * FROM [dbo].[Usuario];
+SELECT * FROM [dbo].[OrdenReconexion];
 GO
 
-SELECT * FROM [dbo].[Persona];
+SELECT * FROM [dbo].[OrdenCorte];
+GO
+
+SELECT * FROM [dbo].[Factura];
+GO
+
+SELECT * FROM [dbo].[EstadoFactura];
+GO
+
+SELECT * FROM [dbo].[ComprobantePago];
+GO
+
+SELECT * FROM [dbo].[MedioPago];
 GO
 
 DELETE FROM [dbo].[ErrorLog];
 DBCC CHECKIDENT ('[dbo].[ErrorLog]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[PersonaXPropiedad];
+DBCC CHECKIDENT ('[dbo].[PersonaXPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[PropiedadXConceptoCobro];
@@ -117,10 +136,6 @@ DELETE FROM [dbo].[TipoDocIdentidad];
 DBCC CHECKIDENT ('[dbo].[TipoDocIdentidad]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
-DELETE FROM [dbo].[MedioDePago];
-DBCC CHECKIDENT ('[dbo].[MedioDePago]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
 DELETE FROM [dbo].[CCConsumoAgua];
 GO
 
@@ -152,4 +167,28 @@ GO
 
 DELETE FROM [dbo].[TipoMontoCC];
 DBCC CHECKIDENT ('[dbo].[TipoMontoCC]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[OrdenReconexion];
+DBCC CHECKIDENT ('[dbo].[OrdenReconexion]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[OrdenCorte];
+DBCC CHECKIDENT ('[dbo].[OrdenCorte]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[Factura];
+DBCC CHECKIDENT ('[dbo].[Factura]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[EstadoFactura];
+DBCC CHECKIDENT ('[dbo].[EstadoFactura]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[ComprobantePago];
+DBCC CHECKIDENT ('[dbo].[ComprobantePago]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[MedioPago];
+DBCC CHECKIDENT ('[dbo].[MedioPago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
