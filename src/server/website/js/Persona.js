@@ -141,8 +141,9 @@ async function update() {
 }
 
 function ret() {
-  var user = ''// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaPersona.html?user='+user);
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace(' ./listaPersona.html?uss='+uss+"&ip="+ip);
 }
 function cerrar(){
   location.replace('./index.html');

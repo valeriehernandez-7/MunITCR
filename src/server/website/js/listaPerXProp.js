@@ -37,6 +37,10 @@ $(document).ready(function(){
 
 function edit(nombre,lote,fechaI,fechaF){
   let url = './PerXPropEdit.html?add=0'
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  url+='&uss='+uss
+  url+='&ip='+ip
   url+='&nombre='+nombre
   url+='&lote='+lote
   url+='&fechaI='+fechaI
@@ -48,10 +52,14 @@ function edit(nombre,lote,fechaI,fechaF){
   location.replace(url);
 }
 function add(){
-    location.replace('./PerXProp.html');
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace('./PerXProp.html?uss='+uss+"&ip="+ip);
 }
 function ret(){
-  location.replace('./AdminOptions.html');
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./AdminOptions.html?uss='+uss+"&ip="+ip);
 }
 function cerrar(){
   location.replace('./index.html');

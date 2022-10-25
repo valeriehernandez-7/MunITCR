@@ -35,10 +35,16 @@ $(document).ready(function(){
 })
 
 function add(){
-    location.replace('./Usuarios.html');
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./Usuarios.html?uss='+uss+"&ip="+ip);
 }
 function edit(nombre,user,pass,admin){
   let url = './UsuarioEdit.html?add=0'
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  url+='&uss='+uss
+  url+='&ip='+ip
   url+='&nombre='+nombre
   url+='&user='+user
   url+='&password='+pass
@@ -46,7 +52,9 @@ function edit(nombre,user,pass,admin){
   location.replace(url);
 }
 function ret(){
-  location.replace('./AdminOptions.html');
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./AdminOptions.html?uss='+uss+"&ip="+ip);
 }
 function cerrar(){
   location.replace('./index.html');

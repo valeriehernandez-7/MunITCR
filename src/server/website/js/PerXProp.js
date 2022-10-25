@@ -7,7 +7,6 @@ $(document).ready(function(){
     };
   fetch(url, options).then(response => response.json())
   .then(response => {
-    console.log(response);
     for (var i = 0; i < response.length; i++) {
       valor=response[i].Persona;
       $select.append($("<option>", {
@@ -33,7 +32,9 @@ $(document).ready(function(){
       }));
     }
     if(add== "0")
+      var registro = (new URL(location.href)).searchParams.get('fechaI')
       document.getElementById('lote').value = idProp;
+      document.getElementById('date').value =registro;
     }).catch(e => {
       console.log(e);
   })
@@ -97,9 +98,56 @@ async function add() {
     });
 }               
 
+async function update() {
+  var url = "http://localhost:8000/UpdatePersonaXPropiedad"
+  var oldid = (new URL(location.href)).searchParams.get('nombre')
+  var oldLote = (new URL(location.href)).searchParams.get('lote')
+  var fechaAsoc = $("#date").val()
+  var fechaDesasoc = (new URL(location.href)).searchParams.get('fechaF')
+  var id = $("#nombre").val()
+  var lote = $("#lote").val();
+  const body={
+    oldId:oldid,
+    oldLote: oldLote,
+    id: id,
+    lote:lote,
+    fechaAsoc: fechaAsoc,
+    fechaDesasoc: null
+  }
+  const options = {
+  method: "post",
+  body: JSON.stringify(body),
+  headers: {"Content-Type": "application/json"},
+  };
+  //Petición HTTP
+  console.log(body)
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+      console.log(response);
+      if(response == 5404){
+        window.alert("El tipo de propiedad no existe");
+        return
+      }      
+      if(response == 5400){
+        window.alert("Error al actualizar la propiedad");
+        return
+      }
+      if(response == 5200){
+        window.alert("Propiedad actualizada con exito");
+        return
+      }else {
+        window.alert("Ocurrio un error al actualizar los daots");
+      }
+    }
+    ).catch(e => {
+      console.log(e);
+    });
+}
+
 function ret() {
-  var user = ''// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaPerXProp.html?user='+user)
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace(' ./listaPerXProp.html?uss='+uss+"&ip="+ip)
 }
 function cerrar(){
   location.replace('./index.html');

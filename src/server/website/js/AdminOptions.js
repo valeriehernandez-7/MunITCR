@@ -1,26 +1,32 @@
 function usr() {
-  var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaUsuarios.html?user='+user);
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace(' ./listaUsuarios.html?uss='+uss+"&ip="+ip);
 }
 function people() {
-  var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaPersona.html?user='+user);
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace(' ./listaPersona.html?uss='+uss+"&ip="+ip);
 }
 function property() {
-  var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaPropiedades.html?user='+user);
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace(' ./listaPropiedades.html?uss='+uss+"&ip="+ip);
 }
 function personXproperty() {
-  var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaPerXProp.html?user='+user);
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace(' ./listaPerXProp.html?uss='+uss+"&ip="+ip);
 }
 function userXproperty() {
-  var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./listaUsersXprop.html?user='+user);
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace(' ./listaUsersXprop.html?uss='+uss+"&ip="+ip);
 }
 function consult(){
-  var user = ""// (new URL(location.href)).searchParams.get('user')
-  location.replace(' ./Consulta.html?user='+user);
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace(' ./Consulta.html?uss='+uss+"&ip="+ip);
 }
 function ret() {
   location.replace(' ./index.html');

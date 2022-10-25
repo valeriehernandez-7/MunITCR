@@ -125,7 +125,7 @@ export const ReadPropiedadXUsuario=  async (req, res) => {
     const result= await pool.request().
                     output('outResultCode', sql.Int).
                     execute('SP_ReadPropiedadXUsuario');
-        res.json(result.recordset);    
+        res.json(result.recordset);   
 }
 
 export const ReadPropiedadXUsuarioIn=  async (req, res) => {
@@ -222,6 +222,8 @@ export const UpdatePersona =  async (req, res) => {
         res.json(result.output.outResultCode);    
     }
 
+
+
 export const ReadPropiedadPersonaIn =  async (req, res) => {
     const pool= await getConection()
     const ident = req.body.ident;
@@ -289,6 +291,23 @@ export const UpdatePropiedad =  async (req, res) => {
                 .input('inFechaRegistro', sql.DATE,registro)
                 .output('outResultCode', sql.Int)
                 .execute('SP_UpdatePropiedad');
+        res.json(result.output.outResultCode);    
+    }
+
+export const UpdatePersonaXPropiedad =  async (req, res) => {
+    const pool= await getConection()
+    const {oldId,oldLote,id,lote,fechaAsoc,fechaDesasoc} = req.body;
+    console.log(oldId,oldLote,id,lote,fechaAsoc,fechaDesasoc)
+    const result= await pool.request()
+                .input('inOldPersonaIdentificacion', sql.VARCHAR(64),oldId)
+                .input('inOldPropiedadLote', sql.CHAR(32),oldLote)
+                .input('inPersonaIdentificacion', sql.VARCHAR(64),id)
+                .input('inPropiedadLote', sql.CHAR(32),lote)
+                .input('inFechaAsociacionPxP', sql.DATE,fechaAsoc)
+                .input('inFechaDesasociacionPxP', sql.DATE,fechaDesasoc)
+                .output('outResultCode', sql.Int)
+                .execute('SP_UpdatePersonaXPropiedad');
+        console.log(result.output.outResultCode)
         res.json(result.output.outResultCode);    
     }
 

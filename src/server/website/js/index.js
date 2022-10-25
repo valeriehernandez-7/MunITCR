@@ -1,7 +1,9 @@
 
-function login(bit) {
+async function login(bit) {  
   var user = $("#usuario").val();
   var pass = $("#contrasena").val();
+  const response = await axios.get('https://api.ipify.org?format=json');
+  const ip = response.data.ip
   if (user == "" || pass==""){
       window.alert("Debe ingresar un usuario y contraseña");
       return;
@@ -24,16 +26,17 @@ function login(bit) {
     method: "get",
     headers: {"Content-Type": "application/json"},
   };
+  
   fetch(url, options).then(response => response.json())
     .then(response => {
       
       if (response == 5200){
         if (bit==0){
-          location.replace(' ./propiedades_usuarioNoAdmin.html?uss='+user);
+          location.replace(' ./propiedades_usuarioNoAdmin.html?uss='+user+"&ip="+ip );
           return
         }
         if (bit ==1 ){
-          location.replace(' ./AdminOptions.html?uss='+user);
+          location.replace(' ./AdminOptions.html?uss='+user+"&ip="+ip );
           return
         }        
     }
@@ -49,9 +52,10 @@ function login(bit) {
   });
   
 }
-function loginAdmin() {
+async function loginAdmin() {
   var user = $("#usuario").val();
   var pass = $("#contrasena").val();
+  const ip = await axios.get('https://api.ipify.org?format=json');
   if (user == "" || pass==""){
       window.alert("Debe ingresar un usuario y contraseña");
       return;
@@ -60,5 +64,5 @@ function loginAdmin() {
     window.alert("No debe incluir ; en el usuario o la conreaseña");
     return;
     }
-  location.replace(' ./AdminOptions.html?uss='+user);
+  location.replace(' ./AdminOptions.html?uss='+user+"&ip="+ip);
 }

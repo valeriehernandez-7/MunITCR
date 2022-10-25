@@ -33,6 +33,10 @@ $(document).ready(function(){
 
 function edit(uso,zona,lote,m2,valorFiscal,registro){
   let url = './PropiedadesEdit.html?add=0'
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  url+='&uss='+uss
+  url+='&ip='+ip
   url+='&uso='+uso
   url+='&zona='+zona
   url+='&lote='+lote
@@ -42,10 +46,14 @@ function edit(uso,zona,lote,m2,valorFiscal,registro){
   location.replace(url);
 }
 function add(){
-    location.replace('./Propiedades.html');
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace('./Propiedades.html?uss='+uss+"&ip="+ip);
 }
 function ret(){
-  location.replace('./AdminOptions.html');
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./AdminOptions.html?uss='+uss+"&ip="+ip);
 }
 function cerrar(){
   location.replace('./index.html');

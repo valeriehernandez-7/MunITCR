@@ -27,15 +27,23 @@ $(document).ready(function(){
 })
 function edit(usuario,lote){
   let url = './UserXpropEdit.html?add=0'
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  url+='&uss='+uss
+  url+='&ip='+ip
   url+='&usuario='+usuario
   url+='&lote='+lote
   location.replace(url);
 }
 function add(){
-    location.replace('./UsersXprop.html');
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./UsersXprop.html?uss='+uss+"&ip="+ip);
 }
 function ret(){
-  location.replace('./AdminOptions.html');
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./AdminOptions.html?uss='+uss+"&ip="+ip);
 }
 function cerrar(){
   location.replace('./index.html');

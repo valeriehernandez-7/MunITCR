@@ -26,7 +26,8 @@ import {ReadPersona,
         ReadPropiedadInPersona,
         ReadUsuarioInXPropiedad,
         UpdateUsuario,
-        UpdatePropiedad
+        UpdatePropiedad,
+        UpdatePersonaXPropiedad
         } from '../controllers/controller'
 
 //lista de personas     
@@ -112,6 +113,9 @@ router.post('/UpdateUsuario',UpdateUsuario)
 
 //update propiedad
 router.post('/UpdatePropiedad',UpdatePropiedad)
+
+//update persona/propiedad
+router.post('/UpdatePersonaXPropiedad',UpdatePersonaXPropiedad)
 
 
 export default router
