@@ -1,97 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Catalogo>
     <TipodeMovimientoLecturadeMedidores>
-        <TipodeMovimientoLecturadeMedidor id="1" Nombre="Lectura" />
-        <TipodeMovimientoLecturadeMedidor id="2" Nombre="Ajuste Credito" />
-        <TipodeMovimientoLecturadeMedidor id="3" Nombre="Ajuste Debito" />
+        <TipodeMovimientoLecturadeMedidor Nombre="Lectura" />
+        <TipodeMovimientoLecturadeMedidor Nombre="Ajuste Credito" />
+        <TipodeMovimientoLecturadeMedidor Nombre="Ajuste Debito" />
     </TipodeMovimientoLecturadeMedidores>
     <TipoUsoPropiedades>
-        <TipoUsoPropiedad id="1" Nombre="Habitacion" />
-        <TipoUsoPropiedad id="2" Nombre="Comercial" />
-        <TipoUsoPropiedad id="3" Nombre="Industrial" />
-        <TipoUsoPropiedad id="4" Nombre="Lote Baldio" />
-        <TipoUsoPropiedad id="5" Nombre="Agricola" />
+        <TipoUsoPropiedad Nombre="Habitacion" />
+        <TipoUsoPropiedad Nombre="Comercial" />
+        <TipoUsoPropiedad Nombre="Industrial" />
+        <TipoUsoPropiedad Nombre="Lote Baldio" />
+        <TipoUsoPropiedad Nombre="Agricola" />
     </TipoUsoPropiedades>
     <TipoZonaPropiedades>
-        <TipoZonaPropiedad id="1" Nombre="Residencial" />
-        <TipoZonaPropiedad id="2" Nombre="Agricola" />
-        <TipoZonaPropiedad id="3" Nombre="Bosque" />
-        <TipoZonaPropiedad id="4" Nombre="Zona Industrial" />
-        <TipoZonaPropiedad id="5" Nombre="Zona Comercial" />
+        <TipoZonaPropiedad Nombre="Residencial" />
+        <TipoZonaPropiedad Nombre="Agricola" />
+        <TipoZonaPropiedad Nombre="Bosque" />
+        <TipoZonaPropiedad Nombre="Zona Industrial" />
+        <TipoZonaPropiedad Nombre="Zona Comercial" />
     </TipoZonaPropiedades>
     <TipoDocumentoIdentidades>
-        <TipoDocumentoIdentidad id="1" Nombre="Cedula CR" />
-        <TipoDocumentoIdentidad id="2" Nombre="Persona Juridica CR" />
-        <TipoDocumentoIdentidad id="3" Nombre="Pasaporte CR" />
+        <TipoDocumentoIdentidad Nombre="Cedula CR" />
+        <TipoDocumentoIdentidad Nombre="Persona Juridica CR" />
+        <TipoDocumentoIdentidad Nombre="Pasaporte CR" />
     </TipoDocumentoIdentidades>
-    <TipoMedioPagos>
-        <TipoMedioPago id="1" Nombre="Efectivo" />
-        <TipoMedioPago id="2" Nombre="Transferencia Bancaria" />
-        <TipoMedioPago id="3" Nombre="Tarjeta Bancaria" />
-    </TipoMedioPagos>
+    <MediosPago>
+        <MedioPago Nombre="Efectivo" />
+        <MedioPago Nombre="Transferencia" />
+        <MedioPago Nombre="Tarjeta" />
+        <MedioPago Nombre="Arreglo" />
+    </MediosPago>
     <PeriodoMontoCCs>
-        <PeriodoMontoCC id="1" Nombre="Mensual" QMeses="1" />
-        <PeriodoMontoCC id="2" Nombre="Trimestral" QMeses="3" />
-        <PeriodoMontoCC id="3" Nombre="Semestral" QMeses="6" />
-        <PeriodoMontoCC id="4" Nombre="Anual" QMeses="12" />
-        <PeriodoMontoCC id="5" Nombre="Unico no recurrente" QMeses="1" />
+        <PeriodoMontoCC Nombre="Unico no recurrente" QMeses="1" />
+        <PeriodoMontoCC Nombre="Mensual" QMeses="1" />
+        <PeriodoMontoCC Nombre="Trimestral" QMeses="3" />
+        <PeriodoMontoCC Nombre="Semestral" QMeses="6" />
+        <PeriodoMontoCC Nombre="Anual" QMeses="12" />
     </PeriodoMontoCCs>
     <TipoMontoCCs>
-        <TipoMontoCC id="1" Nombre="Fijo" />
-        <TipoMontoCC id="2" Nombre="Variable" />
-        <TipoMontoCC id="3" Nombre="Porcentaje" />
+        <TipoMontoCC Nombre="Fijo" />
+        <TipoMontoCC Nombre="Variable" />
+        <TipoMontoCC Nombre="Porcentual" />
     </TipoMontoCCs>
     <TipoParametroSistema>
-        <TipoParametro id="1" Nombre="bigint" />
-        <TipoParametro id="2" Nombre="bit" />
-        <TipoParametro id="3" Nombre="decimal" />
-        <TipoParametro id="4" Nombre="int" />
-        <TipoParametro id="5" Nombre="money" />
-        <TipoParametro id="6" Nombre="numeric" />
-        <TipoParametro id="7" Nombre="smallint" />
-        <TipoParametro id="8" Nombre="smallmoney" />
-        <TipoParametro id="9" Nombre="tinyint" />
-        <TipoParametro id="10" Nombre="float" />
-        <TipoParametro id="11" Nombre="real" />
-        <TipoParametro id="12" Nombre="date" />
-        <TipoParametro id="13" Nombre="datetime" />
-        <TipoParametro id="14" Nombre="time" />
-        <TipoParametro id="15" Nombre="char" />
-        <TipoParametro id="16" Nombre="text" />
-        <TipoParametro id="17" Nombre="varchar" />
-        <TipoParametro id="18" Nombre="nchar" />
-        <TipoParametro id="19" Nombre="ntext" />
-        <TipoParametro id="20" Nombre="nvarchar" />
-        <TipoParametro id="21" Nombre="binary" />
-        <TipoParametro id="22" Nombre="varbinary" />
+        <TipoParametro Nombre="bigint" />
+        <TipoParametro Nombre="bit" />
+        <TipoParametro Nombre="decimal" />
+        <TipoParametro Nombre="int" />
+        <TipoParametro Nombre="money" />
+        <TipoParametro Nombre="numeric" />
+        <TipoParametro Nombre="smallint" />
+        <TipoParametro Nombre="smallmoney" />
+        <TipoParametro Nombre="tinyint" />
+        <TipoParametro Nombre="float" />
+        <TipoParametro Nombre="real" />
+        <TipoParametro Nombre="date" />
+        <TipoParametro Nombre="datetime" />
+        <TipoParametro Nombre="time" />
+        <TipoParametro Nombre="char" />
+        <TipoParametro Nombre="text" />
+        <TipoParametro Nombre="varchar" />
+        <TipoParametro Nombre="nchar" />
+        <TipoParametro Nombre="ntext" />
+        <TipoParametro Nombre="nvarchar" />
+        <TipoParametro Nombre="binary" />
+        <TipoParametro Nombre="varbinary" />
     </TipoParametroSistema>
     <ParametrosSistema>
-        <ParametroSistema id="1" Nombre="Cantidad de dias de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
-        <ParametroSistema id="2" Nombre="Cantidad de dias para calculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
+        <ParametroSistema Nombre="Cantidad de dias de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
+        <ParametroSistema Nombre="Cantidad de dias para calculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
     </ParametrosSistema>
     <CCs>
-        <CC id="1" Nombre="Consumo de agua" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="300" ValorMinimoM3="30" Valorm3="" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
-        <CC id="2" Nombre="Impuesto sobre propiedad" TipoMontoCC="3" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="3" Nombre="Recoleccion de basura y limpieza de canos" TipoMontoCC="2" PeriodoMontoCC="1" ValorMinimo="150" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
-        <CC id="4" Nombre="Patente comercial" TipoMontoCC="1" PeriodoMontoCC="3" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="5" Nombre="Reconexion de agua" TipoMontoCC="1" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="6" Nombre="Intereses moratorios" TipoMontoCC="3" PeriodoMontoCC="1" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC id="7" Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="1" PeriodoMontoCC="4" ValorMinimo="" ValorMinimoM3="" Valorm3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="300" ValorMinimoM3="30" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
+        <CC Nombre="Impuesto sobre propiedad" TipoMontoCC="Porcentual" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Recoleccion de basura y limpieza de canos" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="150" ValorMinimoM3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
+        <CC Nombre="Patente comercial" TipoMontoCC="Fijo" PeriodoMontoCC="Semestral" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Reconexion de agua" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
     </CCs>
-    <TipoDePagos>
-        <TipoDePago id="1" tipoPago="Efectivo" />
-        <TipoDePago id="2" tipoPago="Tarjeta de debito o credito" />
-        <TipoDePago id="3" tipoPago="Transferencia bancaria" />
-        <TipoDePago id="4" tipoPago="Arreglo de pago" />
-    </TipoDePagos>
     <EstadoDeFacturas>
-        <EstadoFactura id="1" EstadoFactura="Pendiente de pago" />
-        <EstadoFactura id="2" EstadoFactura="Pagado normal" />
-        <EstadoFactura id="3" EstadoFactura="Pagado mediante arreglo de pago" />
-        <EstadoFactura id="4" EstadoFactura="Anulado" />
+        <EstadoFactura EstadoFactura="Pago pendiente" />
+        <EstadoFactura EstadoFactura="Pago realizado" />
+        <EstadoFactura EstadoFactura="Arreglo de pago" />
+        <EstadoFactura EstadoFactura="Anulada" />
     </EstadoDeFacturas>
     <EstadoOrdenesDeCorta>
-        <EstadoOrdenes id="1" EstadoOrdenes="Pendiente de pago" />
-        <EstadoOrdenes id="2" EstadoOrdenes="Pago de reconexion realizado" />
+        <EstadoOrdenes EstadoOrdenes="Pago pendiente" />
+        <EstadoOrdenes EstadoOrdenes="Pago realizado" />
     </EstadoOrdenesDeCorta>
 </Catalogo>
