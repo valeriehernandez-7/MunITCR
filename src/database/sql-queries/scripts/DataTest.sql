@@ -16,6 +16,9 @@ GO
 SELECT * FROM [dbo].[TipoMovimientoConsumoAgua];
 GO
 
+SELECT * FROM [dbo].[PropiedadXCCConsumoAgua];
+GO
+
 SELECT * FROM [dbo].[PropiedadXConceptoCobro];
 GO
 
@@ -114,6 +117,9 @@ GO
 
 DELETE FROM [dbo].[PersonaXPropiedad];
 DBCC CHECKIDENT ('[dbo].[PersonaXPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[PropiedadXCCConsumoAgua];
 GO
 
 DELETE FROM [dbo].[PropiedadXConceptoCobro];

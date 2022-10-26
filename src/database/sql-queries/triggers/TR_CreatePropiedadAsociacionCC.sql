@@ -1,7 +1,7 @@
 USE [MunITCR]
 GO
 
-CREATE OR ALTER TRIGGER [TR_CreatePropiedad]
+CREATE OR ALTER TRIGGER [TR_CreatePropiedadAsociacionCC]
 ON [dbo].[Propiedad] 
 AFTER INSERT
 AS

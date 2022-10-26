@@ -92,11 +92,11 @@ BEGIN
 										SELECT 
 											[P].[ID] AS [ID],
 											[P].[Nombre] AS [Nombre],
-											[P].[IdTipoDocIdentidad] AS [Tipo de Documento Identidad],
-											[P].[ValorDocIdentidad] AS [Identificación],
-											[P].[Telefono1] AS [Telefono 1],
-											[P].[Telefono2] AS [Telefono 2], 
-											[P].[CorreoElectronico] AS [Correo Electronico],
+											[P].[IdTipoDocIdentidad] AS [TipodeDocumentoIdentidad],
+											[P].[ValorDocIdentidad] AS [Identificacion],
+											[P].[Telefono1] AS [Telefono1],
+											[P].[Telefono2] AS [Telefono2], 
+											[P].[CorreoElectronico] AS [CorreoElectronico],
 											[P].[Activo] AS [Activo]
 										FROM [dbo].[Persona] AS [P]
 										WHERE [P].[ID] = @lastEntityID

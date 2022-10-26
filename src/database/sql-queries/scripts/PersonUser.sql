@@ -4,7 +4,7 @@ GO
 INSERT INTO dbo.Persona 
 VALUES (
   1,
-  'Valerie Hernández Fernández',
+  'Valerie Hernandez Fernandez',
   '2020010829',
   '71047856',
   '65874017',

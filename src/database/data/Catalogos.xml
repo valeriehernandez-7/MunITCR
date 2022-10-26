@@ -84,13 +84,13 @@
         <ParametroSistema Nombre="Cantidad de dias para calculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
     </ParametrosSistema>
     <CCs>
-        <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="300" ValorMinimoM3="30" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
-        <CC Nombre="Impuesto sobre propiedad" TipoMontoCC="Porcentual" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Recoleccion de basura y limpieza de canos" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="150" ValorMinimoM3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
-        <CC Nombre="Patente comercial" TipoMontoCC="Fijo" PeriodoMontoCC="Semestral" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Reconexion de agua" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="5000" ValorMinimoM3="30" ValorM3="300" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
+        <CC Nombre="Impuesto sobre propiedad" TipoMontoCC="Porcentual" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Recoleccion de basura y limpieza de canos" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="150" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
+        <CC Nombre="Patente comercial" TipoMontoCC="Fijo" PeriodoMontoCC="Semestral" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Reconexion de agua" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
     </CCs>
     <EstadosFactura>
         <EstadoFactura Nombre="Pago pendiente" />
