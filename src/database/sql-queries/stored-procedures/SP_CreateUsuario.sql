@@ -9,6 +9,9 @@ GO
 	@proc_param inUsername 
 	@proc_param inPassword 
 	@proc_param inTipoUsuario 
+	@proc_param inEventDate 
+	@proc_param inEventUser 
+	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
@@ -17,6 +20,9 @@ CREATE OR ALTER PROCEDURE [SP_CreateUsuario]
 	@inUsername VARCHAR(16),
 	@inPassword VARCHAR(16),
 	@inTipoUsuario VARCHAR(16),
+	@inEventDate DATETIME,
+	@inEventUser VARCHAR(16),
+	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -39,6 +45,28 @@ BEGIN
 					WHEN 'Administrador' THEN 1
 				END;
 
+				/* Get the event params to create a new register at dbo.EventLog */
+
+				DECLARE 
+					@idEventType INT,
+					@idEntityType INT,
+					@lastEntityID INT,
+					@actualData NVARCHAR(MAX), 
+					@newData NVARCHAR(MAX);
+
+				SELECT @idEventType = [EVT].[ID] -- event data
+				FROM [dbo].[EventType] AS [EVT]
+				WHERE [EVT].[Name] = 'Create';
+
+				SELECT @idEntityType = [ENT].[ID] -- event data
+				FROM [dbo].[EntityType] AS [ENT]
+				WHERE [ENT].[Name] = 'Usuario';
+
+				IF @inEventDate IS NULL -- event data
+					BEGIN
+						SET @inEventDate = GETDATE();
+					END;
+
 				IF (@idPersona IS NOT NULL) AND (@permisosUsuario IS NOT NULL)
 					BEGIN
 						IF NOT EXISTS (SELECT 1 FROM [dbo].[Usuario] AS [U] WHERE [U].[IDPersona] = @idPersona)
@@ -57,12 +85,60 @@ BEGIN
 												@inPassword,
 												@permisosUsuario
 											);
-											SET @outResultCode = 5200; /* OK */
+
+											SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+
+											SET @newData = ( -- event data
+												SELECT 
+													[U].[ID] AS [ID],
+													[U].[IDPersona] AS [IDPersona],
+													[U].[Username] AS [Usuario],
+													[U].[Password] AS [Contrasena],
+													[U].[Administrador] AS [Administrador],
+													[U].[Activo] AS [Activo]
+												FROM [dbo].[Usuario] AS [U]
+												WHERE [U].[ID] = @lastEntityID
+												FOR JSON AUTO
+											);
+
+
+											IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
+											AND (@lastEntityID IS NOT NULL) AND (@inEventDate IS NOT NULL)
+												BEGIN
+													INSERT INTO [dbo].[EventLog] (
+														[IDEventType],
+														[IDEntityType],
+														[EntityID],
+														[BeforeUpdate],
+														[AfterUpdate],
+														[Username],
+														[UserIP],
+														[DateTime]
+													) VALUES (
+														@idEventType,
+														@idEntityType,
+														@lastEntityID,
+														@actualData,
+														@newData,
+														@inEventUser,
+														@inEventIP,
+														@inEventDate
+													);
+													SET @outResultCode = 5200; /* OK */
+												END;
+											ELSE
+												BEGIN
+													/* Cannot insert the new "Evento" because some 
+													event's params are null */
+													SET @outResultCode = 5408;
+													RETURN;
+												END;
 										COMMIT TRANSACTION [insertUsuario]
 									END;
 								ELSE
 									BEGIN
-										/* Cannot insert the new "Usuario" because it already exists based on the @inUsername */
+										/* Cannot insert the new "Usuario" because it already 
+										exists based on the @inUsername */
 										SET @outResultCode = 5407;
 										RETURN;
 									END;
