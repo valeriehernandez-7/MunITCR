@@ -18,7 +18,7 @@ BEGIN
 		SET @outResultCode = 0; /* Unassigned code */
 
 		DECLARE @idPropiedad INT;
-		SELECT @idPropiedad = P.ID 
+		SELECT @idPropiedad = [P].[ID] 
 		FROM [dbo].[Propiedad] AS [P]
 		WHERE [P].[Lote] = @inPropiedad;
 
