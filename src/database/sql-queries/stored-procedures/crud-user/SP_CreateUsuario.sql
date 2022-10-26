@@ -9,7 +9,6 @@ GO
 	@proc_param inUsername 
 	@proc_param inPassword 
 	@proc_param inTipoUsuario 
-	@proc_param inEventDate 
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
@@ -20,7 +19,6 @@ CREATE OR ALTER PROCEDURE [SP_CreateUsuario]
 	@inUsername VARCHAR(16),
 	@inPassword VARCHAR(16),
 	@inTipoUsuario VARCHAR(16),
-	@inEventDate DATETIME,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
@@ -62,11 +60,6 @@ BEGIN
 				FROM [dbo].[EntityType] AS [ENT]
 				WHERE [ENT].[Name] = 'Usuario';
 
-				IF @inEventDate IS NULL -- event data
-					BEGIN
-						SET @inEventDate = GETDATE();
-					END;
-
 				IF (@idPersona IS NOT NULL) AND (@permisosUsuario IS NOT NULL)
 					BEGIN
 						IF NOT EXISTS (SELECT 1 FROM [dbo].[Usuario] AS [U] WHERE [U].[IDPersona] = @idPersona)
@@ -101,9 +94,8 @@ BEGIN
 												FOR JSON AUTO
 											);
 
-
 											IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
-											AND (@lastEntityID IS NOT NULL) AND (@inEventDate IS NOT NULL)
+											AND (@lastEntityID IS NOT NULL)
 												BEGIN
 													INSERT INTO [dbo].[EventLog] (
 														[IDEventType],
@@ -112,8 +104,7 @@ BEGIN
 														[BeforeUpdate],
 														[AfterUpdate],
 														[Username],
-														[UserIP],
-														[DateTime]
+														[UserIP]
 													) VALUES (
 														@idEventType,
 														@idEntityType,
@@ -121,8 +112,7 @@ BEGIN
 														@actualData,
 														@newData,
 														@inEventUser,
-														@inEventIP,
-														@inEventDate
+														@inEventIP
 													);
 													SET @outResultCode = 5200; /* OK */
 												END;

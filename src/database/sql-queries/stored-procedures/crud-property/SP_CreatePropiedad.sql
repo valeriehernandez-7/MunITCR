@@ -11,8 +11,7 @@ GO
 	@proc_param inMedidor
 	@proc_param inMetrosCuadrados
 	@proc_param inValorFiscal
-	@proc_param inFechaRegistro
-	@proc_param inEventDate 
+	@proc_param inFechaRegistro 
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
@@ -26,7 +25,6 @@ CREATE OR ALTER PROCEDURE [SP_CreatePropiedad]
 	@inMetrosCuadrados BIGINT,
 	@inValorFiscal MONEY,
 	@inFechaRegistro DATE,
-	@inEventDate DATETIME,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
@@ -78,11 +76,6 @@ BEGIN
 				SELECT @idEntityType = [ENT].[ID] -- event data
 				FROM [dbo].[EntityType] AS [ENT]
 				WHERE [ENT].[Name] = 'Propiedad';
-
-				IF @inEventDate IS NULL -- event data
-					BEGIN
-						SET @inEventDate = GETDATE();
-					END;
 
 				IF (@idUsoPropiedad IS NOT NULL) AND (@idZonaPropiedad IS NOT NULL)
 					BEGIN
@@ -152,7 +145,7 @@ BEGIN
 
 
 									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
-									AND (@lastEntityID IS NOT NULL) AND (@inEventDate IS NOT NULL)
+									AND (@lastEntityID IS NOT NULL)
 										BEGIN
 											INSERT INTO [dbo].[EventLog] (
 												[IDEventType],
@@ -161,8 +154,7 @@ BEGIN
 												[BeforeUpdate],
 												[AfterUpdate],
 												[Username],
-												[UserIP],
-												[DateTime]
+												[UserIP]
 											) VALUES (
 												@idEventType,
 												@idEntityType,
@@ -170,8 +162,7 @@ BEGIN
 												@actualData,
 												@newData,
 												@inEventUser,
-												@inEventIP,
-												@inEventDate
+												@inEventIP
 											);
 											SET @outResultCode = 5200; /* OK */
 										END;
