@@ -11,6 +11,9 @@ GO
 	@proc_param inTelefono1 new person's contact number
 	@proc_param inTelefono2 new person's contact number
 	@proc_param inEmail  new person's email
+	@proc_param inEventDate 
+	@proc_param inEventUser 
+	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
@@ -21,6 +24,9 @@ CREATE OR ALTER PROCEDURE [SP_CreatePersona]
 	@inTelefono1 CHAR(16),
 	@inTelefono2 CHAR(16),
 	@inEmail VARCHAR(256),
+	@inEventDate DATETIME,
+	@inEventUser VARCHAR(16),
+	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -36,6 +42,28 @@ BEGIN
 				SELECT @idTipoIdentificacion = [TDI].[ID]
 				FROM [dbo].[TipoDocIdentidad] AS [TDI]
 				WHERE [TDI].[Nombre] = @inTipoIdentificacion;
+
+				/* Get the event params to create a new register at dbo.EventLog */
+
+				DECLARE 
+					@idEventType INT,
+					@idEntityType INT,
+					@lastEntityID INT,
+					@actualData NVARCHAR(MAX), 
+					@newData NVARCHAR(MAX);
+
+				SELECT @idEventType = [EVT].[ID] -- event data
+				FROM [dbo].[EventType] AS [EVT]
+				WHERE [EVT].[Name] = 'Create';
+
+				SELECT @idEntityType = [ENT].[ID] -- event data
+				FROM [dbo].[EntityType] AS [ENT]
+				WHERE [ENT].[Name] = 'Persona';
+
+				IF @inEventDate IS NULL -- event data
+					BEGIN
+						SET @inEventDate = GETDATE();
+					END;
 		
 				IF @idTipoIdentificacion IS NOT NULL
 					BEGIN
@@ -57,7 +85,56 @@ BEGIN
 										@inTelefono2,
 										@inEmail
 									);
-									SET @outResultCode = 5200; /* OK */
+
+									SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+
+									SET @newData = ( -- event data
+										SELECT 
+											[P].[ID] AS [ID],
+											[P].[Nombre] AS [Nombre],
+											[P].[IdTipoDocIdentidad] AS [Tipo de Documento Identidad],
+											[P].[ValorDocIdentidad] AS [Identificación],
+											[P].[Telefono1] AS [Telefono 1],
+											[P].[Telefono2] AS [Telefono 2], 
+											[P].[CorreoElectronico] AS [Correo Electronico],
+											[P].[Activo] AS [Activo]
+										FROM [dbo].[Persona] AS [P]
+										WHERE [P].[ID] = @lastEntityID
+										FOR JSON AUTO
+									);
+
+
+									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
+									AND (@lastEntityID IS NOT NULL) AND (@inEventDate IS NOT NULL)
+										BEGIN
+											INSERT INTO [dbo].[EventLog] (
+												[IDEventType],
+												[IDEntityType],
+												[EntityID],
+												[BeforeUpdate],
+												[AfterUpdate],
+												[Username],
+												[UserIP],
+												[DateTime]
+											) VALUES (
+												@idEventType,
+												@idEntityType,
+												@lastEntityID,
+												@actualData,
+												@newData,
+												@inEventUser,
+												@inEventIP,
+												@inEventDate
+											);
+											SET @outResultCode = 5200; /* OK */
+										END;
+									ELSE
+										BEGIN
+											/* Cannot insert the new "Evento" because some 
+											event's params are null */
+											SET @outResultCode = 5407;
+											RETURN;
+										END;
 								COMMIT TRANSACTION [insertPersona]
 							END;
 						ELSE
