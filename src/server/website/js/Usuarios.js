@@ -52,6 +52,8 @@ async function add() {
   var ident = $("#ident").val()
   var user = $("#user").val();
   var pass = $("#password").val();
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
   var admin 
   if($("#admin").checked==true){
     admin = 'Administrador'
@@ -63,6 +65,8 @@ async function add() {
     user: user,
     password: pass,
     admin: admin,
+    uss: uss,
+    ip: ip
   }
   const options = {
   method: "post",

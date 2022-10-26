@@ -46,13 +46,17 @@ async function add() {
   var phone1 = $("#phone1").val();
   var phone2 = $("#phone2").val();
   var email = $("#email").val();
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
   const body={
     nombre: name,
     tipoID: TipoID,
     Ident:idNumber,
     tel1: phone1,
     tel2: phone2,
-    email: email
+    email: email,
+    uss : uss,
+    ip : ip
   }
   const options = {
   method: "post",

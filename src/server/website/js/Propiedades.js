@@ -65,13 +65,17 @@ async function add() {
   var m2 = $("#squareM").val();
   var valorFiscal = $("#price").val();
   var registro = $("#date").val();
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
   const body={
     uso: uso,
     zona: zona,
     lote:lote,
     m2: m2,
     valorFiscal: valorFiscal,
-    registro: registro
+    registro: registro,
+    uss: uss,
+    ip: ip
   }
   const options = {
   method: "post",
