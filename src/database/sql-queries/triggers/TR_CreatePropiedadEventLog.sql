@@ -1,7 +1,7 @@
 USE [MunITCR]
 GO
 
-CREATE OR ALTER TRIGGER [TR_CreateEventLogPropiedad]
+CREATE OR ALTER TRIGGER [TR_CreatePropiedadEventLog]
 ON [dbo].[Propiedad] 
 AFTER INSERT
 AS
