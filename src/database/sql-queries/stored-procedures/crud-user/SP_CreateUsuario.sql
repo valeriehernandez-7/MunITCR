@@ -60,6 +60,16 @@ BEGIN
 				FROM [dbo].[EntityType] AS [ENT]
 				WHERE [ENT].[Name] = 'Usuario';
 
+				IF @inEventUser IS NULL -- event data
+					BEGIN
+						SET @inEventUser = 'MunITCR';
+					END;
+
+				IF @inEventIP IS NULL -- event data
+					BEGIN
+						SET @inEventIP = '0.0.0.0';
+					END;
+
 				IF (@idPersona IS NOT NULL) AND (@permisosUsuario IS NOT NULL)
 					BEGIN
 						IF NOT EXISTS (SELECT 1 FROM [dbo].[Usuario] AS [U] WHERE [U].[IDPersona] = @idPersona)
@@ -83,7 +93,6 @@ BEGIN
 
 											SET @newData = ( -- event data
 												SELECT 
-													[U].[ID] AS [ID],
 													[U].[IDPersona] AS [IDPersona],
 													[U].[Username] AS [Usuario],
 													[U].[Password] AS [Contrasena],
@@ -94,8 +103,8 @@ BEGIN
 												FOR JSON AUTO
 											);
 
-											IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
-											AND (@lastEntityID IS NOT NULL)
+											IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+											AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 												BEGIN
 													INSERT INTO [dbo].[EventLog] (
 														[IDEventType],

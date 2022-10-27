@@ -77,6 +77,16 @@ BEGIN
 				FROM [dbo].[EntityType] AS [ENT]
 				WHERE [ENT].[Name] = 'Propiedad';
 
+				IF @inEventUser IS NULL -- event data
+					BEGIN
+						SET @inEventUser = 'MunITCR';
+					END;
+
+				IF @inEventIP IS NULL -- event data
+					BEGIN
+						SET @inEventIP = '0.0.0.0';
+					END;
+
 				IF (@idUsoPropiedad IS NOT NULL) AND (@idZonaPropiedad IS NOT NULL)
 					BEGIN
 						IF (NOT EXISTS (SELECT 1 FROM [dbo].[Propiedad] AS [P] WHERE [P].[Lote] = @inLote))
@@ -130,7 +140,6 @@ BEGIN
 
 									SET @newData = ( -- event data
 										SELECT 
-											[P].[ID] AS [ID],
 											[P].[Lote] AS [Propiedad],
 											[P].[IDTipoUsoPropiedad] AS [UsodePropiedad],
 											[P].[IDTipoZonaPropiedad] AS [ZonadePropiedad],
@@ -144,8 +153,8 @@ BEGIN
 									);
 
 
-									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
-									AND (@lastEntityID IS NOT NULL)
+									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+									AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 										BEGIN
 											INSERT INTO [dbo].[EventLog] (
 												[IDEventType],

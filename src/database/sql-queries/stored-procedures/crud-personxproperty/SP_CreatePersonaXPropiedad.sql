@@ -8,6 +8,8 @@ GO
 	@proc_param inPersonaIdentificacion person's doc ID
 	@proc_param inPropiedadLote property identifier
 	@proc_param inFechaAsociacionPxP association date
+	@proc_param inEventUser 
+	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
@@ -15,6 +17,8 @@ CREATE OR ALTER PROCEDURE [SP_CreatePersonaXPropiedad]
 	@inPersonaIdentificacion VARCHAR(64),
 	@inPropiedadLote CHAR(32),
 	@inFechaAsociacionPxP DATE,
+	@inEventUser VARCHAR(16),
+	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -40,6 +44,33 @@ BEGIN
 					BEGIN
 						SET @inFechaAsociacionPxP = GETDATE();
 					END;
+
+				/* Get the event params to create a new register at dbo.EventLog */
+
+				DECLARE 
+					@idEventType INT,
+					@idEntityType INT,
+					@lastEntityID INT,
+					@actualData NVARCHAR(MAX), 
+					@newData NVARCHAR(MAX);
+
+				SELECT @idEventType = [EVT].[ID] -- event data
+				FROM [dbo].[EventType] AS [EVT]
+				WHERE [EVT].[Name] = 'Create';
+
+				SELECT @idEntityType = [ENT].[ID] -- event data
+				FROM [dbo].[EntityType] AS [ENT]
+				WHERE [ENT].[Name] = 'Propietario de Propiedad';
+
+				IF @inEventUser IS NULL -- event data
+					BEGIN
+						SET @inEventUser = 'MunITCR';
+					END;
+
+				IF @inEventIP IS NULL -- event data
+					BEGIN
+						SET @inEventIP = '0.0.0.0';
+					END;
 		
 				IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL) AND (@inFechaAsociacionPxP IS NOT NULL)
 					BEGIN
@@ -47,6 +78,7 @@ BEGIN
 						WHERE [PXP].[IDPersona] = @idPersona AND [PXP].[IDPropiedad] = @idPropiedad)
 							BEGIN
 								BEGIN TRANSACTION [insertPerXPro]
+									/* Insert new "PersonaXPropiedad" as "Persona" + "Propiedad" association */
 									INSERT INTO [dbo].[PersonaXPropiedad] (
 										[IDPersona],
 										[IDPropiedad],
@@ -56,7 +88,51 @@ BEGIN
 										@idPropiedad,
 										@inFechaAsociacionPxP
 									);
-									SET @outResultCode = 5200; /* OK */
+
+									/* GET new "PersonaXPropiedad" PK */
+									SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+
+									SET @newData = ( -- event data
+										SELECT 
+											[PerXPro].[IDPersona] AS [IDPersona],
+											[PerXPro].[IDPropiedad] AS [IDPropiedad],
+											[PerXPro].[FechaInicio] AS [FechadeAsociacion],
+											[PerXPro].[FechaFin] AS [FechadeDesasociacion],
+											[PerXPro].[Activo] AS [Activo]
+										FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
+										WHERE [PerXPro].[ID] = @lastEntityID
+										FOR JSON AUTO
+									);
+
+									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+									AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
+										BEGIN
+											INSERT INTO [dbo].[EventLog] (
+												[IDEventType],
+												[IDEntityType],
+												[EntityID],
+												[BeforeUpdate],
+												[AfterUpdate],
+												[Username],
+												[UserIP]
+											) VALUES (
+												@idEventType,
+												@idEntityType,
+												@lastEntityID,
+												@actualData,
+												@newData,
+												@inEventUser,
+												@inEventIP
+											);
+											SET @outResultCode = 5200; /* OK */
+										END;
+									ELSE
+										BEGIN
+											/* Cannot insert the new "Evento" because some 
+											event's params are null */
+											SET @outResultCode = 5407;
+											RETURN;
+										END;
 								COMMIT TRANSACTION [insertPerXPro]
 							END;
 						ELSE

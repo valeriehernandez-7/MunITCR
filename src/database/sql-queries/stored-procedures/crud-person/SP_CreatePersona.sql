@@ -57,6 +57,16 @@ BEGIN
 				SELECT @idEntityType = [ENT].[ID] -- event data
 				FROM [dbo].[EntityType] AS [ENT]
 				WHERE [ENT].[Name] = 'Persona';
+
+				IF @inEventUser IS NULL -- event data
+					BEGIN
+						SET @inEventUser = 'MunITCR';
+					END;
+
+				IF @inEventIP IS NULL -- event data
+					BEGIN
+						SET @inEventIP = '0.0.0.0';
+					END;
 		
 				IF @idTipoIdentificacion IS NOT NULL
 					BEGIN
@@ -83,7 +93,6 @@ BEGIN
 
 									SET @newData = ( -- event data
 										SELECT 
-											[P].[ID] AS [ID],
 											[P].[Nombre] AS [Nombre],
 											[P].[IdTipoDocIdentidad] AS [TipodeDocumentoIdentidad],
 											[P].[ValorDocIdentidad] AS [Identificacion],
@@ -96,9 +105,8 @@ BEGIN
 										FOR JSON AUTO
 									);
 
-
-									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
-									AND (@lastEntityID IS NOT NULL)
+									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+									AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 										BEGIN
 											INSERT INTO [dbo].[EventLog] (
 												[IDEventType],
