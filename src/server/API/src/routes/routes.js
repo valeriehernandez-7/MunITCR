@@ -108,6 +108,9 @@ router.post('/ReadUsuarioInXPropiedad',ReadUsuarioInXPropiedad)
 //lista de usuarios por propiedad
 router.post('/ReadUsuarioXPropiedadIn',ReadUsuarioXPropiedadIn)
 
+//lista de usuarios por propiedad
+router.post('/ReadPropiedadXUsuario',ReadPropiedadXUsuario)
+
 //update usuario
 router.post('/UpdateUsuario',UpdateUsuario)
 

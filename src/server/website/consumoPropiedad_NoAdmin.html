@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/listaPropiedades.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-  <script src="js/pagar_facturas_propiedad_NoAdmin.js"></script>
+  <script src="js/consumoPropiedad_NoAdmin.js"></script>
 </head>
 <header class="container-fluid">
   <div class="row align-items-center" style="background-color: #017bab;">
@@ -22,7 +22,7 @@
     </div>
     <section class="container-fluid" style="display: flex; justify-content: center;">
         <p style="color:#FFFFFF; text-align: center;">
-          <b>Facturas Pendientes</b><br>
+          <b>Facturas</b><br>
         </p>
       </section>
   </div>
@@ -30,33 +30,16 @@
 <body style="background-color: #b4c5cd;">
   <br><br><br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
-    <section>
-      <div>
-        Cantidad de Facturas
-      </div>      
-      <select class="controls" name="cantFact" id="cantFact"  style="margin-right:10px"><option value="cantFact">Cantidad de Facturas</option></select>
-    
-    </section>
-
-    <section> <!---->
-      <div>
-        Metodo de Pago
-      </div>
-      <select class="controls" name="metodoPago" id="metodoPago"  style="margin-right:10px"><option value="metodoPago">Metodo de Pago</option></select>
-      <input class="buttons" type="submit" id="addBtn" value=" Pagar Facturas " onclick="pendientes();">
-    </section>
   </div>
   <br>
   <br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <table id="tablaItems" style="border: 2px solid #017bab;">
       <tr>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Factura</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Estado</th><!--tal vez hay que quitar-->
         <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Vencimiento</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Monto Original</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Monto a Pagar</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tipo</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Monto</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Saldo</th>
       </tr> 
       
       <tbody id="tableBody"></tbody>

@@ -121,10 +121,21 @@ export const ReadPropiedadLote=  async (req, res) => {
 
 export const ReadPropiedadXUsuario=  async (req, res) => {
     const pool= await getConection() 
+    var lote = req.query.lote;
+    console.log(lote);
+    const result= await pool.request()
+                    .input(inPropiedad, sql.CHAR(32),lote)
+                    .output('outResultCode', sql.Int)
+                    .execute('SP_ReadPropiedadXUsuario');
+    res.json(result.recordset);   
+}
+
+export const ReadMovimientoConsumoAgua=  async (req, res) => {
+    const pool= await getConection() 
     var user = req.query.user;
     const result= await pool.request().
                     output('outResultCode', sql.Int).
-                    execute('SP_ReadPropiedadXUsuario');
+                    execute('SP_ReadMovimientoConsumoAgua');
         res.json(result.recordset);   
 }
 
