@@ -27,8 +27,8 @@ BEGIN
 				SELECT 
 					[MCCA].[Fecha] AS [Fecha],
 					[TMCA].[Nombre] AS [Tipo],
-					[MCCA].[Monto] AS [Monto],
-					[PXCA].[LecturaMedidor] AS [Saldo]
+					[MCCA].[MontoM3] AS [Consumo],
+					[MCCA].[LecturaMedidor] AS [Saldo]
 				FROM [dbo].[MovimientoConsumoAgua] AS [MCCA]
 					INNER JOIN [dbo].[TipoMovimientoConsumoAgua] AS [TMCA] 
 					ON [TMCA].[ID] = [MCCA].[IDTipoMovimientoConsumoAgua]

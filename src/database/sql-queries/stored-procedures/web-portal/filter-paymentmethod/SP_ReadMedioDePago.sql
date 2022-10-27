@@ -3,12 +3,12 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadMedioDePago
+	@proc_name SP_ReadMedioPago
 	@proc_description
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadMedioDePago]
+CREATE OR ALTER PROCEDURE [SP_ReadMedioPago]
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -16,7 +16,7 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT [MP].[Nombre]
-		FROM [dbo].[MedioDePago] AS [MP]
+		FROM [dbo].[MedioPago] AS [MP]
 		ORDER BY [MP].[Nombre];
 		SET @outResultCode = 5200; /* OK */
 	END TRY

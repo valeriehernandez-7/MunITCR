@@ -25,7 +25,9 @@ BEGIN
 			ON [PxP].[IDPersona] = [Per].[ID]
 			LEFT JOIN [dbo].[Propiedad] AS [Pro]
 			ON [PxP].[IDPropiedad] =  [Pro].[ID]
-		WHERE [Per].[Activo] = 1 AND [Pro].[Activo] = 1;
+		WHERE [PxP].[Activo] = 1
+		AND [Per].[Activo] = 1 
+		AND [Pro].[Activo] = 1;
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH
