@@ -55,10 +55,14 @@ async function add() {
   var iden = $("#nombre").val()
   var lote = $("#lote").val();
   var fecha = $("#date").val();
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
   const body={
     iden: iden,
     lote:lote,
-    fecha: fecha
+    fecha: fecha,
+    uss: uss,
+    ip: ip
   }
   const options = {
   method: "post",

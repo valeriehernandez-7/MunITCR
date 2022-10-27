@@ -1,3 +1,4 @@
+//import { count } from "console";
 
 $(document).ready(function(){
   var url = "http://localhost:8000/ReadTipoUsoPropiedad"
@@ -62,15 +63,18 @@ async function add() {
   var uso = $("#idType").val()
   var zona = $("#idZone").val();
   var lote = $("#lote").val();
+  var medidor = $("#medidor").val();
   var m2 = $("#squareM").val();
   var valorFiscal = $("#price").val();
   var registro = $("#date").val();
   var uss = (new URL(location.href)).searchParams.get('uss')
   var ip = (new URL(location.href)).searchParams.get('ip')
+  console.log(medidor)
   const body={
     uso: uso,
     zona: zona,
     lote:lote,
+    medidor: medidor,
     m2: m2,
     valorFiscal: valorFiscal,
     registro: registro,
