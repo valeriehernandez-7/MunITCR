@@ -1,6 +1,10 @@
 $(document).ready(function(){
   console.log('cargando')
-  var url = "http://localhost:8000/ReadPersonaXPropiedad"
+  
+  var valor = (new URL(location.href)).searchParams.get('opcion')
+  var opcion = document.getElementById("vistarelacionpxp");
+  opcion.value= valor
+  var url = "http://localhost:8000/ReadPersonaXPropiedad"+"?opcion="+valor
   const options = {
   method: "get",
   headers: {"Content-Type": "application/json"},
@@ -34,6 +38,15 @@ $(document).ready(function(){
   });
 
 })
+
+function update(){
+  var opcion = document.getElementById("vistarelacionpxp");
+  var value = opcion.value;
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace('./listaPerXProp.html?uss='+uss+"&ip="+ip+"&opcion="+value);
+  
+}
 
 function edit(nombre,lote,fechaI,fechaF){
   let url = './PerXPropEdit.html?add=0'

@@ -16,7 +16,7 @@ function property() {
 function personXproperty() {
   var uss = (new URL(location.href)).searchParams.get('uss')
   var ip = (new URL(location.href)).searchParams.get('ip')
-  location.replace(' ./listaPerXProp.html?uss='+uss+"&ip="+ip);
+  location.replace(' ./listaPerXProp.html?uss='+uss+"&ip="+ip+"&opcion=1");
 }
 function userXproperty() {
   var uss = (new URL(location.href)).searchParams.get('uss')
