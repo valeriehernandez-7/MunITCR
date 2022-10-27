@@ -149,7 +149,6 @@ export const CreatePersona=  async (req, res) => {
                 .input('inTelefono1', sql.CHAR(16),tel1)
                 .input('inTelefono2', sql.CHAR(16),tel2)
                 .input('inEmail', sql.VARCHAR(256),email)
-                .input('inEventDate', sql.DATETIME,null)
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
@@ -165,7 +164,6 @@ export const CreateUsuario =  async (req, res) => {
                 .input('inUsername', sql.VARCHAR(16),user)
                 .input('inPassword', sql.VARCHAR(16),password)
                 .input('inTipoUsuario', sql.VARCHAR(16),admin)
-                .input('inEventDate', sql.DATETIME,null)
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
@@ -175,16 +173,15 @@ export const CreateUsuario =  async (req, res) => {
 
 export const CreatePropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {uso,zona,lote,m2,valorFiscal,registro,uss,ip} = req.body;
+    const {uso,zona,lote,medidor,m2,valorFiscal,registro,uss,ip} = req.body;
     const result= await pool.request() 
                 .input('inUsoPropiedad', sql.VARCHAR(128),uso)
                 .input('inZonaPropiedad', sql.VARCHAR(128),zona)
                 .input('inLote', sql.CHAR(32),lote)
-                .input('inMedidor', sql.CHAR(16),medidor)error
+                .input('inMedidor', sql.CHAR(16),medidor)
                 .input('inMetrosCuadrados', sql.BIGINT,m2)
                 .input('inValorFiscal', sql.MONEY,valorFiscal)
                 .input('inFechaRegistro', sql.DATE,registro)
-                .input('inEventDate', sql.DATETIME,null)
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
@@ -194,11 +191,13 @@ export const CreatePropiedad =  async (req, res) => {
 
 export const CreatePersonaXPropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {iden,lote,fecha,} = req.body;
+    const {iden,lote,fecha,uss,ip} = req.body;
     const result= await pool.request() 
                 .input('inPersonaIdentificacion', sql.VARCHAR(64),iden)
                 .input('inPropiedadLote', sql.CHAR(32),lote)
                 .input('inFechaAsociacionPxP', sql.DATE,fecha)
+                .input('inEventUser', sql.VARCHAR(16),uss)
+                .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
                 .execute('SP_CreatePersonaXPropiedad');
         res.json(result.output.outResultCode);    
