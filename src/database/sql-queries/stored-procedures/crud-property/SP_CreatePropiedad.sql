@@ -12,8 +12,6 @@ GO
 	@proc_param inMetrosCuadrados
 	@proc_param inValorFiscal
 	@proc_param inFechaRegistro 
-	@proc_param inEventUser 
-	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
@@ -25,8 +23,6 @@ CREATE OR ALTER PROCEDURE [SP_CreatePropiedad]
 	@inMetrosCuadrados BIGINT,
 	@inValorFiscal MONEY,
 	@inFechaRegistro DATE,
-	@inEventUser VARCHAR(16),
-	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -60,33 +56,6 @@ BEGIN
 						SET @inFechaRegistro = GETDATE();
 					END;
 
-				/* Get the event params to create a new register at dbo.EventLog */
-
-				DECLARE 
-					@idEventType INT,
-					@idEntityType INT,
-					@lastEntityID INT,
-					@actualData NVARCHAR(MAX), 
-					@newData NVARCHAR(MAX);
-
-				SELECT @idEventType = [EVT].[ID] -- event data
-				FROM [dbo].[EventType] AS [EVT]
-				WHERE [EVT].[Name] = 'Create';
-
-				SELECT @idEntityType = [ENT].[ID] -- event data
-				FROM [dbo].[EntityType] AS [ENT]
-				WHERE [ENT].[Name] = 'Propiedad';
-
-				IF @inEventUser IS NULL -- event data
-					BEGIN
-						SET @inEventUser = 'MunITCR';
-					END;
-
-				IF @inEventIP IS NULL -- event data
-					BEGIN
-						SET @inEventIP = '0.0.0.0';
-					END;
-
 				IF (@idUsoPropiedad IS NOT NULL) AND (@idZonaPropiedad IS NOT NULL)
 					BEGIN
 						IF (NOT EXISTS (SELECT 1 FROM [dbo].[Propiedad] AS [P] WHERE [P].[Lote] = @inLote))
@@ -114,7 +83,7 @@ BEGIN
 									associates the new "Propiedad" with the "conceptos de cobro" according to @inZonaPropiedad */
 									
 									/* GET new "Propiedad" PK */
-									SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+									DECLARE @lastPropertyID INT = SCOPE_IDENTITY();
 
 									/* Check if the new "Propiedad" is associated to the "Concepto de Cobro" related to "Consumo de agua" */
 									DECLARE @idPropiedadXCCAgua INT;
@@ -122,7 +91,7 @@ BEGIN
 									FROM dbo.[PropiedadXConceptoCobro] AS [PXCC] 
 										INNER JOIN [dbo].[ConceptoCobro] AS [CC]
 										ON [CC].[Nombre] = 'Consumo de agua'
-									WHERE [PXCC].[IDPropiedad] = @lastEntityID 
+									WHERE [PXCC].[IDPropiedad] = @lastPropertyID 
 									AND [PXCC].IDConceptoCobro = [CC].[ID];
 
 									/* Associate new "Propiedad" with new "PropiedadXCCConsumoAgua" */
@@ -137,51 +106,7 @@ BEGIN
 											);
 										END;
 
-
-									SET @newData = ( -- event data
-										SELECT 
-											[P].[Lote] AS [Propiedad],
-											[P].[IDTipoUsoPropiedad] AS [UsodePropiedad],
-											[P].[IDTipoZonaPropiedad] AS [ZonadePropiedad],
-											[P].[MetrosCuadrados] AS [MetrosCuadrados],
-											[P].[ValorFiscal] AS [ValorFiscal],
-											[P].[FechaRegistro] AS [FechadeRegistro],
-											[P].[Activo] AS [Activo]
-										FROM [dbo].[Propiedad] AS [P]
-										WHERE [P].[ID] = @lastEntityID
-										FOR JSON AUTO
-									);
-
-
-									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
-									AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
-										BEGIN
-											INSERT INTO [dbo].[EventLog] (
-												[IDEventType],
-												[IDEntityType],
-												[EntityID],
-												[BeforeUpdate],
-												[AfterUpdate],
-												[Username],
-												[UserIP]
-											) VALUES (
-												@idEventType,
-												@idEntityType,
-												@lastEntityID,
-												@actualData,
-												@newData,
-												@inEventUser,
-												@inEventIP
-											);
-											SET @outResultCode = 5200; /* OK */
-										END;
-									ELSE
-										BEGIN
-											/* Cannot insert the new "Evento" because some 
-											event's params are null */
-											SET @outResultCode = 5407;
-											RETURN;
-										END;
+									SET @outResultCode = 5200; /* OK */
 								COMMIT TRANSACTION [insertPropiedad]
 							END;
 						ELSE
