@@ -9,7 +9,7 @@ GO
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
 CREATE OR ALTER PROCEDURE [SP_ReadMovimientoConsumoAgua]
-	@inPropiedad CHAR(32),
+	@inPropiedad VARCHAR(32),
 	@outResultCode INT OUTPUT
 AS
 BEGIN

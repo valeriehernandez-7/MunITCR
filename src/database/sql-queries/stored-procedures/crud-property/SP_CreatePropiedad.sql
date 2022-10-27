@@ -18,8 +18,8 @@ GO
 CREATE OR ALTER PROCEDURE [SP_CreatePropiedad]
 	@inUsoPropiedad VARCHAR(128),
 	@inZonaPropiedad VARCHAR(128),
-	@inLote CHAR(32),
-	@inMedidor CHAR(16),
+	@inLote VARCHAR(32),
+	@inMedidor VARCHAR(16),
 	@inMetrosCuadrados BIGINT,
 	@inValorFiscal MONEY,
 	@inFechaRegistro DATE,

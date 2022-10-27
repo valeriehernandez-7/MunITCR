@@ -15,7 +15,7 @@ GO
 */
 CREATE OR ALTER PROCEDURE [SP_CreatePersonaXPropiedad]
 	@inPersonaIdentificacion VARCHAR(64),
-	@inPropiedadLote CHAR(32),
+	@inPropiedadLote VARCHAR(32),
 	@inFechaAsociacionPxP DATE,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),

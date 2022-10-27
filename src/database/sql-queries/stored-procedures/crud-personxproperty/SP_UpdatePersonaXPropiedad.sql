@@ -14,9 +14,9 @@ GO
 */
 CREATE OR ALTER PROCEDURE [SP_UpdatePersonaXPropiedad]
 	@inOldPersonaIdentificacion VARCHAR(64),
-	@inOldPropiedadLote CHAR(32),
+	@inOldPropiedadLote VARCHAR(32),
 	@inPersonaIdentificacion VARCHAR(64),
-	@inPropiedadLote CHAR(32),
+	@inPropiedadLote VARCHAR(32),
 	@inFechaAsociacionPxP DATE,
 	@inFechaDesasociacionPxP DATE,
 	@outResultCode INT OUTPUT

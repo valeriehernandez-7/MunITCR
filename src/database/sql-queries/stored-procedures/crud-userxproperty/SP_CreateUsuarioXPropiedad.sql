@@ -12,7 +12,7 @@ GO
 */
 CREATE OR ALTER PROCEDURE [SP_CreateUsuarioXPropiedad]
 	@inUsuarioUsername VARCHAR(16),
-	@inPropiedadLote CHAR(32),
+	@inPropiedadLote VARCHAR(32),
 	@outResultCode INT OUTPUT
 AS
 BEGIN

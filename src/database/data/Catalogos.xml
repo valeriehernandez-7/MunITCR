@@ -41,7 +41,7 @@
         <MedioPago Nombre="Efectivo" />
         <MedioPago Nombre="Transferencia" />
         <MedioPago Nombre="Tarjeta" />
-        <MedioPago Nombre="Arreglo" />
+        <MedioPago Nombre="Arreglo de pago" />
     </MediosPago>
     <PeriodoMontoCCs>
         <PeriodoMontoCC Nombre="Unico no recurrente" QMeses="1" />
@@ -80,8 +80,9 @@
         <TipoParametro Nombre="varbinary" />
     </TipoParametroSistema>
     <ParametrosSistema>
-        <ParametroSistema Nombre="Cantidad de dias de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
         <ParametroSistema Nombre="Cantidad de dias para calculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
+        <ParametroSistema Nombre="Cantidad de dias de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
+        <ParametroSistema Nombre="Cuota minima para arreglo de pago" NombreTipoPar="float" Valor="0.2" />
     </ParametrosSistema>
     <CCs>
         <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="5000" ValorMinimoM3="30" ValorM3="300" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
@@ -92,10 +93,4 @@
         <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
         <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
     </CCs>
-    <EstadosFactura>
-        <EstadoFactura Nombre="Pago pendiente" />
-        <EstadoFactura Nombre="Pago realizado" />
-        <EstadoFactura Nombre="Arreglo de pago" />
-        <EstadoFactura Nombre="Anulada" />
-    </EstadosFactura>
 </Catalogo>

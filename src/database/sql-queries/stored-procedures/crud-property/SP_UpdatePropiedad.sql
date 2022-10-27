@@ -16,10 +16,10 @@ GO
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
 CREATE OR ALTER PROCEDURE [SP_UpdatePropiedad]
-	@inOldLote CHAR(32),
+	@inOldLote VARCHAR(32),
 	@inUsoPropiedad VARCHAR(128),
 	@inZonaPropiedad VARCHAR(128),
-	@inLote CHAR(32),
+	@inLote VARCHAR(32),
 	@inMetrosCuadrados BIGINT,
 	@inValorFiscal MONEY,
 	@inFechaRegistro DATE,

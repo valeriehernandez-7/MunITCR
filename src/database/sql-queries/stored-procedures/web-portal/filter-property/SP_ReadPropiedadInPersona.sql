@@ -10,7 +10,7 @@ GO
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
 CREATE OR ALTER PROCEDURE [SP_ReadPropiedadInPersona]
-	@inPropiedadLote CHAR(32),
+	@inPropiedadLote VARCHAR(32),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
