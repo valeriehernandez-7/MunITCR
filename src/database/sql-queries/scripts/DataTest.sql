@@ -1,103 +1,68 @@
+USE [MunITCR]
+GO
+
+/* SHOW ALL DB TABLES NAME */
 SELECT * FROM information_schema.tables ORDER BY table_name;
 GO
 
-SELECT * FROM [dbo].[ErrorLog];
-GO
+-- *************************************************************
 
-SELECT * FROM [dbo].[EventLog];
-GO
-
-SELECT * FROM [dbo].[EventType];
-GO
-
-SELECT * FROM [dbo].[EntityType];
-GO
-
-SELECT * FROM [dbo].[TipoMovimientoConsumoAgua];
-GO
-
-SELECT * FROM [dbo].[PropiedadXCCConsumoAgua];
-GO
-
-SELECT * FROM [dbo].[PropiedadXConceptoCobro];
-GO
-
-SELECT * FROM [dbo].[Propiedad];
-GO
-
-SELECT * FROM [dbo].[Usuario];
-GO
-
-SELECT * FROM [dbo].[Persona];
-GO
-
-SELECT * FROM [dbo].[TipoUsoPropiedad];
-GO
-
-SELECT * FROM [dbo].[TipoZonaPropiedad];
-GO
-
-SELECT * FROM [dbo].[TipoDocIdentidad];
-GO
-
-SELECT * FROM [dbo].[TipoParametro];
-GO
-
-SELECT * FROM [dbo].[Parametro];
-GO
-
-SELECT * FROM [dbo].[ParametroInteger];
-GO
-
-SELECT * FROM [dbo].[PeriodoMontoCC];
-GO
-
-SELECT * FROM [dbo].[TipoMontoCC];
-GO
-
-SELECT * FROM [dbo].[ConceptoCobro];
-GO
-
-SELECT * FROM [dbo].[CCConsumoAgua];
-GO
-
-SELECT * FROM [dbo].[CCImpuestoPropiedad];
-GO
-
-SELECT * FROM [dbo].[CCBasura];
-GO
-
-SELECT * FROM [dbo].[CCPatenteComercial];
-GO
-
-SELECT * FROM [dbo].[CCReconexion];
-GO
-
-SELECT * FROM [dbo].[CCInteresMoratorio];
-GO
-
-SELECT * FROM [dbo].[CCMantenimientoParque];
-GO
-
-SELECT * FROM [dbo].[OrdenReconexion];
-GO
-
-SELECT * FROM [dbo].[OrdenCorte];
-GO
-
-SELECT * FROM [dbo].[Factura];
-GO
-
-SELECT * FROM [dbo].[EstadoFactura];
-GO
-
-SELECT * FROM [dbo].[ComprobantePago];
-GO
-
-SELECT * FROM [dbo].[MedioPago];
-GO
+/* SHOW ALL DB TABLES AUTOMATIC */
+DECLARE @sqlText VARCHAR(MAX) = '';
+SELECT @sqlText = @sqlText + ' SELECT * FROM ' + QUOTENAME(NAME) + CHAR(13) 
+FROM SYS.TABLES
+WHERE NAME <> 'sysdiagrams'
+ORDER BY NAME;
+EXEC(@sqlText);
 
 -- *************************************************************
+
+/* SHOW DB TABLE */
+
+ SELECT * FROM [CCBasura]  
+ SELECT * FROM [CCConsumoAgua]  
+ SELECT * FROM [CCImpuestoPropiedad]  
+ SELECT * FROM [CCInteresMoratorio]  
+ SELECT * FROM [CCMantenimientoParque]  
+ SELECT * FROM [CCPatenteComercial]  
+ SELECT * FROM [CCReconexion]  
+ SELECT * FROM [ComprobantePago]  
+ SELECT * FROM [ConceptoCobro]  
+ SELECT * FROM [DetalleCC]  
+ SELECT * FROM [DetalleCCConsumoAgua]  
+ SELECT * FROM [EntityType]  
+ SELECT * FROM [ErrorLog]  
+ SELECT * FROM [EventLog]  
+ SELECT * FROM [EventType]  
+ SELECT * FROM [Factura]  
+ SELECT * FROM [MedioPago]  
+ SELECT * FROM [MovimientoConsumoAgua]  
+ SELECT * FROM [OrdenCorte]  
+ SELECT * FROM [OrdenReconexion]  
+ SELECT * FROM [Parametro]  
+ SELECT * FROM [ParametroInteger]  
+ SELECT * FROM [ParametroMoney]  
+ SELECT * FROM [ParametroPorcentaje]  
+ SELECT * FROM [ParametroTexto]  
+ SELECT * FROM [PeriodoMontoCC]  
+ SELECT * FROM [Persona]  
+ SELECT * FROM [PersonaXPropiedad]  
+ SELECT * FROM [Propiedad]  
+ SELECT * FROM [PropiedadXCCConsumoAgua]  
+ SELECT * FROM [PropiedadXConceptoCobro]  
+ SELECT * FROM [TipoDocIdentidad]  
+ SELECT * FROM [TipoMontoCC]  
+ SELECT * FROM [TipoMovimientoConsumoAgua]  
+ SELECT * FROM [TipoParametro]  
+ SELECT * FROM [TipoUsoPropiedad]  
+ SELECT * FROM [TipoZonaPropiedad]  
+ SELECT * FROM [Usuario]  
+ SELECT * FROM [UsuarioXPropiedad] 
+ 
+
+-- *************************************************************
+
+/* CLEAR DB TABLE */
 
 DELETE FROM [dbo].[ErrorLog];
 DBCC CHECKIDENT ('[dbo].[ErrorLog]', RESEED, 0) WITH NO_INFOMSGS;
@@ -210,10 +175,6 @@ DELETE FROM [dbo].[Factura];
 DBCC CHECKIDENT ('[dbo].[Factura]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
-DELETE FROM [dbo].[EstadoFactura];
-DBCC CHECKIDENT ('[dbo].[EstadoFactura]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
 DELETE FROM [dbo].[ComprobantePago];
 DBCC CHECKIDENT ('[dbo].[ComprobantePago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -221,3 +182,13 @@ GO
 DELETE FROM [dbo].[MedioPago];
 DBCC CHECKIDENT ('[dbo].[MedioPago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
+
+-- *************************************************************
+
+/* DELETE DB STORED PROCEDURES */
+
+DECLARE @sql NVARCHAR(MAX) = N'';
+SELECT @sql += N'DROP PROCEDURE dbo.'+ QUOTENAME(name) + ';' FROM sys.procedures
+WHERE name LIKE N'sp[_]%'
+AND SCHEMA_NAME(schema_id) = N'dbo';
+EXEC sp_executesql @sql;
