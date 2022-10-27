@@ -51,6 +51,8 @@ export const ReadUsuario = async (req, res) => {
 }
 
 export const ReadPersonaXPropiedad = async (req, res) => {
+    var opcion =req.query.opcion
+    console.log(opcion)
     const pool= await getConection()
     const result= await pool.request().
                     output('outResultCode', sql.Int).
@@ -124,7 +126,7 @@ export const ReadPropiedadXUsuario=  async (req, res) => {
     var lote = req.query.lote;
     console.log(lote);
     const result= await pool.request()
-                    .input(inPropiedad, sql.CHAR(32),lote)
+                    .input(inPropiedad, sql.VARCHAR(32),lote)
                     .output('outResultCode', sql.Int)
                     .execute('SP_ReadPropiedadXUsuario');
     res.json(result.recordset);   
@@ -157,8 +159,8 @@ export const CreatePersona=  async (req, res) => {
                 .input('inNombre', sql.VARCHAR(128),nombre)
                 .input('inTipoIdentificacion', sql.VARCHAR(128),tipoID)
                 .input('inIdentificacion', sql.VARCHAR(64),Ident)
-                .input('inTelefono1', sql.CHAR(16),tel1)
-                .input('inTelefono2', sql.CHAR(16),tel2)
+                .input('inTelefono1', sql.VARCHAR(16),tel1)
+                .input('inTelefono2', sql.VARCHAR(16),tel2)
                 .input('inEmail', sql.VARCHAR(256),email)
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
@@ -188,8 +190,8 @@ export const CreatePropiedad =  async (req, res) => {
     const result= await pool.request() 
                 .input('inUsoPropiedad', sql.VARCHAR(128),uso)
                 .input('inZonaPropiedad', sql.VARCHAR(128),zona)
-                .input('inLote', sql.CHAR(32),lote)
-                .input('inMedidor', sql.CHAR(16),medidor)
+                .input('inLote', sql.VARCHAR(32),lote)
+                .input('inMedidor', sql.VARCHAR(16),medidor)
                 .input('inMetrosCuadrados', sql.BIGINT,m2)
                 .input('inValorFiscal', sql.MONEY,valorFiscal)
                 .input('inFechaRegistro', sql.DATE,registro)
@@ -203,7 +205,7 @@ export const CreatePersonaXPropiedad =  async (req, res) => {
     const {iden,lote,fecha,uss,ip} = req.body;
     const result= await pool.request() 
                 .input('inPersonaIdentificacion', sql.VARCHAR(64),iden)
-                .input('inPropiedadLote', sql.CHAR(32),lote)
+                .input('inPropiedadLote', sql.VARCHAR(32),lote)
                 .input('inFechaAsociacionPxP', sql.DATE,fecha)
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
@@ -217,7 +219,7 @@ export const CreateUsuarioXPropiedad =  async (req, res) => {
     const {user,lote} = req.body;
     const result= await pool.request() 
                 .input('inUsuarioUsername', sql.VARCHAR(16),user)
-                .input('inPropiedadLote', sql.CHAR(32),lote)
+                .input('inPropiedadLote', sql.VARCHAR(32),lote)
                 .output('outResultCode', sql.Int)
                 .execute('SP_CreateUsuarioXPropiedad');
         res.json(result.output.outResultCode);    
@@ -231,8 +233,8 @@ export const UpdatePersona =  async (req, res) => {
                 .input('inNombre', sql.VARCHAR(128),nombre)
                 .input('inTipoIdentificacion', sql.VARCHAR(128),tipoID)
                 .input('inIdentificacion', sql.VARCHAR(64),Ident)
-                .input('inTelefono1', sql.CHAR(16),tel1)
-                .input('inTelefono2', sql.CHAR(16),tel2)
+                .input('inTelefono1', sql.VARCHAR(16),tel1)
+                .input('inTelefono2', sql.VARCHAR(16),tel2)
                 .input('inEmail', sql.VARCHAR(256),email)
                 .output('outResultCode', sql.Int)
                 .execute('SP_UpdatePersona');
@@ -255,7 +257,7 @@ export const ReadPropiedadInPersona =  async (req, res) => {
     const pool= await getConection()
     const lote = req.body.lote;
     const result= await pool.request() 
-                .input('inPropiedadLote', sql.CHAR(32),lote)
+                .input('inPropiedadLote', sql.VARCHAR(32),lote)
                 .output('outResultCode', sql.Int)
                 .execute('SP_ReadPropiedadInPersona');
         res.json(result.recordset);    
@@ -275,7 +277,7 @@ export const ReadUsuarioXPropiedadIn =  async (req, res) => {
     const pool= await getConection()
     const lote = req.body.lote;
     const result= await pool.request() 
-                .input('inPropiedad', sql.CHAR(32),lote)
+                .input('inPropiedad', sql.VARCHAR(32),lote)
                 .output('outResultCode', sql.Int)
                 .execute('SP_ReadUsuarioXPropiedadIn');
         res.json(result.recordset);    
@@ -299,10 +301,10 @@ export const UpdatePropiedad =  async (req, res) => {
     const pool= await getConection()
     const {oldLote,uso,zona,lote,m2,valorFiscal,registro} = req.body;
     const result= await pool.request()
-                .input('inOldLote', sql.CHAR(32),oldLote)
+                .input('inOldLote', sql.VARCHAR(32),oldLote)
                 .input('inUsoPropiedad', sql.VARCHAR(128),uso)
                 .input('inZonaPropiedad', sql.VARCHAR(128),zona)
-                .input('inLote', sql.CHAR(32),lote)
+                .input('inLote', sql.VARCHAR(32),lote)
                 .input('inMetrosCuadrados', sql.BIGINT,m2)
                 .input('inValorFiscal', sql.MONEY,valorFiscal)
                 .input('inFechaRegistro', sql.DATE,registro)
@@ -317,9 +319,9 @@ export const UpdatePersonaXPropiedad =  async (req, res) => {
     console.log(oldId,oldLote,id,lote,fechaAsoc,fechaDesasoc)
     const result= await pool.request()
                 .input('inOldPersonaIdentificacion', sql.VARCHAR(64),oldId)
-                .input('inOldPropiedadLote', sql.CHAR(32),oldLote)
+                .input('inOldPropiedadLote', sql.VARCHAR(32),oldLote)
                 .input('inPersonaIdentificacion', sql.VARCHAR(64),id)
-                .input('inPropiedadLote', sql.CHAR(32),lote)
+                .input('inPropiedadLote', sql.VARCHAR(32),lote)
                 .input('inFechaAsociacionPxP', sql.DATE,fechaAsoc)
                 .input('inFechaDesasociacionPxP', sql.DATE,fechaDesasoc)
                 .output('outResultCode', sql.Int)
