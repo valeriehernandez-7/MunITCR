@@ -52,7 +52,6 @@ BEGIN
 				DECLARE 
 					@idEventType INT,
 					@idEntityType INT,
-					@lastEntityID INT,
 					@actualData NVARCHAR(MAX), 
 					@newData NVARCHAR(MAX);
 
@@ -107,9 +106,6 @@ BEGIN
 											[CorreoElectronico] = @inEmail
 									WHERE [P].[ID] = @idPersona;
 
-									/* GET new "Persona" PK */
-									SET @lastEntityID = SCOPE_IDENTITY(); -- event data
-
 									/* Get "Persona" data after update */
 									SET @newData = ( -- event data
 										SELECT 
@@ -121,11 +117,11 @@ BEGIN
 											[P].[CorreoElectronico] AS [CorreoElectronico],
 											[P].[Activo] AS [Activo]
 										FROM [dbo].[Persona] AS [P]
-										WHERE [P].[ID] = @lastEntityID
+										WHERE [P].[ID] = @idPersona
 										FOR JSON AUTO
 									);
 
-									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
 									AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 										BEGIN
 											INSERT INTO [dbo].[EventLog] (
@@ -139,7 +135,7 @@ BEGIN
 											) VALUES (
 												@idEventType,
 												@idEntityType,
-												@lastEntityID,
+												@idPersona,
 												@actualData,
 												@newData,
 												@inEventUser,

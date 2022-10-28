@@ -53,11 +53,16 @@ BEGIN
 				SELECT @idPropiedad = [Pro].[ID]
 				FROM [dbo].[Propiedad] AS [Pro]
 				WHERE [Pro].[Lote] = @inPropiedadLote;
+
+				DECLARE @idPersonaXPropiedad INT;
+				SELECT @idPersonaXPropiedad = [PerXPro].[ID]
+				FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
+				WHERE [IDPersona] = @idOldPersona 
+				AND [IDPropiedad] = @idOldPropiedad;
 		
 				DECLARE 
 					@idEventType INT,
 					@idEntityType INT,
-					@lastEntityID INT,
 					@actualData NVARCHAR(MAX), 
 					@newData NVARCHAR(MAX);
 
@@ -79,8 +84,8 @@ BEGIN
 						SET @inEventIP = '0.0.0.0';
 					END;
 
-				IF (@idOldPersona IS NOT NULL) AND (@idPersona IS NOT NULL)
-				AND (@idOldPropiedad IS NOT NULL) AND (@idPropiedad IS NOT NULL)
+				IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL)
+				AND (@idPersonaXPropiedad IS NOT NULL)
 					BEGIN
 						BEGIN TRANSACTION [updatePerXPro]
 
@@ -93,23 +98,18 @@ BEGIN
 									[PerXPro].[FechaFin] AS [FechadeDesasociacion],
 									[PerXPro].[Activo] AS [Activo]
 								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
-								WHERE [IDPersona] = @idOldPersona 
-								AND [IDPropiedad] = @idOldPropiedad 
+								WHERE [PerXPro].[ID] = @idPersonaXPropiedad 
 								FOR JSON AUTO
 							);
 
-							/* Update "PersonaXPropiedad" using  @idOldPersona & @idOldPropiedad */
+							/* Update "PersonaXPropiedad" using  @idPersonaXPropiedad */
 							UPDATE [dbo].[PersonaXPropiedad]
 								SET 
 									[IDPersona] = @idPersona,
 									[IDPropiedad] = @idPropiedad,
 									[FechaInicio] = @inFechaAsociacionPxP,
 									[FechaFin] = @inFechaDesasociacionPxP
-							WHERE [IDPersona] = @idOldPersona 
-							AND [IDPropiedad] = @idOldPropiedad 
-
-							/* GET new "PersonaXPropiedad" PK */
-							SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+							WHERE [ID] = @idPersonaXPropiedad;
 
 							/* Get "PersonaXPropiedad" data after update */
 							SET @newData = ( -- event data
@@ -120,11 +120,11 @@ BEGIN
 									[PerXPro].[FechaFin] AS [FechadeDesasociacion],
 									[PerXPro].[Activo] AS [Activo]
 								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
-								WHERE [PerXPro].[ID] = @lastEntityID
+								WHERE [PerXPro].[ID] = @idPersonaXPropiedad 
 								FOR JSON AUTO
 							);
 
-							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL)
 							AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 								BEGIN
 									INSERT INTO [dbo].[EventLog] (
@@ -138,7 +138,7 @@ BEGIN
 									) VALUES (
 										@idEventType,
 										@idEntityType,
-										@lastEntityID,
+										@idPersonaXPropiedad,
 										@actualData,
 										@newData,
 										@inEventUser,
