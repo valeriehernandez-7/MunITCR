@@ -9,6 +9,8 @@ GO
 	@proc_param inUsername 
 	@proc_param inPassword 
 	@proc_param inTipoUsuario 
+	@proc_param inEventUser 
+	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
@@ -79,6 +81,7 @@ BEGIN
 					BEGIN
 						BEGIN TRANSACTION [updateUsuario]
 
+							/* Get "Usuario" data before update */
 							SET @actualData = ( -- event data
 								SELECT 
 									[U].[IDPersona] AS [IDPersona],
@@ -87,19 +90,20 @@ BEGIN
 									[U].[Administrador] AS [Administrador],
 									[U].[Activo] AS [Activo]
 								FROM [dbo].[Usuario] AS [U]
-								WHERE [U].[ID] = @inOldUsername
+								WHERE [U].[ID] = @idUsuario
 								FOR JSON AUTO
 							);
 
+							/* Update "Usuario" using  @idUsuario */
 							UPDATE [dbo].[Usuario]
 								SET 
 									[IDPersona] = @idPersona,
 									[Username] = @inUsername,
 									[Password] = @inPassword,
 									[Administrador] = @permisosUsuario
-							WHERE [ID] = @idUsuario;
+							WHERE [Usuario].[ID] = @idUsuario;
 
-
+							/* Get "Usuario" data after update */
 							SET @newData = ( -- event data
 								SELECT 
 									[U].[IDPersona] AS [IDPersona],
