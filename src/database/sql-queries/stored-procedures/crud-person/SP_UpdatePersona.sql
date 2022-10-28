@@ -47,6 +47,34 @@ BEGIN
 				WHERE [Per].[ValorDocIdentidad] = @inOldIdentificacion
 				AND [Per].[Activo] = 1;
 		
+				/* Get the event params to create a new register at dbo.EventLog */
+
+				DECLARE 
+					@idEventType INT,
+					@idEntityType INT,
+					@lastEntityID INT,
+					@actualData NVARCHAR(MAX), 
+					@newData NVARCHAR(MAX);
+
+				SELECT @idEventType = [EVT].[ID] -- event data
+				FROM [dbo].[EventType] AS [EVT]
+				WHERE [EVT].[Name] = 'Update';
+
+				SELECT @idEntityType = [ENT].[ID] -- event data
+				FROM [dbo].[EntityType] AS [ENT]
+				WHERE [ENT].[Name] = 'Persona';
+
+				IF @inEventUser IS NULL -- event data
+					BEGIN
+						SET @inEventUser = 'MunITCR';
+					END;
+
+				IF @inEventIP IS NULL -- event data
+					BEGIN
+						SET @inEventIP = '0.0.0.0';
+					END;
+
+
 				IF @idTipoIdentificacion IS NOT NULL
 					BEGIN
 						IF @idPersona IS NOT NULL
@@ -62,6 +90,53 @@ BEGIN
 											[CorreoElectronico] = @inEmail
 									WHERE [ValorDocIdentidad] = @inOldIdentificacion;
 									SET @outResultCode = 5200; /* OK */
+
+									SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+
+									SET @newData = ( -- event data
+										SELECT 
+											[P].[Nombre] AS [Nombre],
+											[P].[IdTipoDocIdentidad] AS [TipodeDocumentoIdentidad],
+											[P].[ValorDocIdentidad] AS [Identificacion],
+											[P].[Telefono1] AS [Telefono1],
+											[P].[Telefono2] AS [Telefono2], 
+											[P].[CorreoElectronico] AS [CorreoElectronico],
+											[P].[Activo] AS [Activo]
+										FROM [dbo].[Persona] AS [P]
+										WHERE [P].[ID] = @lastEntityID
+										FOR JSON AUTO
+									);
+
+									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+									AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
+										BEGIN
+											INSERT INTO [dbo].[EventLog] (
+												[IDEventType],
+												[IDEntityType],
+												[EntityID],
+												[BeforeUpdate],
+												[AfterUpdate],
+												[Username],
+												[UserIP]
+											) VALUES (
+												@idEventType,
+												@idEntityType,
+												@lastEntityID,
+												@actualData,
+												@newData,
+												@inEventUser,
+												@inEventIP
+											);
+											SET @outResultCode = 5200; /* OK */
+										END;
+									ELSE
+										BEGIN
+											/* Cannot insert the new "Evento" because some 
+											event's params are null */
+											SET @outResultCode = 5407;
+											RETURN;
+										END;
+
 								COMMIT TRANSACTION [updatePersona]
 							END;
 						ELSE

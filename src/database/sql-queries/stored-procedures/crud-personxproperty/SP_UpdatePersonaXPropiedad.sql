@@ -54,6 +54,31 @@ BEGIN
 				FROM [dbo].[Propiedad] AS [Pro]
 				WHERE [Pro].[Lote] = @inPropiedadLote;
 		
+				DECLARE 
+					@idEventType INT,
+					@idEntityType INT,
+					@lastEntityID INT,
+					@actualData NVARCHAR(MAX), 
+					@newData NVARCHAR(MAX);
+
+				SELECT @idEventType = [EVT].[ID] -- event data
+				FROM [dbo].[EventType] AS [EVT]
+				WHERE [EVT].[Name] = 'Update';
+
+				SELECT @idEntityType = [ENT].[ID] -- event data
+				FROM [dbo].[EntityType] AS [ENT]
+				WHERE [ENT].[Name] = 'Propietario de Propiedad';
+
+				IF @inEventUser IS NULL -- event data
+					BEGIN
+						SET @inEventUser = 'MunITCR';
+					END;
+
+				IF @inEventIP IS NULL -- event data
+					BEGIN
+						SET @inEventIP = '0.0.0.0';
+					END;
+
 				IF (@idOldPersona IS NOT NULL) AND (@idPersona IS NOT NULL)
 				AND (@idOldPropiedad IS NOT NULL) AND (@idPropiedad IS NOT NULL)
 					BEGIN
@@ -67,6 +92,50 @@ BEGIN
 							WHERE [IDPersona] = @idOldPersona 
 							AND [IDPropiedad] = @idOldPropiedad 
 							SET @outResultCode = 5200; /* OK */
+						/* GET new "PersonaXPropiedad" PK */
+							SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+
+							SET @newData = ( -- event data
+								SELECT 
+									[PerXPro].[IDPersona] AS [IDPersona],
+									[PerXPro].[IDPropiedad] AS [IDPropiedad],
+									[PerXPro].[FechaInicio] AS [FechadeAsociacion],
+									[PerXPro].[FechaFin] AS [FechadeDesasociacion],
+									[PerXPro].[Activo] AS [Activo]
+								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
+								WHERE [PerXPro].[ID] = @lastEntityID
+								FOR JSON AUTO
+							);
+
+							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+							AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
+								BEGIN
+									INSERT INTO [dbo].[EventLog] (
+										[IDEventType],
+										[IDEntityType],
+										[EntityID],
+										[BeforeUpdate],
+										[AfterUpdate],
+										[Username],
+										[UserIP]
+									) VALUES (
+										@idEventType,
+										@idEntityType,
+										@lastEntityID,
+										@actualData,
+										@newData,
+										@inEventUser,
+										@inEventIP
+									);
+									SET @outResultCode = 5200; /* OK */
+								END;
+							ELSE
+								BEGIN
+									/* Cannot insert the new "Evento" because some 
+									event's params are null */
+									SET @outResultCode = 5407;
+									RETURN;
+								END;
 						COMMIT TRANSACTION [updatePerXPro]
 					END;
 				ELSE
