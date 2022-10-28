@@ -14,7 +14,7 @@ GO
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
 CREATE OR ALTER PROCEDURE [SP_CreateUsuarioXPropiedad]
-	@inUsuarioUsername VARCHAR(64),
+	@inUsuarioUsername VARCHAR(16),
 	@inPropiedadLote VARCHAR(32),
 	@inFechaAsociacionUxP DATE,
 	@inEventUser VARCHAR(16),
