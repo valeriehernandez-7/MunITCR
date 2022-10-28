@@ -18,6 +18,8 @@ CREATE OR ALTER PROCEDURE [SP_UpdateUsuario]
 	@inUsername VARCHAR(16),
 	@inPassword VARCHAR(16),
 	@inTipoUsuario VARCHAR(16),
+	@inEventUser VARCHAR(16),
+	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -47,10 +49,49 @@ BEGIN
 					WHEN 'Administrador' THEN 1
 				END;
 
+				/* Get the event params to create a new register at dbo.EventLog */
+
+				DECLARE 
+					@idEventType INT,
+					@idEntityType INT,
+					@lastEntityID INT,
+					@actualData NVARCHAR(MAX), 
+					@newData NVARCHAR(MAX);
+					
+				SELECT @idEventType = [EVT].[ID] -- event data
+				FROM [dbo].[EventType] AS [EVT]
+				WHERE [EVT].[Name] = 'Create';
+
+				SELECT @idEntityType = [ENT].[ID] -- event data
+				FROM [dbo].[EntityType] AS [ENT]
+				WHERE [ENT].[Name] = 'Usuario';
+
+				IF @inEventUser IS NULL -- event data
+					BEGIN
+						SET @inEventUser = 'MunITCR';
+					END;
+
+				IF @inEventIP IS NULL -- event data
+					BEGIN
+						SET @inEventIP = '0.0.0.0';
+					END;
 				IF (@idUsuario IS NOT NULL) AND (@idPersona IS NOT NULL) 
 				AND (@permisosUsuario IS NOT NULL)
 					BEGIN
 						BEGIN TRANSACTION [updateUsuario]
+
+							SET @actualData = ( -- event data
+								SELECT 
+									[U].[IDPersona] AS [IDPersona],
+									[U].[Username] AS [Usuario],
+									[U].[Password] AS [Contrasena],
+									[U].[Administrador] AS [Administrador],
+									[U].[Activo] AS [Activo]
+								FROM [dbo].[Usuario] AS [U]
+								WHERE [U].[ID] = @inOldUsername
+								FOR JSON AUTO
+							);
+
 							UPDATE [dbo].[Usuario]
 								SET 
 									[IDPersona] = @idPersona,
@@ -59,6 +100,49 @@ BEGIN
 									[Administrador] = @permisosUsuario
 							WHERE [ID] = @idUsuario;
 							SET @outResultCode = 5200; /* OK */
+							SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+
+							SET @newData = ( -- event data
+								SELECT 
+									[U].[IDPersona] AS [IDPersona],
+									[U].[Username] AS [Usuario],
+									[U].[Password] AS [Contrasena],
+									[U].[Administrador] AS [Administrador],
+									[U].[Activo] AS [Activo]
+								FROM [dbo].[Usuario] AS [U]
+								WHERE [U].[ID] = @lastEntityID
+								FOR JSON AUTO
+							);
+
+							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+							AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
+								BEGIN
+									INSERT INTO [dbo].[EventLog] (
+										[IDEventType],
+										[IDEntityType],
+										[EntityID],
+										[BeforeUpdate],
+										[AfterUpdate],
+										[Username],
+										[UserIP]
+									) VALUES (
+										@idEventType,
+										@idEntityType,
+										@lastEntityID,
+										@actualData,
+										@newData,
+										@inEventUser,
+										@inEventIP
+									);
+									SET @outResultCode = 5200; /* OK */
+								END;
+							ELSE
+								BEGIN
+									/* Cannot insert the new "Evento" because some 
+									event's params are null */
+									SET @outResultCode = 5408;
+									RETURN;
+								END;
 						COMMIT TRANSACTION [updateUsuario]
 					END;
 				ELSE
