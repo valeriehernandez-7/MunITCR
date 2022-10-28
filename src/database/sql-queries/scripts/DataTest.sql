@@ -84,6 +84,10 @@ DELETE FROM [dbo].[PersonaXPropiedad];
 DBCC CHECKIDENT ('[dbo].[PersonaXPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
+DELETE FROM [dbo].[MovimientoConsumoAgua];
+DBCC CHECKIDENT ('[dbo].[MovimientoConsumoAgua]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
 DELETE FROM [dbo].[PropiedadXCCConsumoAgua];
 GO
 

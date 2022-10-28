@@ -35,7 +35,9 @@ BEGIN
 				FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA]
 					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 					ON [PXCC].[ID] = [PXCCCA].[IDPropiedadXCC]
-				WHERE [PXCC].[IDPropiedad] = @inPropiedadLote;
+					INNER JOIN [dbo].[Propiedad] AS [Pro]
+					ON [Pro].[ID] = [PXCC].[IDPropiedad]
+				WHERE [Pro].[Lote] = @inPropiedadLote;
 
 				IF @inFecha IS NULL
 					BEGIN
@@ -49,6 +51,39 @@ BEGIN
 						DECLARE 
 							@lecturaMedidor INT,
 							@montoM3 INT;
+
+						IF (@inTipo = 'Lectura')
+							BEGIN
+								/* 
+								[MovimientoConsumoAgua].[LecturaMedidor] = @inMonto 
+								[MovimientoConsumoAgua].[MontoM3] = @inMonto - [PropiedadXCCConsumoAgua].[LecturaMedidor] 
+								*/
+								SET @lecturaMedidor = @inMonto;
+								SELECT @montoM3 = (@inMonto - [PXCCCA].[LecturaMedidor])
+								FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA];
+							END;
+
+						IF (@inTipo = 'Ajuste Credito')
+							BEGIN
+								/* 
+								[MovimientoConsumoAgua].[LecturaMedidor] = [PropiedadXCCConsumoAgua].[LecturaMedidor] + @inMonto 
+								[MovimientoConsumoAgua].[MontoM3] = @inMonto  
+								*/
+								SELECT @lecturaMedidor = ([PXCCCA].[LecturaMedidor] + @inMonto)
+								FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA];
+								SET @montoM3 = @inMonto;
+							END;
+
+						IF (@inTipo = 'Ajuste Debito')
+							BEGIN
+								/* 
+								[MovimientoConsumoAgua].[LecturaMedidor] = [PropiedadXCCConsumoAgua].[LecturaMedidor] - @inMonto 
+								[MovimientoConsumoAgua].[MontoM3] = @inMonto  
+								*/
+								SELECT @lecturaMedidor = ([PXCCCA].[LecturaMedidor] - @inMonto)
+								FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA];
+								SET @montoM3 = @inMonto;
+							END;
 						
 						IF (@lecturaMedidor IS NOT NULL) AND (@montoM3 IS NOT NULL)
 							BEGIN
@@ -73,6 +108,15 @@ BEGIN
 												@montoM3,
 												@lecturaMedidor
 											);
+
+											UPDATE [dbo].[PropiedadXCCConsumoAgua]
+												SET [LecturaMedidor] = [MCA].[LecturaMedidor]
+											FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA]
+												INNER JOIN [dbo].[MovimientoConsumoAgua] AS [MCA]
+												ON [MCA].[IDPropiedadXCCConsumoAgua] = [PXCCCA].[IDPropiedadXCC]
+											WHERE [PXCCCA].[IDPropiedadXCC] = @idPropiedadXCCConsumoAgua
+											AND [MCA].[ID] = SCOPE_IDENTITY();
+
 											SET @outResultCode = 5200; /* OK */
 										COMMIT TRANSACTION [insertMovimientoConsumoAgua]
 									END;
