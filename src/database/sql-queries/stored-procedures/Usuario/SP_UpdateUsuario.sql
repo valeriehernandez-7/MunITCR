@@ -60,7 +60,7 @@ BEGIN
 					
 				SELECT @idEventType = [EVT].[ID] -- event data
 				FROM [dbo].[EventType] AS [EVT]
-				WHERE [EVT].[Name] = 'Create';
+				WHERE [EVT].[Name] = 'Update';
 
 				SELECT @idEntityType = [ENT].[ID] -- event data
 				FROM [dbo].[EntityType] AS [ENT]
