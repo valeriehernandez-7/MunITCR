@@ -75,7 +75,9 @@ BEGIN
 				IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL) AND (@inFechaAsociacionPxP IS NOT NULL)
 					BEGIN
 						IF NOT EXISTS (SELECT 1 FROM [dbo].[PersonaXPropiedad] AS [PXP] 
-						WHERE [PXP].[IDPersona] = @idPersona AND [PXP].[IDPropiedad] = @idPropiedad)
+						WHERE [PXP].[IDPersona] = @idPersona 
+						AND [PXP].[IDPropiedad] = @idPropiedad
+						AND [PXP].[Activo] = 1)
 							BEGIN
 								BEGIN TRANSACTION [insertPerXPro]
 									/* Insert new "PersonaXPropiedad" as "Persona" + "Propiedad" association */

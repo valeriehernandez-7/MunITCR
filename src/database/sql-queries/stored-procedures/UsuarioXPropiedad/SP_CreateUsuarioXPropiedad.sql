@@ -7,7 +7,7 @@ GO
 	@proc_description
 	@proc_param inUsuarioIdentificacion person's doc ID
 	@proc_param inPropiedadLote property identifier
-	@proc_param inFechaAsociacionPxP association date
+	@proc_param @inFechaAsociacionUxP association date
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
@@ -75,7 +75,9 @@ BEGIN
 				IF (@idUsuario IS NOT NULL) AND (@idPropiedad IS NOT NULL) AND (@inFechaAsociacionUxP IS NOT NULL)
 					BEGIN
 						IF NOT EXISTS (SELECT 1 FROM [dbo].[UsuarioXPropiedad] AS [UXP] 
-						WHERE [UXP].[IDUsuario] = @idUsuario AND [UXP].[IDPropiedad] = @idPropiedad)
+						WHERE [UXP].[IDUsuario] = @idUsuario 
+						AND [UXP].[IDPropiedad] = @idPropiedad
+						AND [UXP].[Activo] = 1)
 							BEGIN
 								BEGIN TRANSACTION [insertUsrXPro]
 									/* Insert new "UsuarioXPropiedad" as "Usuario" + "Propiedad" association */
