@@ -54,7 +54,6 @@ BEGIN
 				DECLARE 
 					@idEventType INT,
 					@idEntityType INT,
-					@lastEntityID INT,
 					@actualData NVARCHAR(MAX), 
 					@newData NVARCHAR(MAX);
 					
@@ -99,8 +98,7 @@ BEGIN
 									[Password] = @inPassword,
 									[Administrador] = @permisosUsuario
 							WHERE [ID] = @idUsuario;
-							SET @outResultCode = 5200; /* OK */
-							SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+
 
 							SET @newData = ( -- event data
 								SELECT 
@@ -110,11 +108,11 @@ BEGIN
 									[U].[Administrador] AS [Administrador],
 									[U].[Activo] AS [Activo]
 								FROM [dbo].[Usuario] AS [U]
-								WHERE [U].[ID] = @lastEntityID
+								WHERE [U].[ID] = @idUsuario
 								FOR JSON AUTO
 							);
 
-							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@idUsuario IS NOT NULL)
 							AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 								BEGIN
 									INSERT INTO [dbo].[EventLog] (
@@ -128,7 +126,7 @@ BEGIN
 									) VALUES (
 										@idEventType,
 										@idEntityType,
-										@lastEntityID,
+										@idUsuario,
 										@actualData,
 										@newData,
 										@inEventUser,
