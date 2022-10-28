@@ -227,7 +227,7 @@ export const CreateUsuarioXPropiedad =  async (req, res) => {
 
 export const UpdatePersona =  async (req, res) => {
     const pool= await getConection()
-    const {oldId,nombre,tipoID,Ident,tel1,tel2,email} = req.body;
+    const {oldId,nombre,tipoID,Ident,tel1,tel2,email,uss,ip} = req.body;
     const result= await pool.request() 
                 .input('inOldIdentificacion', sql.VARCHAR(64),oldId)
                 .input('inNombre', sql.VARCHAR(128),nombre)
@@ -236,6 +236,8 @@ export const UpdatePersona =  async (req, res) => {
                 .input('inTelefono1', sql.VARCHAR(16),tel1)
                 .input('inTelefono2', sql.VARCHAR(16),tel2)
                 .input('inEmail', sql.VARCHAR(256),email)
+                .input('inEventUser', sql.VARCHAR(16),uss)
+                .input('inEventIP', sql.VARCHAR(64),ip)                
                 .output('outResultCode', sql.Int)
                 .execute('SP_UpdatePersona');
         res.json(result.output.outResultCode);    

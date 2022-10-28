@@ -23,6 +23,8 @@ CREATE OR ALTER PROCEDURE [SP_UpdatePersona]
 	@inTelefono1 VARCHAR(16),
 	@inTelefono2 VARCHAR(16),
 	@inEmail VARCHAR(256),
+	@inEventUser VARCHAR(16),
+	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -91,12 +93,12 @@ BEGIN
 											[P].[CorreoElectronico] AS [CorreoElectronico],
 											[P].[Activo] AS [Activo]
 										FROM [dbo].[Persona] AS [P]
-										WHERE [P].[ID] = @idPersona;
+										WHERE [P].[ID] = @idPersona
 										FOR JSON AUTO
 									);
 
 									/* Update "Persona" using  @idPersona */
-									UPDATE [dbo].[Persona]
+									UPDATE [dbo].[Persona] 
 										SET 
 											[Nombre] = @inNombre,
 											[IDTipoDocIdentidad] = @idTipoIdentificacion,
@@ -104,7 +106,7 @@ BEGIN
 											[Telefono1] = @inTelefono1,
 											[Telefono2] = @inTelefono2,
 											[CorreoElectronico] = @inEmail
-									WHERE [P].[ID] = @idPersona;
+									WHERE [Persona].[ID] = @idPersona;
 
 									/* Get "Persona" data after update */
 									SET @newData = ( -- event data

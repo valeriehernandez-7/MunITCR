@@ -100,7 +100,9 @@ async function update() {
   var idNumber = $("#idNumber").val();
   var phone1 = $("#phone1").val();
   var phone2 = $("#phone2").val();
-  var email = $("#email").val();
+  var email = $("#email").val();  
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
   const body={
     oldId:  id,
     nombre: name,
@@ -108,7 +110,9 @@ async function update() {
     Ident:  idNumber,
     tel1:   phone1,
     tel2:   phone2,
-    email:  email
+    email:  email,
+    uss: uss,
+    ip: ip
   }
   const options = {
   method: "post",
