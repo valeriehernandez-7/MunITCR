@@ -55,9 +55,10 @@ export const ReadPersonaXPropiedad = async (req, res) => {
     console.log(opcion)
     const pool= await getConection()
     const result= await pool.request().
+                    input('inEsAsociacion', sql.Bit, parseInt(opcion)).
                     output('outResultCode', sql.Int).
-                    execute('SP_ReadPersonaXPropiedad');                    
-        res.json(result.recordset); 
+                    execute('SP_ReadPersonaXPropiedadAsocDesasoc');                 
+        res.json(result.recordset);  
 }
 
 export const ReadPersonaIdentificacion = async (req, res) => {
@@ -225,7 +226,7 @@ export const CreateUsuarioXPropiedad =  async (req, res) => {
         res.json(result.output.outResultCode);    
     }
 
-export const UpdatePersona =  async (req, res) => {
+export const UpdatePersona =  async (req, res) => { 
     const pool= await getConection()
     const {oldId,nombre,tipoID,Ident,tel1,tel2,email,uss,ip} = req.body;
     const result= await pool.request() 
@@ -287,13 +288,15 @@ export const ReadUsuarioXPropiedadIn =  async (req, res) => {
 
 export const UpdateUsuario =  async (req, res) => {
     const pool= await getConection()
-    const {oldID,ident,user,password,admin} = req.body;
+    const {oldID,ident,user,password,admin,uss,ip} = req.body;
     const result= await pool.request()
                 .input('inOldUsername', sql.VARCHAR(64),oldID)
                 .input('inIdentificacionPersona', sql.VARCHAR(64),ident)
                 .input('inUsername', sql.VARCHAR(16),user)
                 .input('inPassword', sql.VARCHAR(16),password)
                 .input('inTipoUsuario', sql.VARCHAR(16),admin)
+                .input('inEventUser', sql.VARCHAR(16),uss)
+                .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
                 .execute('SP_UpdateUsuario');
         res.json(result.output.outResultCode);    

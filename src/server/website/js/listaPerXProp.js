@@ -2,8 +2,11 @@ $(document).ready(function(){
   console.log('cargando')
   
   var valor = (new URL(location.href)).searchParams.get('opcion')
+  if(valor==null){
+    valor=1;
+  }
   var opcion = document.getElementById("vistarelacionpxp");
-  opcion.value= valor
+  opcion.value= valor  
   var url = "http://localhost:8000/ReadPersonaXPropiedad"+"?opcion="+valor
   const options = {
   method: "get",
@@ -13,19 +16,21 @@ $(document).ready(function(){
   .then(response => {
     $("#tableBody > tbody").empty();
     for (var i = 0; i < response.length; i++) {
+      console.log(response[i])
       var perXprop = response [i];      
       var Propietario = perXprop.Propietario;
       var Propiedad = perXprop.Propiedad;
-      var FechaAsociación = perXprop.FechadeAsociación ;
+      var FechaAsociación = perXprop.FechadeRegistro;
       FechaAsociación=FechaAsociación.substring(0,10);
       var FechaDesasociación = perXprop.FechaDesasociación;
       var tabla = "<tr><td> ";
-      if(FechaDesasociación==undefined){
-        tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + "</td>"
-      }else{
-        FechaDesasociación = FechaDesasociación.substring(0,10)
-        tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + FechaDesasociación + "</td>"
-      } 
+      tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td>"
+      //if(FechaDesasociación==undefined){
+      //  tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + "</td>"
+      //}else{
+      //  FechaDesasociación = FechaDesasociación.substring(0,10)
+      //  tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + FechaDesasociación + "</td>"
+      //} 
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit("+ Propietario +"," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"edit("+ Propietario +"," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       //se debe cambiar el otro boton

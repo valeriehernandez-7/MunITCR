@@ -55,7 +55,8 @@ async function add() {
   var uss = (new URL(location.href)).searchParams.get('uss')
   var ip = (new URL(location.href)).searchParams.get('ip')
   var admin 
-  if($("#admin").checked==true){
+  const cb = document.querySelector('#Admin');
+  if(cb.checked==true){
     admin = 'Administrador'
   }else{
     admin = 'Propietario'
@@ -110,10 +111,12 @@ async function update() {
   var oldID =  (new URL(location.href)).searchParams.get('user')
   var ident = $("#ident").val()
   var user = $("#user").val();
-  var pass = $("#password").val();
+  var pass = $("#password").val();  
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
   var admin 
-  console.log($("#admin").checked)
-  if($("#admin").checked==true){
+  const cb = document.querySelector('#Admin');
+  if(cb.checked==true){
     admin = 'Administrador'
   }else{
     admin = 'Propietario'
@@ -124,6 +127,8 @@ async function update() {
     user: user,
     password: pass,
     admin: admin,
+    uss: uss,
+    ip: ip
   }
   const options = {
   method: "post",
