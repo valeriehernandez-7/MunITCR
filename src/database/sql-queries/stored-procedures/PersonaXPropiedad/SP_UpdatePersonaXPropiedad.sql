@@ -9,6 +9,8 @@ GO
 	@proc_param inPropiedadLote property identifier
 	@proc_param inFechaAsociacionPxP association date
 	@proc_param inFechaDesasociacionPxP desassociation date
+	@proc_param inEventUser 
+	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
@@ -19,6 +21,8 @@ CREATE OR ALTER PROCEDURE [SP_UpdatePersonaXPropiedad]
 	@inPropiedadLote VARCHAR(32),
 	@inFechaAsociacionPxP DATE,
 	@inFechaDesasociacionPxP DATE,
+	@inEventUser VARCHAR(16),
+	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -109,7 +113,7 @@ BEGIN
 									[IDPropiedad] = @idPropiedad,
 									[FechaInicio] = @inFechaAsociacionPxP,
 									[FechaFin] = @inFechaDesasociacionPxP
-							WHERE [ID] = @idPersonaXPropiedad;
+							WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
 
 							/* Get "PersonaXPropiedad" data after update */
 							SET @newData = ( -- event data

@@ -12,6 +12,8 @@ GO
 	@proc_param inTelefono1 person's new contact number
 	@proc_param inTelefono2 person's new contact number
 	@proc_param inEmail  person's new email
+	@proc_param inEventUser 
+	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
