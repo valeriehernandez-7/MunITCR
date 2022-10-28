@@ -110,15 +110,21 @@ async function update() {
   var fechaDesasoc = (new URL(location.href)).searchParams.get('fechaF')
   var id = $("#nombre").val()
   var lote = $("#lote").val();
+  var uss = (new URL(location.href)).searchParams.get('ip')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  var opcion = (new URL(location.href)).searchParams.get('opcion')
   const body={
     oldId:oldid,
     oldLote: oldLote,
     id: id,
     lote:lote,
     fechaAsoc: fechaAsoc,
-    fechaDesasoc: null
-  }
-  const options = {
+    fechaDesasoc: null,
+    uss: uss,
+    ip: ip,
+    opcion: opcion
+  } 
+  const options = {  
   method: "post",
   body: JSON.stringify(body),
   headers: {"Content-Type": "application/json"},

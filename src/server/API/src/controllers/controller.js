@@ -320,20 +320,22 @@ export const UpdatePropiedad =  async (req, res) => {
 
 export const UpdatePersonaXPropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {oldId,oldLote,id,lote,fechaAsoc,fechaDesasoc} = req.body;
-    console.log(oldId,oldLote,id,lote,fechaAsoc,fechaDesasoc)
+    const {oldId,oldLote,id,lote,fechaAsoc,fechaDesasoc,uss,ip,opcion} = req.body;
+    console.log(typeof(oldId),oldLote,id,lote,fechaAsoc,fechaDesasoc) 
     const result= await pool.request()
                 .input('inOldPersonaIdentificacion', sql.VARCHAR(64),oldId)
                 .input('inOldPropiedadLote', sql.VARCHAR(32),oldLote)
                 .input('inPersonaIdentificacion', sql.VARCHAR(64),id)
                 .input('inPropiedadLote', sql.VARCHAR(32),lote)
-                .input('inFechaAsociacionPxP', sql.DATE,fechaAsoc)
-                .input('inFechaDesasociacionPxP', sql.DATE,fechaDesasoc)
+                .input('inFechaRelacionPxP', sql.Date,fechaAsoc)
+                .input('inEsAsociacion', sql.Bit,opcion)
+                .input('inEventUser', sql.VARCHAR(16),uss)
+                .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
                 .execute('SP_UpdatePersonaXPropiedad');
-        console.log(result.output.outResultCode)
-        res.json(result.output.outResultCode);    
-    }
+                console.log(result.output.outResultCode)
+        res.json(result.output.outResultCode); 
+    } 
 
 
 

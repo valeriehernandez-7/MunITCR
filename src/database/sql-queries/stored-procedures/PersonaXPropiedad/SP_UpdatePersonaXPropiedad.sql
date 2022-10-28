@@ -19,11 +19,11 @@ CREATE OR ALTER PROCEDURE [SP_UpdatePersonaXPropiedad]
 	@inOldPropiedadLote VARCHAR(32),
 	@inPersonaIdentificacion VARCHAR(64),
 	@inPropiedadLote VARCHAR(32),
-	@inFechaAsociacionPxP DATE,
-	@inFechaDesasociacionPxP DATE,
+	@inFechaRelacionPxP DATE,
+	@inEsAsociacion BIT,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
-	@outResultCode INT OUTPUT
+	@outResultCode INT OUTPUT 
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -32,7 +32,7 @@ BEGIN
 
 		IF (@inOldPersonaIdentificacion IS NOT NULL) AND (@inOldPropiedadLote IS NOT NULL)
 		AND (@inPersonaIdentificacion IS NOT NULL) AND (@inPropiedadLote IS NOT NULL)
-		AND (@inFechaAsociacionPxP IS NOT NULL)
+		AND (@inFechaRelacionPxP IS NOT NULL)
 			BEGIN
 				/* Gets the PK of old "Persona" using @idPersonaIdentificacion */
 				DECLARE @idOldPersona INT;
@@ -107,13 +107,26 @@ BEGIN
 							);
 
 							/* Update "PersonaXPropiedad" using  @idPersonaXPropiedad */
-							UPDATE [dbo].[PersonaXPropiedad]
-								SET 
-									[IDPersona] = @idPersona,
-									[IDPropiedad] = @idPropiedad,
-									[FechaInicio] = @inFechaAsociacionPxP,
-									[FechaFin] = @inFechaDesasociacionPxP
-							WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
+							IF (@inEsAsociacion = 1)
+								BEGIN
+									UPDATE [dbo].[PersonaXPropiedad]
+									SET 
+										[IDPersona] = @idPersona,
+										[IDPropiedad] = @idPropiedad,
+										[FechaInicio] = @inFechaRelacionPxP,
+									WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
+								END
+							ELSE
+								BEGIN
+									UPDATE [dbo].[PersonaXPropiedad]
+									SET 
+										[IDPersona] = @idPersona,
+										[IDPropiedad] = @idPropiedad,
+										[FechaFin] = @inFechaRelacionPxP
+									WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
+								END
+
+							
 
 							/* Get "PersonaXPropiedad" data after update */
 							SET @newData = ( -- event data
