@@ -80,6 +80,21 @@ BEGIN
 						IF @idPersona IS NOT NULL
 							BEGIN
 								BEGIN TRANSACTION [updatePersona]
+									 
+									SET @actualData = ( -- event data
+										SELECT 
+											[P].[Nombre] AS [Nombre],
+											[P].[IdTipoDocIdentidad] AS [TipodeDocumentoIdentidad],
+											[P].[ValorDocIdentidad] AS [Identificacion],
+											[P].[Telefono1] AS [Telefono1],
+											[P].[Telefono2] AS [Telefono2], 
+											[P].[CorreoElectronico] AS [CorreoElectronico],
+											[P].[Activo] AS [Activo]
+										FROM [dbo].[Persona] AS [P]
+										WHERE [ValorDocIdentidad] = @inOldIdentificacion;
+										FOR JSON AUTO
+									);
+
 									UPDATE [dbo].[Persona]
 										SET 
 											[Nombre] = @inNombre,

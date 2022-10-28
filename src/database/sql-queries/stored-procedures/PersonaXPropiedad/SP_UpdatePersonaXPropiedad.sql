@@ -83,6 +83,19 @@ BEGIN
 				AND (@idOldPropiedad IS NOT NULL) AND (@idPropiedad IS NOT NULL)
 					BEGIN
 						BEGIN TRANSACTION [updatePerXPro]
+
+							SET @actualData = ( -- event data
+								SELECT 
+									[PerXPro].[IDPersona] AS [IDPersona],
+									[PerXPro].[IDPropiedad] AS [IDPropiedad],
+									[PerXPro].[FechaInicio] AS [FechadeAsociacion],
+									[PerXPro].[FechaFin] AS [FechadeDesasociacion],
+									[PerXPro].[Activo] AS [Activo]
+								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
+								WHERE [IDPersona] = @idOldPersona
+								FOR JSON AUTO
+							);
+
 							UPDATE [dbo].[PersonaXPropiedad]
 								SET 
 									[IDPersona] = @idPersona,
