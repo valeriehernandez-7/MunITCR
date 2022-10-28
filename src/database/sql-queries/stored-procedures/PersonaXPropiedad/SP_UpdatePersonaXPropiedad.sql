@@ -84,6 +84,7 @@ BEGIN
 					BEGIN
 						BEGIN TRANSACTION [updatePerXPro]
 
+							/* Get "PersonaXPropiedad" data before update */
 							SET @actualData = ( -- event data
 								SELECT 
 									[PerXPro].[IDPersona] AS [IDPersona],
@@ -92,10 +93,12 @@ BEGIN
 									[PerXPro].[FechaFin] AS [FechadeDesasociacion],
 									[PerXPro].[Activo] AS [Activo]
 								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
-								WHERE [IDPersona] = @idOldPersona
+								WHERE [IDPersona] = @idOldPersona 
+								AND [IDPropiedad] = @idOldPropiedad 
 								FOR JSON AUTO
 							);
 
+							/* Update "PersonaXPropiedad" using  @idOldPersona & @idOldPropiedad */
 							UPDATE [dbo].[PersonaXPropiedad]
 								SET 
 									[IDPersona] = @idPersona,
@@ -104,10 +107,11 @@ BEGIN
 									[FechaFin] = @inFechaDesasociacionPxP
 							WHERE [IDPersona] = @idOldPersona 
 							AND [IDPropiedad] = @idOldPropiedad 
-							SET @outResultCode = 5200; /* OK */
-						/* GET new "PersonaXPropiedad" PK */
+
+							/* GET new "PersonaXPropiedad" PK */
 							SET @lastEntityID = SCOPE_IDENTITY(); -- event data
 
+							/* Get "PersonaXPropiedad" data after update */
 							SET @newData = ( -- event data
 								SELECT 
 									[PerXPro].[IDPersona] AS [IDPersona],

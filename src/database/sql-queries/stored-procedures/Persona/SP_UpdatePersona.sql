@@ -80,7 +80,8 @@ BEGIN
 						IF @idPersona IS NOT NULL
 							BEGIN
 								BEGIN TRANSACTION [updatePersona]
-									 
+									
+									/* Get "Persona" data before update */
 									SET @actualData = ( -- event data
 										SELECT 
 											[P].[Nombre] AS [Nombre],
@@ -91,10 +92,11 @@ BEGIN
 											[P].[CorreoElectronico] AS [CorreoElectronico],
 											[P].[Activo] AS [Activo]
 										FROM [dbo].[Persona] AS [P]
-										WHERE [ValorDocIdentidad] = @inOldIdentificacion;
+										WHERE [P].[ID] = @idPersona;
 										FOR JSON AUTO
 									);
 
+									/* Update "Persona" using  @idPersona */
 									UPDATE [dbo].[Persona]
 										SET 
 											[Nombre] = @inNombre,
@@ -103,11 +105,12 @@ BEGIN
 											[Telefono1] = @inTelefono1,
 											[Telefono2] = @inTelefono2,
 											[CorreoElectronico] = @inEmail
-									WHERE [ValorDocIdentidad] = @inOldIdentificacion;
-									SET @outResultCode = 5200; /* OK */
+									WHERE [P].[ID] = @idPersona;
 
+									/* GET new "Persona" PK */
 									SET @lastEntityID = SCOPE_IDENTITY(); -- event data
 
+									/* Get "Persona" data after update */
 									SET @newData = ( -- event data
 										SELECT 
 											[P].[Nombre] AS [Nombre],
