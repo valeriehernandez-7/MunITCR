@@ -9,19 +9,45 @@ GO
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
 CREATE OR ALTER PROCEDURE [SP_ReadPropiedadXUsuario]
+	@inEsAsociacion BIT,
 	@outResultCode INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
-		SELECT	
-			[P].[Lote] AS [Propiedad],
-			[U].[Username] AS [Usuario]
-		FROM [dbo].[Propiedad] AS [P]
-			INNER JOIN [dbo].[Usuario] AS [U]
-			ON [U].[ID] = [P].[IDUsuario]
-		WHERE [P].[Activo] = 1 AND [U].[Activo] = 1;
+		IF (@inEsAsociacion = 1)
+			BEGIN
+				SELECT  
+					[Usr].[Username] AS [Usuario],
+					[Pro].[Lote] AS [Propiedad],
+					[UxP].[FechaInicio] AS [FechadeRegistro]
+				FROM [dbo].[UsuarioXPropiedad] AS [UxP]
+					LEFT JOIN [dbo].[Usuario] AS [Usr]
+					ON [UxP].[IDUsuario] = [Usr].[ID]
+					LEFT JOIN [dbo].[Propiedad] AS [Pro]
+					ON [UxP].[IDPropiedad] =  [Pro].[ID]
+				WHERE [UxP].[FechaFin] IS NULL
+				AND [UxP].[Activo] = 1
+				AND [Usr].[Activo] = 1 
+				AND [Pro].[Activo] = 1;
+			END
+		ELSE
+			BEGIN
+				SELECT  
+					[Usr].[Username] AS [Usuario],
+					[Pro].[Lote] AS [Propiedad],
+					[UxP].[FechaInicio] AS [FechadeRegistro]
+				FROM [dbo].[UsuarioXPropiedad] AS [UxP]
+					LEFT JOIN [dbo].[Usuario] AS [Usr]
+					ON [UxP].[IDUsuario] = [Usr].[ID]
+					LEFT JOIN [dbo].[Propiedad] AS [Pro]
+					ON [UxP].[IDPropiedad] =  [Pro].[ID]
+				WHERE [UxP].[FechaFin] IS NOT NULL
+				AND [UxP].[Activo] = 1
+				AND [Usr].[Activo] = 1 
+				AND [Pro].[Activo] = 1;
+			END
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH
