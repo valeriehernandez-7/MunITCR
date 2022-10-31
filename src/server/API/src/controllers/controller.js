@@ -221,8 +221,6 @@ export const CreatePropiedad =  async (req, res) => {
                 .input('inMetrosCuadrados', sql.BIGINT,m2)
                 .input('inValorFiscal', sql.MONEY,valorFiscal)
                 .input('inFechaRegistro', sql.DATE,registro)
-                .input('inEventUser', sql.VARCHAR(16),uss)
-                .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
                 .execute('SP_CreatePropiedad');
         res.json(result.output.outResultCode);    
