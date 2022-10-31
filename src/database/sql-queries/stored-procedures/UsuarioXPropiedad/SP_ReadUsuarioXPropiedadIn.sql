@@ -24,7 +24,7 @@ BEGIN
 			[U].[Administrador] AS [TipodeUsuario]
 		FROM [dbo].[Propiedad] AS [Pro]
 			INNER JOIN [dbo].[Usuario] AS [U]
-			ON [U].[ID] = [Pro].[IDUsuario]
+			ON [U].[IDPersona] = [Pro].[ID] 
 			INNER JOIN [dbo].[Persona] AS [Per]
 			ON [Per].[ID] = [U].[IDPersona]
 		WHERE [U].[Activo] = 1 AND [Pro].[Activo] = 1 
