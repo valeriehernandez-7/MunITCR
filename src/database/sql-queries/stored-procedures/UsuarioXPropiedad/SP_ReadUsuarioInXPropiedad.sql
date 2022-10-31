@@ -18,24 +18,26 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT	
-			[Pro].[Lote] AS [Propiedad],
+			[P].[Lote] AS [Propiedad],
 			[TU].[Nombre] AS [UsodePropiedad], 
 			[TZ].[Nombre] AS [ZonadePropiedad],
-			[Pro].[MetrosCuadrados] AS [Territorio],
-			[Pro].[ValorFiscal] AS [ValorFiscal], 
-			[Pro].[FechaRegistro] AS [FechadeRegistro]
-		FROM [dbo].[Propiedad] AS [Pro]
-			LEFT JOIN [dbo].[TipoUsoPropiedad] AS [TU]
-			ON [TU].[ID] = [Pro].[IDTipoUsoPropiedad]
-			LEFT JOIN [dbo].[TipoZonaPropiedad] AS [TZ]
-			ON [TZ].[ID] = [Pro].[IDTipoZonaPropiedad]
-			LEFT JOIN [dbo].[UsuarioXPropiedad] AS UXP
-			ON [UXP].[IDPropiedad] = [Pro].[ID]
+			[P].[MetrosCuadrados] AS [Territorio],
+			[P].[ValorFiscal] AS [ValorFiscal], 
+			[P].[FechaRegistro] AS [FechadeRegistro]
+		FROM [dbo].[UsuarioXPropiedad] AS [UXP]
 			LEFT JOIN [dbo].[Usuario] AS [U]
-			ON [U].[IDPersona] = [UXP].[IDUsuario] 
-		WHERE [Pro].[Activo] = 1 AND [U].[Activo] = 1
+			ON [U].[ID] = [UXP].[IDUsuario] 
+			LEFT JOIN [dbo].[Propiedad] AS [P]
+			ON [P].[ID] = [UXP].[IDPropiedad]
+			INNER JOIN [dbo].[TipoUsoPropiedad] AS [TU]
+			ON [P].[IDTipoUsoPropiedad] = [TU].[ID]
+			INNER JOIN [dbo].[TipoZonaPropiedad] AS [TZ]
+			ON [P].[IDTipoZonaPropiedad] = [TZ].[ID]
+		WHERE [UXP].[Activo] = 1
+		AND [P].[Activo] = 1 
+		AND [U].[Activo] = 1
 		AND [U].[Username] = @inUsuarioUsername
-		ORDER BY [Pro].[Lote];
+		ORDER BY [P].[Lote];
 		SET @outResultCode = 5200; /* OK */ select * from Usuario select * from propiedad select * from UsuarioXPropiedad
 	END TRY
 	BEGIN CATCH
