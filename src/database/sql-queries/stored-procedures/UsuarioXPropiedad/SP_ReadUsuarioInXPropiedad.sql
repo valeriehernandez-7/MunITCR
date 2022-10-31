@@ -34,7 +34,7 @@ BEGIN
 			LEFT JOIN [dbo].[Usuario] AS [U]
 			ON [U].[IDPersona] = [UXP].[IDUsuario] 
 		WHERE [Pro].[Activo] = 1 AND [U].[Activo] = 1
-		AND [U].[Username] = 'v'
+		AND [U].[Username] = @inUsuarioUsername
 		ORDER BY [Pro].[Lote];
 		SET @outResultCode = 5200; /* OK */ select * from Usuario select * from propiedad select * from UsuarioXPropiedad
 	END TRY
