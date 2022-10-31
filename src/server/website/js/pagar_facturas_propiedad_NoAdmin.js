@@ -1,40 +1,28 @@
 $( document ).ready(function() {
-    var user = (new URL(location.href)).searchParams.get('uss')
-    console.log(user)
-    const body={
-      user: user
-    }
-    console.log(body)
+    var lote = (new URL(location.href)).searchParams.get('lote')
+    console.log(lote)
+    
+    
     const options = {
-      method: "post",
-      body: JSON.stringify(body),
+      method: "get",
       headers: {"Content-Type": "application/json"},
     };
     console.log(options)
-    var url = "http://localhost:8000/ReadUsuarioInXPropiedad"
+    var url = "http://localhost:8000/ReadFacturaPendientePropiedadIn?lote="+lote
     fetch(url, options).then(response => response.json())
     .then(response => {
-      console.log(response)
+      console.log(response[0])
       $("#tableBody > tbody").empty();
       for (var i = 0; i < response.length; i++) {
-        var propiedad = response [i];      
-        var lote = propiedad.Propiedad;
-        var uso = propiedad.UsodePropiedad;
-        var zona = propiedad.ZonadePropiedad ;
-        var area = propiedad.Territorio;
-        var valorFiscal = propiedad.ValorFiscal;
-        var fechaRegistro = propiedad.FechadeRegistro;
-        fechaRegistro = fechaRegistro.substring(0,10);
+        var factura = response [i];      
+        var fecha = factura.Fecha.substring(0,10);
+        var fechaV = factura.FechaVencimiento.substring(0,10);
+        var moro = factura.Morosidades;
+        var sub = factura.Subtotal;
+        var total = factura.Total
         var tabla = "<tr><td> ";
-        tabla += uso + "</td><td>" + zona + "</td><td>" + lote + "</td><td>" + area + "</td><td>" + valorFiscal + "</td><td>" + fechaRegistro 
-        var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"lecturas("+ lote +");\" >"
-        var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"facturas("+ lote +");\" >"
-        var boton3 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"facturasPendientes("+ lote +");\" >"
-        var boton4 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"comprobante("+ lote +");\" >"
-        tabla+= "<td>"+ boton + "</td>"
-        tabla+= "<td>"+ boton2 + "</td>"
-        tabla+= "<td>"+ boton3 + "</td>"
-        tabla+= "<td>"+ boton4 + "</td></tr>"
+        tabla += fecha + "</td><td>" + fechaV + "</td><td>" + moro + "</td><td>" + sub + "</td><td>" + total + "</td></tr>"; 
+       
         $("#tablaItems ").append(tabla);
       }}).catch(e => {
         console.log(e);

@@ -1,16 +1,4 @@
-$( document ).ready(function() {
-  //$('.linea').click(function() {
-  //    $('#home').html('<embed src="./files/'+this.id+'_4b/'+this.id+'_ejemplo.pdf" type="application/pdf" width="100%" height="400px" class="margenfilemodal" />');
-  //    //alert(this);
-  //    let elementos = this.getElementsByTagName("td")
-  //
-  //
-  //    let url = './listaMediciones.html?'
-  //
-  //    let usuario = '&usuario='+ elementos[0].innerHTML
-  //    let lote = '&lote='+ elementos[1].innerHTML
-  //    location.replace(url+usuario+lote);
-  //});
+$( document ).ready(function() {  
   var user = (new URL(location.href)).searchParams.get('uss')
   console.log(user)
   const body={
@@ -42,11 +30,9 @@ $( document ).ready(function() {
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"lecturas("+ lote +");\" >"
       var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"facturas("+ lote +");\" >"
       var boton3 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"facturasPendientes("+ lote +");\" >"
-      var boton4 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"comprobante("+ lote +");\" >"
       tabla+= "<td>"+ boton + "</td>"
       tabla+= "<td>"+ boton2 + "</td>"
-      tabla+= "<td>"+ boton3 + "</td>"
-      tabla+= "<td>"+ boton4 + "</td></tr>"
+      tabla+= "<td>"+ boton3 + "</td></tr>"
       $("#tablaItems ").append(tabla);
     }}).catch(e => {
       console.log(e);

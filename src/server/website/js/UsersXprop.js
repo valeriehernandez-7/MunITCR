@@ -107,7 +107,7 @@ async function add() {
 }   
 
 async function update() {
-  var url = "http://localhost:8000/UpdatePersonaXPropiedad"
+  var url = "http://localhost:8000/UpdateUsuarioXPropiedad"
   var oldid = (new URL(location.href)).searchParams.get('nombre')
   var oldLote = (new URL(location.href)).searchParams.get('lote')
   var fechaAsoc = $("#date").val()

@@ -142,6 +142,30 @@ export const ReadMovimientoConsumoAgua=  async (req, res) => {
         res.json(result.recordset);   
 } 
 
+export const ReadFacturaPagadaPropiedadIn=  async (req, res) => {
+    const pool= await getConection() 
+    var lote = req.query.lote;
+    console.log(lote)
+    const result= await pool.request().
+                    input('inPropiedad', sql.VARCHAR(32), lote).
+                    output('outResultCode', sql.Int).
+                    execute('SP_ReadFacturaPagadaPropiedadIn');
+                    console.log(result)
+        res.json(result.recordset);   
+} 
+
+export const ReadFacturaPendientePropiedadIn=  async (req, res) => {
+    const pool= await getConection() 
+    var lote = req.query.lote;
+    console.log(lote)
+    const result= await pool.request().
+                    input('inPropiedad', sql.VARCHAR(32), lote).
+                    output('outResultCode', sql.Int).
+                    execute('SP_ReadFacturaPendientePropiedadIn');
+                    
+        res.json(result.recordset);   
+} 
+
 export const ReadPropiedadXUsuarioIn=  async (req, res) => {
     const pool= await getConection()
     var user = req.query.user;
@@ -230,7 +254,7 @@ export const CreateUsuarioXPropiedad =  async (req, res) => {
                 .output('outResultCode', sql.Int)
                 .execute('SP_CreateUsuarioXPropiedad');
         res.json(result.output.outResultCode);    
-    }
+    } 
 
 export const UpdatePersona =  async (req, res) => { 
     const pool= await getConection()
