@@ -5,6 +5,7 @@ GO
 /* 
 	@proc_name SP_UpdateUsuario
 	@proc_description 
+	@proc_param inOldUsername 
 	@proc_param inIdentificacionPersona 
 	@proc_param inUsername 
 	@proc_param inPassword 

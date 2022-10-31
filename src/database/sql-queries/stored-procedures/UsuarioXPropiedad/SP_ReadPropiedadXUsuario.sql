@@ -19,34 +19,34 @@ BEGIN
 		IF (@inEsAsociacion = 1)
 			BEGIN
 				SELECT  
-					[Usr].[Username] AS [Usuario],
-					[Pro].[Lote] AS [Propiedad],
+					[U].[Username] AS [Usuario],
+					[P].[Lote] AS [Propiedad],
 					[UxP].[FechaInicio] AS [FechadeRegistro]
 				FROM [dbo].[UsuarioXPropiedad] AS [UxP]
-					LEFT JOIN [dbo].[Usuario] AS [Usr]
-					ON [UxP].[IDUsuario] = [Usr].[ID]
-					LEFT JOIN [dbo].[Propiedad] AS [Pro]
-					ON [UxP].[IDPropiedad] =  [Pro].[ID]
+					LEFT JOIN [dbo].[Usuario] AS [U]
+					ON [UxP].[IDUsuario] = [U].[ID]
+					LEFT JOIN [dbo].[Propiedad] AS [P]
+					ON [UxP].[IDPropiedad] =  [P].[ID]
 				WHERE [UxP].[FechaFin] IS NULL
 				AND [UxP].[Activo] = 1
-				AND [Usr].[Activo] = 1 
-				AND [Pro].[Activo] = 1;
+				AND [U].[Activo] = 1 
+				AND [P].[Activo] = 1;
 			END
 		ELSE
 			BEGIN
 				SELECT  
-					[Usr].[Username] AS [Usuario],
-					[Pro].[Lote] AS [Propiedad],
+					[U].[Username] AS [Usuario],
+					[P].[Lote] AS [Propiedad],
 					[UxP].[FechaInicio] AS [FechadeRegistro]
 				FROM [dbo].[UsuarioXPropiedad] AS [UxP]
-					LEFT JOIN [dbo].[Usuario] AS [Usr]
-					ON [UxP].[IDUsuario] = [Usr].[ID]
-					LEFT JOIN [dbo].[Propiedad] AS [Pro]
-					ON [UxP].[IDPropiedad] =  [Pro].[ID]
+					LEFT JOIN [dbo].[Usuario] AS [U]
+					ON [UxP].[IDUsuario] = [U].[ID]
+					LEFT JOIN [dbo].[Propiedad] AS [P]
+					ON [UxP].[IDPropiedad] =  [P].[ID]
 				WHERE [UxP].[FechaFin] IS NOT NULL
 				AND [UxP].[Activo] = 1
-				AND [Usr].[Activo] = 1 
-				AND [Pro].[Activo] = 1;
+				AND [U].[Activo] = 1 
+				AND [P].[Activo] = 1;
 			END
 		SET @outResultCode = 5200; /* OK */
 	END TRY

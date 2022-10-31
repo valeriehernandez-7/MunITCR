@@ -7,7 +7,6 @@ GO
 	@proc_description 
 	@proc_param inIdentificacionPersona 
 	@proc_param inUsername 
-	@proc_param inFechaDesasociacion 
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
