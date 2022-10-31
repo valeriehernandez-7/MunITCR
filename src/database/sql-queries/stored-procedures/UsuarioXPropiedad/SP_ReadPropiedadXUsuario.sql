@@ -21,14 +21,14 @@ BEGIN
 				SELECT  
 					[U].[Username] AS [Usuario],
 					[P].[Lote] AS [Propiedad],
-					[UxP].[FechaInicio] AS [FechadeRegistro]
-				FROM [dbo].[UsuarioXPropiedad] AS [UxP]
+					[UXP].[FechaInicio] AS [FechadeRegistro]
+				FROM [dbo].[UsuarioXPropiedad] AS [UXP]
 					LEFT JOIN [dbo].[Usuario] AS [U]
-					ON [UxP].[IDUsuario] = [U].[ID]
+					ON [UXP].[IDUsuario] = [U].[ID]
 					LEFT JOIN [dbo].[Propiedad] AS [P]
-					ON [UxP].[IDPropiedad] =  [P].[ID]
-				WHERE [UxP].[FechaFin] IS NULL
-				AND [UxP].[Activo] = 1
+					ON [UXP].[IDPropiedad] =  [P].[ID]
+				WHERE [UXP].[FechaFin] IS NULL
+				AND [UXP].[Activo] = 1
 				AND [U].[Activo] = 1 
 				AND [P].[Activo] = 1;
 			END
@@ -37,14 +37,14 @@ BEGIN
 				SELECT  
 					[U].[Username] AS [Usuario],
 					[P].[Lote] AS [Propiedad],
-					[UxP].[FechaInicio] AS [FechadeRegistro]
-				FROM [dbo].[UsuarioXPropiedad] AS [UxP]
+					[UXP].[FechaInicio] AS [FechadeRegistro]
+				FROM [dbo].[UsuarioXPropiedad] AS [UXP]
 					LEFT JOIN [dbo].[Usuario] AS [U]
-					ON [UxP].[IDUsuario] = [U].[ID]
+					ON [UXP].[IDUsuario] = [U].[ID]
 					LEFT JOIN [dbo].[Propiedad] AS [P]
-					ON [UxP].[IDPropiedad] =  [P].[ID]
-				WHERE [UxP].[FechaFin] IS NOT NULL
-				AND [UxP].[Activo] = 1
+					ON [UXP].[IDPropiedad] =  [P].[ID]
+				WHERE [UXP].[FechaFin] IS NOT NULL
+				AND [UXP].[Activo] = 1
 				AND [U].[Activo] = 1 
 				AND [P].[Activo] = 1;
 			END

@@ -7,7 +7,7 @@ GO
 	@proc_description
 	@proc_param inUsuarioUsername
 	@proc_param outResultCode Procedure return value
-	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
+	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernï¿½ndez Fernï¿½ndez</a>
 */
 CREATE OR ALTER PROCEDURE [SP_ReadUsuarioInXPropiedad]
 	@inUsuarioUsername VARCHAR(16),

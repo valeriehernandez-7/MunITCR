@@ -36,9 +36,9 @@ BEGIN
 
 				/* Gets the PK of "Propiedad" using @inPropiedadLote */
 				DECLARE @idPropiedad INT;
-				SELECT @idPropiedad = [Pro].[ID]
-				FROM [dbo].[Propiedad] AS [Pro]
-				WHERE [Pro].[Lote] = @inPropiedadLote;
+				SELECT @idPropiedad = [P].[ID]
+				FROM [dbo].[Propiedad] AS [P]
+				WHERE [P].[Lote] = @inPropiedadLote;
 
 				IF @inFechaAsociacionUxP IS NULL
 					BEGIN

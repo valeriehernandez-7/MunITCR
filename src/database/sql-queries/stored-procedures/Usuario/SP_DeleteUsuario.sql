@@ -74,7 +74,7 @@ BEGIN
 								FOR JSON AUTO
 							);
 
-							/* Delete of "Usuario" using  @idUsuario 
+							/* Delete "Usuario" using  @idUsuario 
 							as setting off "Activo" */
 							UPDATE [dbo].[Usuario]
 								SET [Activo] = 0

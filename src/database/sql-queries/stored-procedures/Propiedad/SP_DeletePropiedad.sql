@@ -76,7 +76,7 @@ BEGIN
 								FOR JSON AUTO
 							);
 
-							/* Delete of "Propiedad" using  @idPropiedad 
+							/* Delete "Propiedad" using  @idPropiedad 
 							as setting off "Activo" */
 							UPDATE [dbo].[Propiedad]
 								SET [Activo] = 0

@@ -41,18 +41,21 @@ BEGIN
 				FROM [dbo].[Propiedad] AS [Pro]
 				WHERE [Pro].[Lote] = @inPropiedadLote;
 
+				/* Gets the PK of "PersonaXPropiedad" using @idPersona and @idPropiedad */
 				DECLARE @idPersonaXPropiedad INT;
-				SELECT @idPersonaXPropiedad = [PerXPro].[ID]
-				FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
+				SELECT @idPersonaXPropiedad = [PXP].[ID]
+				FROM [dbo].[PersonaXPropiedad] AS [PXP]
 				WHERE [IDPersona] = @idPersona 
 				AND [IDPropiedad] = @idPropiedad
-				AND [PerXPro].[FechaFin] IS NULL
-				AND [PerXPro].[Activo] = 1;
+				AND [PXP].[FechaFin] IS NULL
+				AND [PXP].[Activo] = 1;
 
 				IF @inFechaDesasociacionPxP IS NULL
 					BEGIN
 						SET @inFechaDesasociacionPxP = GETDATE();
 					END;
+
+				/* Get the event params to create a new register at dbo.EventLog */
 		
 				DECLARE 
 					@idEventType INT,
@@ -83,18 +86,18 @@ BEGIN
 						IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL) 
 						AND (@inFechaDesasociacionPxP IS NOT NULL)
 							BEGIN
-								BEGIN TRANSACTION [updatePerXPro]
+								BEGIN TRANSACTION [disassociatePersonaXPropiedad]
 
 									/* Get "PersonaXPropiedad" data before update */
 									SET @actualData = ( -- event data
 										SELECT 
-											[PerXPro].[IDPersona] AS [IDPersona],
-											[PerXPro].[IDPropiedad] AS [IDPropiedad],
-											[PerXPro].[FechaInicio] AS [FechaInicio],
-											[PerXPro].[FechaFin] AS [FechaFin],
-											[PerXPro].[Activo] AS [Activo]
-										FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
-										WHERE [PerXPro].[ID] = @idPersonaXPropiedad 
+											[PXP].[IDPersona] AS [IDPersona],
+											[PXP].[IDPropiedad] AS [IDPropiedad],
+											[PXP].[FechaInicio] AS [FechaInicio],
+											[PXP].[FechaFin] AS [FechaFin],
+											[PXP].[Activo] AS [Activo]
+										FROM [dbo].[PersonaXPropiedad] AS [PXP]
+										WHERE [PXP].[ID] = @idPersonaXPropiedad 
 										FOR JSON AUTO
 									);
 
@@ -110,13 +113,13 @@ BEGIN
 									/* Get "PersonaXPropiedad" data after update */
 									SET @newData = ( -- event data
 										SELECT 
-											[PerXPro].[IDPersona] AS [IDPersona],
-											[PerXPro].[IDPropiedad] AS [IDPropiedad],
-											[PerXPro].[FechaInicio] AS [FechaInicio],
-											[PerXPro].[FechaFin] AS [FechaFin],
-											[PerXPro].[Activo] AS [Activo]
-										FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
-										WHERE [PerXPro].[ID] = @idPersonaXPropiedad 
+											[PXP].[IDPersona] AS [IDPersona],
+											[PXP].[IDPropiedad] AS [IDPropiedad],
+											[PXP].[FechaInicio] AS [FechaInicio],
+											[PXP].[FechaFin] AS [FechaFin],
+											[PXP].[Activo] AS [Activo]
+										FROM [dbo].[PersonaXPropiedad] AS [PXP]
+										WHERE [PXP].[ID] = @idPersonaXPropiedad 
 										FOR JSON AUTO
 									);
 
@@ -149,7 +152,7 @@ BEGIN
 											SET @outResultCode = 5407;
 											RETURN;
 										END;
-								COMMIT TRANSACTION [updatePerXPro]
+								COMMIT TRANSACTION [disassociatePersonaXPropiedad]
 							END;
 						ELSE
 							BEGIN
@@ -178,7 +181,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [updatePerXPro]
+				ROLLBACK TRANSACTION [disassociatePersonaXPropiedad]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN

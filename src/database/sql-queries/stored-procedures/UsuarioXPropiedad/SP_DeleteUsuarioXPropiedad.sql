@@ -3,36 +3,51 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_DeletePersona
-	@proc_description 
-	@proc_param inIdentificacion 
+	@proc_name SP_DeleteUsuarioXPropiedad
+	@proc_description
+	@proc_param inUsuarioUsername user's username
+	@proc_param inPropiedadLote property identifier
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_DeletePersona]
-	@inIdentificacion VARCHAR(64),
+CREATE OR ALTER PROCEDURE [SP_DeleteUsuarioXPropiedad]
+	@inUsuarioUsername VARCHAR(16),
+	@inPropiedadLote VARCHAR(32),
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
-	@outResultCode INT OUTPUT
+	@outResultCode INT OUTPUT 
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 
-		IF (@inIdentificacion IS NOT NULL)
+		IF (@inUsuarioUsername IS NOT NULL) AND (@inPropiedadLote IS NOT NULL)
 			BEGIN
-				/* Gets the PK of "Persona" using @inIdentificacion */
-				DECLARE @idPersona INT;
-				SELECT @idPersona = [Per].[ID]
-				FROM [dbo].[Persona] AS [Per]
-				WHERE [Per].[ValorDocIdentidad] = @inIdentificacion
-				AND [Per].[Activo] = 1;
+				/* Gets the PK of new "Usuario" using @inUsuarioUsername */
+				DECLARE @idUsuario INT;
+				SELECT @idUsuario = [U].[ID]
+				FROM [dbo].[Usuario] AS [U]
+				WHERE [U].[Username] = @inUsuarioUsername;
+				
+				/* Gets the PK of new "Propiedad" using @inPropiedadLote */
+				DECLARE @idPropiedad INT;
+				SELECT @idPropiedad = [Pro].[ID]
+				FROM [dbo].[Propiedad] AS [Pro]
+				WHERE [Pro].[Lote] = @inPropiedadLote;
+
+				/* Gets the PK of "UsuarioXPropiedad" using @idUsuario and @idPropiedad */
+				DECLARE @idUsuarioXUsuario INT;
+				SELECT @idUsuarioXUsuario = [UXP].[ID]
+				FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+				WHERE [IDUsuario] = @idUsuario 
+				AND [IDPropiedad] = @idPropiedad
+				AND [UXP].[Activo] = 1;
 
 				/* Get the event params to create a new register at dbo.EventLog */
-
+		
 				DECLARE 
 					@idEventType INT,
 					@idEntityType INT,
@@ -45,7 +60,7 @@ BEGIN
 
 				SELECT @idEntityType = [ENT].[ID] -- event data
 				FROM [dbo].[EntityType] AS [ENT]
-				WHERE [ENT].[Name] = 'Persona';
+				WHERE [ENT].[Name] = 'Usuario de Propiedad';
 
 				IF @inEventUser IS NULL -- event data
 					BEGIN
@@ -57,32 +72,30 @@ BEGIN
 						SET @inEventIP = '0.0.0.0';
 					END;
 
-				IF (@idPersona IS NOT NULL)
+				IF (@idUsuarioXUsuario IS NOT NULL)
 					BEGIN
-						BEGIN TRANSACTION [deletePersona]
-							
-							/* Get "Persona" data before delete */
+						BEGIN TRANSACTION [deleteUsuarioXPropiedad]
+
+							/* Get "UsuarioXPropiedad" data before delete */
 							SET @actualData = ( -- event data
 								SELECT 
-									[P].[Nombre] AS [Nombre],
-									[P].[IdTipoDocIdentidad] AS [IdTipoDocIdentidad],
-									[P].[ValorDocIdentidad] AS [ValorDocIdentidad],
-									[P].[Telefono1] AS [Telefono1],
-									[P].[Telefono2] AS [Telefono2], 
-									[P].[CorreoElectronico] AS [CorreoElectronico],
-									[P].[Activo] AS [Activo]
-								FROM [dbo].[Persona] AS [P]
-								WHERE [P].[ID] = @idPersona
+									[UXP].[IDUsuario] AS [IDUsuario],
+									[UXP].[IDPropiedad] AS [IDPropiedad],
+									[UXP].[FechaInicio] AS [FechaInicio],
+									[UXP].[FechaFin] AS [FechaFin],
+									[UXP].[Activo] AS [Activo]
+								FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+								WHERE [UXP].[ID] = @idUsuarioXUsuario 
 								FOR JSON AUTO
 							);
 
-							/* Delete "Persona" using  @idPersona 
+							/* Delete "UsuarioXPropiedad" using  @idUsuarioXUsuario 
 							as setting off "Activo" */
-							UPDATE [dbo].[Persona]
+							UPDATE [dbo].[UsuarioXPropiedad]
 								SET [Activo] = 0
-							WHERE [Persona].[ID] = @idPersona;
+							WHERE [UsuarioXPropiedad].[ID] = @idUsuarioXUsuario;
 
-							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
+							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL)
 							AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 								BEGIN
 									INSERT INTO [dbo].[EventLog] (
@@ -96,7 +109,7 @@ BEGIN
 									) VALUES (
 										@idEventType,
 										@idEntityType,
-										@idPersona,
+										@idUsuarioXUsuario,
 										@actualData,
 										@newData,
 										@inEventUser,
@@ -111,19 +124,18 @@ BEGIN
 									SET @outResultCode = 5407;
 									RETURN;
 								END;
-
-						COMMIT TRANSACTION [deletePersona]
+						COMMIT TRANSACTION [deleteUsuarioXPropiedad]
 					END;
 				ELSE
 					BEGIN
-						/* Cannot delete the "Persona" because did not exist based on @idPersona */
+						/* Cannot delete the "UsuarioXPropiedad" because did not exist based on @idUsuarioXUsuario */
 						SET @outResultCode = 5404; 
 						RETURN;
 					END;
 			END;
 		ELSE
 			BEGIN
-				/* Cannot delete the "Persona" because some params are null */
+				/* Cannot delete association "Usuario" with "Propiedad" because some params are null */
 				SET @outResultCode = 5400; 
 				RETURN;
 			END;
@@ -131,7 +143,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [deletePersona]
+				ROLLBACK TRANSACTION [deleteUsuarioXPropiedad]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN

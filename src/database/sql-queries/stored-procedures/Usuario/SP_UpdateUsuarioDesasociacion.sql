@@ -65,7 +65,7 @@ BEGIN
 				
 				IF (@idUsuario IS NOT NULL)
 					BEGIN
-						BEGIN TRANSACTION [updateUsuarioDesasociacion]
+						BEGIN TRANSACTION [disassociateUsuarioXPersona]
 
 							/* Get "Usuario" data before update */
 							SET @actualData = ( -- event data
@@ -128,7 +128,7 @@ BEGIN
 									SET @outResultCode = 5408;
 									RETURN;
 								END;
-						COMMIT TRANSACTION [updateUsuarioDesasociacion]
+						COMMIT TRANSACTION [disassociateUsuarioXPersona]
 					END;
 				ELSE
 					BEGIN
@@ -148,7 +148,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [updateUsuarioDesasociacion]
+				ROLLBACK TRANSACTION [disassociateUsuarioXPersona]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN

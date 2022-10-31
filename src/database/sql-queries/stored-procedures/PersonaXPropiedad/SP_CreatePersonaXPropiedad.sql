@@ -79,7 +79,7 @@ BEGIN
 						AND [PXP].[IDPropiedad] = @idPropiedad
 						AND [PXP].[Activo] = 1)
 							BEGIN
-								BEGIN TRANSACTION [insertPerXPro]
+								BEGIN TRANSACTION [insertPersonaXPropiedad]
 									/* Insert new "PersonaXPropiedad" as "Persona" + "Propiedad" association */
 									INSERT INTO [dbo].[PersonaXPropiedad] (
 										[IDPersona],
@@ -96,13 +96,13 @@ BEGIN
 
 									SET @newData = ( -- event data
 										SELECT 
-											[PerXPro].[IDPersona] AS [IDPersona],
-											[PerXPro].[IDPropiedad] AS [IDPropiedad],
-											[PerXPro].[FechaInicio] AS [FechaInicio],
-											[PerXPro].[FechaFin] AS [FechaFin],
-											[PerXPro].[Activo] AS [Activo]
-										FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
-										WHERE [PerXPro].[ID] = @lastEntityID
+											[PXP].[IDPersona] AS [IDPersona],
+											[PXP].[IDPropiedad] AS [IDPropiedad],
+											[PXP].[FechaInicio] AS [FechaInicio],
+											[PXP].[FechaFin] AS [FechaFin],
+											[PXP].[Activo] AS [Activo]
+										FROM [dbo].[PersonaXPropiedad] AS [PXP]
+										WHERE [PXP].[ID] = @lastEntityID
 										FOR JSON AUTO
 									);
 
@@ -135,7 +135,7 @@ BEGIN
 											SET @outResultCode = 5407;
 											RETURN;
 										END;
-								COMMIT TRANSACTION [insertPerXPro]
+								COMMIT TRANSACTION [insertPersonaXPropiedad]
 							END;
 						ELSE
 							BEGIN
@@ -164,7 +164,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [insertPerXPro]
+				ROLLBACK TRANSACTION [insertPersonaXPropiedad]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN

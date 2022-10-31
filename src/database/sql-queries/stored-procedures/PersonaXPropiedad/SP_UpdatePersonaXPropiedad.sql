@@ -8,6 +8,7 @@ GO
 	@proc_param inPersonaIdentificacion person's doc ID
 	@proc_param inPropiedadLote property identifier
 	@proc_param inFechaRelacionPxP association/disassociation date
+	@proc_param inEsAsociacion 
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
@@ -31,7 +32,7 @@ BEGIN
 
 		IF (@inOldPersonaIdentificacion IS NOT NULL) AND (@inOldPropiedadLote IS NOT NULL)
 		AND (@inPersonaIdentificacion IS NOT NULL) AND (@inPropiedadLote IS NOT NULL)
-		AND (@inFechaRelacionPxP IS NOT NULL)
+		AND (@inFechaRelacionPxP IS NOT NULL) AND (@inEsAsociacion IS NOT NULL)
 			BEGIN
 				/* Gets the PK of old "Persona" using @idPersonaIdentificacion */
 				DECLARE @idOldPersona INT;
@@ -57,11 +58,15 @@ BEGIN
 				FROM [dbo].[Propiedad] AS [Pro]
 				WHERE [Pro].[Lote] = @inPropiedadLote;
 
+				/* Gets the PK of "PersonaXPropiedad" using @idOldPersona and @idOldPropiedad */
 				DECLARE @idPersonaXPropiedad INT;
-				SELECT @idPersonaXPropiedad = [PerXPro].[ID]
-				FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
+				SELECT @idPersonaXPropiedad = [PXP].[ID]
+				FROM [dbo].[PersonaXPropiedad] AS [PXP]
 				WHERE [IDPersona] = @idOldPersona 
-				AND [IDPropiedad] = @idOldPropiedad;
+				AND [IDPropiedad] = @idOldPropiedad
+				AND [PXP].[Activo] = 1;
+
+				/* Get the event params to create a new register at dbo.EventLog */
 		
 				DECLARE 
 					@idEventType INT,
@@ -88,20 +93,20 @@ BEGIN
 					END;
 
 				IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL)
-				AND (@idPersonaXPropiedad IS NOT NULL) AND (@inEsAsociacion IS NOT NULL)
+				AND (@idPersonaXPropiedad IS NOT NULL)
 					BEGIN
-						BEGIN TRANSACTION [updatePerXPro]
+						BEGIN TRANSACTION [updatePersonaXPropiedad]
 
 							/* Get "PersonaXPropiedad" data before update */
 							SET @actualData = ( -- event data
 								SELECT 
-									[PerXPro].[IDPersona] AS [IDPersona],
-									[PerXPro].[IDPropiedad] AS [IDPropiedad],
-									[PerXPro].[FechaInicio] AS [FechaInicio],
-									[PerXPro].[FechaFin] AS [FechaFin],
-									[PerXPro].[Activo] AS [Activo]
-								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
-								WHERE [PerXPro].[ID] = @idPersonaXPropiedad 
+									[PXP].[IDPersona] AS [IDPersona],
+									[PXP].[IDPropiedad] AS [IDPropiedad],
+									[PXP].[FechaInicio] AS [FechaInicio],
+									[PXP].[FechaFin] AS [FechaFin],
+									[PXP].[Activo] AS [Activo]
+								FROM [dbo].[PersonaXPropiedad] AS [PXP]
+								WHERE [PXP].[ID] = @idPersonaXPropiedad 
 								FOR JSON AUTO
 							);
 
@@ -128,13 +133,13 @@ BEGIN
 							/* Get "PersonaXPropiedad" data after update */
 							SET @newData = ( -- event data
 								SELECT 
-									[PerXPro].[IDPersona] AS [IDPersona],
-									[PerXPro].[IDPropiedad] AS [IDPropiedad],
-									[PerXPro].[FechaInicio] AS [FechaInicio],
-									[PerXPro].[FechaFin] AS [FechaFin],
-									[PerXPro].[Activo] AS [Activo]
-								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
-								WHERE [PerXPro].[ID] = @idPersonaXPropiedad 
+									[PXP].[IDPersona] AS [IDPersona],
+									[PXP].[IDPropiedad] AS [IDPropiedad],
+									[PXP].[FechaInicio] AS [FechaInicio],
+									[PXP].[FechaFin] AS [FechaFin],
+									[PXP].[Activo] AS [Activo]
+								FROM [dbo].[PersonaXPropiedad] AS [PXP]
+								WHERE [PXP].[ID] = @idPersonaXPropiedad 
 								FOR JSON AUTO
 							);
 
@@ -167,7 +172,7 @@ BEGIN
 									SET @outResultCode = 5407;
 									RETURN;
 								END;
-						COMMIT TRANSACTION [updatePerXPro]
+						COMMIT TRANSACTION [updatePersonaXPropiedad]
 					END;
 				ELSE
 					BEGIN
@@ -188,7 +193,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [updatePerXPro]
+				ROLLBACK TRANSACTION [updatePersonaXPropiedad]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN
