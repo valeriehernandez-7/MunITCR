@@ -85,8 +85,8 @@ BEGIN
 							SET @actualData = ( -- event data
 								SELECT 
 									[U].[IDPersona] AS [IDPersona],
-									[U].[Username] AS [Usuario],
-									[U].[Password] AS [Contrasena],
+									[U].[Username] AS [Username],
+									[U].[Password] AS [Password],
 									[U].[Administrador] AS [Administrador],
 									[U].[Activo] AS [Activo]
 								FROM [dbo].[Usuario] AS [U]
@@ -107,8 +107,8 @@ BEGIN
 							SET @newData = ( -- event data
 								SELECT 
 									[U].[IDPersona] AS [IDPersona],
-									[U].[Username] AS [Usuario],
-									[U].[Password] AS [Contrasena],
+									[U].[Username] AS [Username],
+									[U].[Password] AS [Password],
 									[U].[Administrador] AS [Administrador],
 									[U].[Activo] AS [Activo]
 								FROM [dbo].[Usuario] AS [U]

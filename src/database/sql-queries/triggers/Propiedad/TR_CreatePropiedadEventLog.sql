@@ -28,12 +28,12 @@ BEGIN
 	/* Get 'INSERTED' data and create NVARCHAR with JSON format */
 	SET @newData = (
 		SELECT 
-			[NP].[Lote] AS [Propiedad],
-			[NP].[IDTipoUsoPropiedad] AS [UsodePropiedad],
-			[NP].[IDTipoZonaPropiedad] AS [ZonadePropiedad],
+			[NP].[Lote] AS [Lote],
+			[NP].[IDTipoUsoPropiedad] AS [IDTipoUsoPropiedad],
+			[NP].[IDTipoZonaPropiedad] AS [IDTipoZonaPropiedad],
 			[NP].[MetrosCuadrados] AS [MetrosCuadrados],
 			[NP].[ValorFiscal] AS [ValorFiscal],
-			[NP].[FechaRegistro] AS [FechadeRegistro],
+			[NP].[FechaRegistro] AS [FechaRegistro],
 			[NP].[Activo] AS [Activo]
 		FROM INSERTED [NP] 
 		FOR JSON AUTO

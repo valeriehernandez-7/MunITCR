@@ -7,8 +7,7 @@ GO
 	@proc_description
 	@proc_param inPersonaIdentificacion person's doc ID
 	@proc_param inPropiedadLote property identifier
-	@proc_param inFechaAsociacionPxP association date
-	@proc_param inFechaDesasociacionPxP desassociation date
+	@proc_param inFechaRelacionPxP association/disassociation date
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
@@ -89,7 +88,7 @@ BEGIN
 					END;
 
 				IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL)
-				AND (@idPersonaXPropiedad IS NOT NULL)
+				AND (@idPersonaXPropiedad IS NOT NULL) AND (@inEsAsociacion IS NOT NULL)
 					BEGIN
 						BEGIN TRANSACTION [updatePerXPro]
 
@@ -98,8 +97,8 @@ BEGIN
 								SELECT 
 									[PerXPro].[IDPersona] AS [IDPersona],
 									[PerXPro].[IDPropiedad] AS [IDPropiedad],
-									[PerXPro].[FechaInicio] AS [FechadeAsociacion],
-									[PerXPro].[FechaFin] AS [FechadeDesasociacion],
+									[PerXPro].[FechaInicio] AS [FechaInicio],
+									[PerXPro].[FechaFin] AS [FechaFin],
 									[PerXPro].[Activo] AS [Activo]
 								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
 								WHERE [PerXPro].[ID] = @idPersonaXPropiedad 
@@ -113,9 +112,9 @@ BEGIN
 									SET 
 										[IDPersona] = @idPersona,
 										[IDPropiedad] = @idPropiedad,
-										[FechaInicio] = @inFechaRelacionPxP,
+										[FechaInicio] = @inFechaRelacionPxP
 									WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
-								END
+								END;
 							ELSE
 								BEGIN
 									UPDATE [dbo].[PersonaXPropiedad]
@@ -124,17 +123,15 @@ BEGIN
 										[IDPropiedad] = @idPropiedad,
 										[FechaFin] = @inFechaRelacionPxP
 									WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
-								END
-
-							
+								END;
 
 							/* Get "PersonaXPropiedad" data after update */
 							SET @newData = ( -- event data
 								SELECT 
 									[PerXPro].[IDPersona] AS [IDPersona],
 									[PerXPro].[IDPropiedad] AS [IDPropiedad],
-									[PerXPro].[FechaInicio] AS [FechadeAsociacion],
-									[PerXPro].[FechaFin] AS [FechadeDesasociacion],
+									[PerXPro].[FechaInicio] AS [FechaInicio],
+									[PerXPro].[FechaFin] AS [FechaFin],
 									[PerXPro].[Activo] AS [Activo]
 								FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
 								WHERE [PerXPro].[ID] = @idPersonaXPropiedad 

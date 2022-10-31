@@ -98,8 +98,8 @@ BEGIN
 										SELECT 
 											[PerXPro].[IDPersona] AS [IDPersona],
 											[PerXPro].[IDPropiedad] AS [IDPropiedad],
-											[PerXPro].[FechaInicio] AS [FechadeAsociacion],
-											[PerXPro].[FechaFin] AS [FechadeDesasociacion],
+											[PerXPro].[FechaInicio] AS [FechaInicio],
+											[PerXPro].[FechaFin] AS [FechaFin],
 											[PerXPro].[Activo] AS [Activo]
 										FROM [dbo].[PersonaXPropiedad] AS [PerXPro]
 										WHERE [PerXPro].[ID] = @lastEntityID

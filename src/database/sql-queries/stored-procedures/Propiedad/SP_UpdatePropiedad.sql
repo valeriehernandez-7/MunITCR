@@ -90,51 +90,25 @@ BEGIN
 				IF (@idPropiedad IS NOT NULL) AND (@idUsoPropiedad IS NOT NULL) AND (@idZonaPropiedad IS NOT NULL)
 					BEGIN
 						BEGIN TRANSACTION [updatePropiedad]
-							
-							/* Get "Propiedad" data before update */
-							SET @actualData = ( -- event data
-								SELECT 
-									[P].[IDTipoUsoPropiedad] AS [IDTipoUsoPropiedad],
-									[P].[IDTipoZonaPropiedad] AS [IDTipoZonaPropiedad],
-									[P].[Lote] AS [Lote],
-									[P].[MetrosCuadrados] AS [MetrosCuadrados],
-									[P].[ValorFiscal] AS [ValorFiscal], 
-									[P].[FechaRegistro] AS [FechaRegistro],
-									[P].[Activo] AS [Activo]
-								FROM [dbo].[Propiedad] AS [P]
-								WHERE [P].[ID] = @idPropiedad
-								FOR JSON AUTO
-							);
-
-							/* Update "Propiedad" using  @idPropiedad */
-							UPDATE [dbo].[Propiedad]
-								SET
-									[IDTipoUsoPropiedad] = @idUsoPropiedad,
-									[IDTipoZonaPropiedad] = @idZonaPropiedad,
-									[Lote] = @inLote,
-									[MetrosCuadrados] = @inMetrosCuadrados,
-									[ValorFiscal] = @inValorFiscal,
-									[FechaRegistro] = @inFechaRegistro
-							WHERE [Propiedad].[ID] = @idPropiedad;
-
-							/* Get "Propiedad" data after update */
-							SET @newData = ( -- event data
-								SELECT 
-									[P].[IDTipoUsoPropiedad] AS [IDTipoUsoPropiedad],
-									[P].[IDTipoZonaPropiedad] AS [IDTipoZonaPropiedad],
-									[P].[Lote] AS [Lote],
-									[P].[MetrosCuadrados] AS [MetrosCuadrados],
-									[P].[ValorFiscal] AS [ValorFiscal], 
-									[P].[FechaRegistro] AS [FechaRegistro],
-									[P].[Activo] AS [Activo]
-								FROM [dbo].[Propiedad] AS [P]
-								WHERE [P].[ID] = @idPropiedad
-								FOR JSON AUTO
-							);
-
 							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
 							AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 								BEGIN
+									/* Get "Propiedad" data before update */
+									SET @actualData = ( -- event data
+										SELECT 
+											[P].[IDTipoUsoPropiedad] AS [IDTipoUsoPropiedad],
+											[P].[IDTipoZonaPropiedad] AS [IDTipoZonaPropiedad],
+											[P].[Lote] AS [Lote],
+											[P].[MetrosCuadrados] AS [MetrosCuadrados],
+											[P].[ValorFiscal] AS [ValorFiscal], 
+											[P].[FechaRegistro] AS [FechaRegistro],
+											[P].[Activo] AS [Activo]
+										FROM [dbo].[Propiedad] AS [P]
+										WHERE [P].[ID] = @idPropiedad
+										FOR JSON AUTO
+									);
+
+									/* Insert new event at EventLog */
 									INSERT INTO [dbo].[EventLog] (
 										[IDEventType],
 										[IDEntityType],
@@ -152,6 +126,18 @@ BEGIN
 										@inEventUser,
 										@inEventIP
 									);
+
+									/* Update "Propiedad" using  @idPropiedad */
+									UPDATE [dbo].[Propiedad]
+										SET
+											[IDTipoUsoPropiedad] = @idUsoPropiedad,
+											[IDTipoZonaPropiedad] = @idZonaPropiedad,
+											[Lote] = @inLote,
+											[MetrosCuadrados] = @inMetrosCuadrados,
+											[ValorFiscal] = @inValorFiscal,
+											[FechaRegistro] = @inFechaRegistro
+									WHERE [Propiedad].[ID] = @idPropiedad;
+
 									SET @outResultCode = 5200; /* OK */
 								END;
 							ELSE

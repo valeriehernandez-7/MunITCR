@@ -94,8 +94,8 @@ BEGIN
 									SET @newData = ( -- event data
 										SELECT 
 											[P].[Nombre] AS [Nombre],
-											[P].[IdTipoDocIdentidad] AS [TipodeDocumentoIdentidad],
-											[P].[ValorDocIdentidad] AS [Identificacion],
+											[P].[IdTipoDocIdentidad] AS [IdTipoDocIdentidad],
+											[P].[ValorDocIdentidad] AS [ValorDocIdentidad],
 											[P].[Telefono1] AS [Telefono1],
 											[P].[Telefono2] AS [Telefono2], 
 											[P].[CorreoElectronico] AS [CorreoElectronico],
