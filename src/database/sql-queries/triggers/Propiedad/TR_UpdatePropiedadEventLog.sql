@@ -27,7 +27,7 @@ BEGIN
 			[NP].[ValorFiscal] AS [ValorFiscal], 
 			[NP].[FechaRegistro] AS [FechaRegistro],
 			[NP].[Activo] AS [Activo]
-		FROM UPDATED [NP] 
+		FROM INSERTED [NP] 
 		FOR JSON AUTO
 	);
 
