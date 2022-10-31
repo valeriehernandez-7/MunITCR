@@ -3,28 +3,18 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_UpdatePropiedad
+	@proc_name SP_UpdatePropiedadValorFiscal
 	@proc_description 
-	@proc_param inOldLote 
-	@proc_param inUsoPropiedad 
-	@proc_param inZonaPropiedad 
-	@proc_param inLote 
-	@proc_param inMetrosCuadrados 
-	@proc_param inValorFiscal 
-	@proc_param inFechaRegistro 
+	@proc_param inPropiedadLote 
+	@proc_param inValorFiscal  
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_UpdatePropiedad]
-	@inOldLote VARCHAR(32),
-	@inUsoPropiedad VARCHAR(128),
-	@inZonaPropiedad VARCHAR(128),
-	@inLote VARCHAR(32),
-	@inMetrosCuadrados BIGINT,
+CREATE OR ALTER PROCEDURE [SP_UpdatePropiedadValorFiscal]
+	@inPropiedadLote VARCHAR(32),
 	@inValorFiscal MONEY,
-	@inFechaRegistro DATE,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
@@ -34,32 +24,13 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 
-		IF (@inOldLote IS NOT NULL) AND (@inUsoPropiedad IS NOT NULL) 
-		AND (@inZonaPropiedad IS NOT NULL) AND (@inLote IS NOT NULL) 
-		AND (@inMetrosCuadrados IS NOT NULL) AND (@inValorFiscal IS NOT NULL)
+		IF (@inPropiedadLote IS NOT NULL) AND (@inValorFiscal IS NOT NULL)
 			BEGIN
-				/* Gets the PK of old "Propiedad" using @inOldLote */
+				/* Gets the PK of "Propiedad" using @inPropiedadLote */
 				DECLARE @idPropiedad INT;
 				SELECT @idPropiedad = [Pro].[ID]
 				FROM [dbo].[Propiedad] AS [Pro]
-				WHERE [Pro].[Lote] = @inOldLote;
-
-				/* Gets the PK of "Tipo Uso de Propiedad" using @inUsoPropiedad */
-				DECLARE @idUsoPropiedad INT;
-				SELECT @idUsoPropiedad = [UP].[ID]
-				FROM [dbo].[TipoUsoPropiedad] AS [UP]
-				WHERE [UP].[Nombre] = @inUsoPropiedad;
-
-				/* Gets the PK of "Tipo Zona de Propiedad" using @inZonaPropiedad */
-				DECLARE @idZonaPropiedad INT;
-				SELECT @idZonaPropiedad = [ZP].[ID]
-				FROM [dbo].[TipoZonaPropiedad] AS [ZP]
-				WHERE [ZP].[Nombre] = @inZonaPropiedad;
-
-				IF @inFechaRegistro IS NULL
-					BEGIN
-						SET @inFechaRegistro = GETDATE();
-					END;
+				WHERE [Pro].[Lote] = @inPropiedadLote;
 
 				/* Get the event params to create a new register at dbo.EventLog */
 
@@ -87,9 +58,9 @@ BEGIN
 						SET @inEventIP = '0.0.0.0';
 					END;
 
-				IF (@idPropiedad IS NOT NULL) AND (@idUsoPropiedad IS NOT NULL) AND (@idZonaPropiedad IS NOT NULL)
+				IF (@idPropiedad IS NOT NULL)
 					BEGIN
-						BEGIN TRANSACTION [updatePropiedad]
+						BEGIN TRANSACTION [updatePropiedadValorFiscal]
 							
 							/* Get "Propiedad" data before update */
 							SET @actualData = ( -- event data
@@ -106,15 +77,9 @@ BEGIN
 								FOR JSON AUTO
 							);
 
-							/* Update "Propiedad" using  @idPropiedad */
+							/* Update the "valor fiscal" of "Propiedad" using  @idPropiedad */
 							UPDATE [dbo].[Propiedad]
-								SET
-									[IDTipoUsoPropiedad] = @idUsoPropiedad,
-									[IDTipoZonaPropiedad] = @idZonaPropiedad,
-									[Lote] = @inLote,
-									[MetrosCuadrados] = @inMetrosCuadrados,
-									[ValorFiscal] = @inValorFiscal,
-									[FechaRegistro] = @inFechaRegistro
+								SET [ValorFiscal] = @inValorFiscal
 							WHERE [Propiedad].[ID] = @idPropiedad;
 
 							/* Get "Propiedad" data after update */
@@ -162,7 +127,7 @@ BEGIN
 									RETURN;
 								END;
 
-						COMMIT TRANSACTION [updatePropiedad]
+						COMMIT TRANSACTION [updatePropiedadValorFiscal]
 					END;
 				ELSE
 					BEGIN
@@ -182,7 +147,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [updatePropiedad]
+				ROLLBACK TRANSACTION [updatePropiedadValorFiscal]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN
