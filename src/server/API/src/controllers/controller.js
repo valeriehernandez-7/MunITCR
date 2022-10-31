@@ -133,23 +133,24 @@ export const ReadPropiedadXUsuario=  async (req, res) => {
     res.json(result.recordset);   
 }
 
-export const ReadMovimientoConsumoAgua=  async (req, res) => {
-    const pool= await getConection() 
-    var user = req.query.user;
-    const result= await pool.request().
-                    output('outResultCode', sql.Int).
-                    execute('SP_ReadMovimientoConsumoAgua');
-        res.json(result.recordset);   
-} 
-
 export const ReadFacturaPagadaPropiedadIn=  async (req, res) => {
     const pool= await getConection() 
     var lote = req.query.lote;
-    console.log(lote)
     const result= await pool.request().
                     input('inPropiedad', sql.VARCHAR(32), lote).
                     output('outResultCode', sql.Int).
                     execute('SP_ReadFacturaPagadaPropiedadIn');
+                    console.log(result)
+        res.json(result.recordset);   
+} 
+
+export const ReadMovimientoConsumoAgua=  async (req, res) => {
+    const pool= await getConection() 
+    var lote = req.query.lote;
+    const result= await pool.request().
+                    input('inPropiedad', sql.VARCHAR(32), lote).
+                    output('outResultCode', sql.Int).
+                    execute('SP_ReadMovimientoConsumoAgua');
                     console.log(result)
         res.json(result.recordset);   
 } 

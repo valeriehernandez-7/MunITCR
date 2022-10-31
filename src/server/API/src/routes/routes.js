@@ -29,7 +29,8 @@ import {ReadPersona,
         UpdatePropiedad,
         UpdatePersonaXPropiedad,
         ReadFacturaPagadaPropiedadIn,
-        ReadFacturaPendientePropiedadIn
+        ReadFacturaPendientePropiedadIn,
+        ReadMovimientoConsumoAgua
         } from '../controllers/controller'
 
 //lista de personas     
@@ -83,6 +84,9 @@ router.get('/ReadFacturaPagadaPropiedadIn',ReadFacturaPagadaPropiedadIn)
 
 //listas de faturas pagadas por propiedad
 router.get('/ReadFacturaPendientePropiedadIn',ReadFacturaPendientePropiedadIn)
+
+//listas de faturas pagadas por propiedad
+router.get('/ReadMovimientoConsumoAgua',ReadMovimientoConsumoAgua)
 
 
 //Agrega una persona a la BD

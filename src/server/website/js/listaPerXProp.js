@@ -28,7 +28,7 @@ $(document).ready(function(){
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit("+ Propietario +"," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Desasociar \" onclick=\"desasoc("+ Propietario +"," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       //se debe cambiar el otro boton
-      if (opcion==1)
+      if (valor==1)
         tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       else
         tabla+= "<td>"+ boton + "</td></tr>"
