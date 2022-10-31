@@ -30,7 +30,7 @@ BEGIN
 			LEFT JOIN [dbo].[TipoZonaPropiedad] AS [TZ]
 			ON [TZ].[ID] = [Pro].[IDTipoZonaPropiedad]
 			LEFT JOIN [dbo].[Usuario] AS [U]
-			ON [U].[ID] = [Pro].[IDUsuario] 
+			ON [U].[IDPersona] = [Pro].[ID] 
 		WHERE [Pro].[Activo] = 1 AND [U].[Activo] = 1
 		AND [U].[Username] = @inUsuarioUsername
 		ORDER BY [Pro].[Lote];
