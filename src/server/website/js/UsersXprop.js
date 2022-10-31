@@ -16,7 +16,12 @@ $(document).ready(function(){
       }));
     }
     if(add== "0")
-      document.getElementById('nombre').value = usuario;
+      var idPer = (new URL(location.href)).searchParams.get('nombre')
+      var idProp = (new URL(location.href)).searchParams.get('lote')
+      nombre = document.getElementById('nombre')
+      nombre.value = idPer
+      lote = document.getElementById('lote')
+      lote.value =idProp
     }).catch(e => {
       console.log(e);
     });
@@ -100,6 +105,58 @@ async function add() {
       console.log(e);
     });
 }   
+
+async function update() {
+  var url = "http://localhost:8000/UpdatePersonaXPropiedad"
+  var oldid = (new URL(location.href)).searchParams.get('nombre')
+  var oldLote = (new URL(location.href)).searchParams.get('lote')
+  var fechaAsoc = $("#date").val()
+  var fechaDesasoc = (new URL(location.href)).searchParams.get('fechaF')
+  var id = $("#nombre").val()
+  var lote = $("#lote").val();
+  var uss = (new URL(location.href)).searchParams.get('ip')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  var opcion = (new URL(location.href)).searchParams.get('opcion')
+  const body={
+    oldId:oldid,
+    oldLote: oldLote,
+    id: id,
+    lote:lote,
+    fechaAsoc: fechaAsoc,
+    fechaDesasoc: null,
+    uss: uss,
+    ip: ip,
+    opcion: opcion
+  } 
+  const options = {  
+  method: "post",
+  body: JSON.stringify(body),
+  headers: {"Content-Type": "application/json"},
+  };
+  //Petición HTTP
+  console.log(body)
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+      console.log(response);
+      if(response == 5404){
+        window.alert("El tipo de propiedad no existe");
+        return
+      }      
+      if(response == 5400){
+        window.alert("Error al actualizar la propiedad");
+        return
+      }
+      if(response == 5200){
+        window.alert("Propiedad actualizada con exito");
+        return
+      }else {
+        window.alert("Ocurrio un error al actualizar los daots");
+      }
+    }
+    ).catch(e => {
+      console.log(e);
+    });
+}
 
 function ret() {
   var uss = (new URL(location.href)).searchParams.get('uss')
