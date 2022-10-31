@@ -84,6 +84,9 @@ DELETE FROM [dbo].[PersonaXPropiedad];
 DBCC CHECKIDENT ('[dbo].[PersonaXPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
+DELETE FROM [dbo].[DetalleCCConsumoAgua];
+GO
+
 DELETE FROM [dbo].[MovimientoConsumoAgua];
 DBCC CHECKIDENT ('[dbo].[MovimientoConsumoAgua]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -112,6 +115,15 @@ DBCC CHECKIDENT ('[dbo].[Persona]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[ParametroInteger];
+GO
+
+DELETE FROM [dbo].[ParametroMoney];
+GO
+
+DELETE FROM [dbo].[ParametroPorcentaje];
+GO
+
+DELETE FROM [dbo].[ParametroTexto];
 GO
 
 DELETE FROM [dbo].[Parametro];
@@ -177,6 +189,10 @@ GO
 
 DELETE FROM [dbo].[OrdenCorte];
 DBCC CHECKIDENT ('[dbo].[OrdenCorte]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[DetalleCC];
+DBCC CHECKIDENT ('[dbo].[DetalleCC]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[Factura];
