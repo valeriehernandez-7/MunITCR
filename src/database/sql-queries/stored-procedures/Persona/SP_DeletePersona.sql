@@ -12,7 +12,7 @@ GO
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
 CREATE OR ALTER PROCEDURE [SP_DeletePersona]
-	@inIdentificacion VARCHAR(32),
+	@inIdentificacion VARCHAR(64),
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT

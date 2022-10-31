@@ -3,24 +3,16 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_UpdateUsuario
+	@proc_name SP_DeleteUsuario
 	@proc_description 
-	@proc_param inOldUsername 
-	@proc_param inIdentificacionPersona 
 	@proc_param inUsername 
-	@proc_param inPassword 
-	@proc_param inTipoUsuario 
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_UpdateUsuario]
-	@inOldUsername VARCHAR(16),
-	@inIdentificacionPersona VARCHAR(64),
+CREATE OR ALTER PROCEDURE [SP_DeleteUsuario]
 	@inUsername VARCHAR(16),
-	@inPassword VARCHAR(16),
-	@inTipoUsuario VARCHAR(16),
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
@@ -30,27 +22,14 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 
-		IF (@inIdentificacionPersona IS NOT NULL) AND (@inUsername IS NOT NULL) AND  
-		(@inPassword IS NOT NULL) AND (@inTipoUsuario IS NOT NULL)
+		IF (@inUsername IS NOT NULL)
 			BEGIN
-				/* Gets the PK of "Usuario" using @inOldUsername */
+				/* Gets the PK of "Usuario" using @inUsername */
 				DECLARE @idUsuario INT;
 				SELECT @idUsuario = [U].[ID]
 				FROM [dbo].[Usuario] AS [U]
-				WHERE [U].[Username] = @inOldUsername
+				WHERE [U].[Username] = @inUsername
 				AND [U].[Activo] = 1;
-
-				/* Gets the PK of "Persona" using @inIdentificacionPersona */
-				DECLARE @idPersona INT;
-				SELECT @idPersona = [P].[ID]
-				FROM [dbo].[Persona] AS [P]
-				WHERE [P].[ValorDocIdentidad] = @inIdentificacionPersona;
-
-				DECLARE @permisosUsuario BIT =
-				CASE @inTipoUsuario
-					WHEN 'Propietario' THEN 0
-					WHEN 'Administrador' THEN 1
-				END;
 
 				/* Get the event params to create a new register at dbo.EventLog */
 
@@ -59,10 +38,10 @@ BEGIN
 					@idEntityType INT,
 					@actualData NVARCHAR(MAX), 
 					@newData NVARCHAR(MAX);
-					
+
 				SELECT @idEventType = [EVT].[ID] -- event data
 				FROM [dbo].[EventType] AS [EVT]
-				WHERE [EVT].[Name] = 'Update';
+				WHERE [EVT].[Name] = 'Delete';
 
 				SELECT @idEntityType = [ENT].[ID] -- event data
 				FROM [dbo].[EntityType] AS [ENT]
@@ -77,12 +56,12 @@ BEGIN
 					BEGIN
 						SET @inEventIP = '0.0.0.0';
 					END;
-				IF (@idUsuario IS NOT NULL) AND (@idPersona IS NOT NULL) 
-				AND (@permisosUsuario IS NOT NULL)
-					BEGIN
-						BEGIN TRANSACTION [updateUsuario]
 
-							/* Get "Usuario" data before update */
+				IF (@idUsuario IS NOT NULL)
+					BEGIN
+						BEGIN TRANSACTION [deleteUsuario]
+							
+							/* Get "Usuario" data before delete */
 							SET @actualData = ( -- event data
 								SELECT 
 									[U].[IDPersona] AS [IDPersona],
@@ -95,29 +74,13 @@ BEGIN
 								FOR JSON AUTO
 							);
 
-							/* Update "Usuario" using  @idUsuario */
+							/* Delete of "Usuario" using  @idUsuario 
+							as setting off "Activo" */
 							UPDATE [dbo].[Usuario]
-								SET 
-									[IDPersona] = @idPersona,
-									[Username] = @inUsername,
-									[Password] = @inPassword,
-									[Administrador] = @permisosUsuario
+								SET [Activo] = 0
 							WHERE [Usuario].[ID] = @idUsuario;
 
-							/* Get "Usuario" data after update */
-							SET @newData = ( -- event data
-								SELECT 
-									[U].[IDPersona] AS [IDPersona],
-									[U].[Username] AS [Username],
-									[U].[Password] AS [Password],
-									[U].[Administrador] AS [Administrador],
-									[U].[Activo] AS [Activo]
-								FROM [dbo].[Usuario] AS [U]
-								WHERE [U].[ID] = @idUsuario
-								FOR JSON AUTO
-							);
-
-							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@idUsuario IS NOT NULL)
+							IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) 
 							AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 								BEGIN
 									INSERT INTO [dbo].[EventLog] (
@@ -143,23 +106,22 @@ BEGIN
 								BEGIN
 									/* Cannot insert the new "Evento" because some 
 									event's params are null */
-									SET @outResultCode = 5408;
+									SET @outResultCode = 5407;
 									RETURN;
 								END;
-						COMMIT TRANSACTION [updateUsuario]
+
+						COMMIT TRANSACTION [deleteUsuario]
 					END;
 				ELSE
 					BEGIN
-						/* Cannot update the "Usuario" because a person with 
-						@inIdentificacionPersona did not exist or 
-						@inTipoUsuario did not exist */
+						/* Cannot delete the "Usuario" because did not exist based on @idUsuario */
 						SET @outResultCode = 5404; 
 						RETURN;
 					END;
 			END;
 		ELSE
 			BEGIN
-				/* Cannot update the "Usuario" because some params are null */
+				/* Cannot delete the "Usuario" because some params are null */
 				SET @outResultCode = 5400; 
 				RETURN;
 			END;
@@ -167,7 +129,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [updateUsuario]
+				ROLLBACK TRANSACTION [deleteUsuario]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN
