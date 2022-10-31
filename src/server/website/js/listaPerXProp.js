@@ -9,8 +9,8 @@ $(document).ready(function(){
   opcion.value= valor  
   var url = "http://localhost:8000/ReadPersonaXPropiedad"+"?opcion="+valor
   const options = {
-  method: "get",
-  headers: {"Content-Type": "application/json"},
+    method: "get",
+    headers: {"Content-Type": "application/json"},
   };
   fetch(url, options).then(response => response.json())
   .then(response => {
@@ -25,12 +25,6 @@ $(document).ready(function(){
       var FechaDesasociación = perXprop.FechaDesasociación;
       var tabla = "<tr><td> ";
       tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td>"
-      //if(FechaDesasociación==undefined){
-      //  tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + "</td>"
-      //}else{
-      //  FechaDesasociación = FechaDesasociación.substring(0,10)
-      //  tabla += Propietario + "</td><td>" + Propiedad + "</td><td>" + FechaAsociación + "</td><td>" + FechaDesasociación + "</td>"
-      //} 
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit("+ Propietario +"," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Desasociar \" onclick=\"desasoc("+ Propietario +"," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       //se debe cambiar el otro boton

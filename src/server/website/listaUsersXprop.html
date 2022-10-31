@@ -34,23 +34,30 @@
       <input class="buttons" type="submit" id="addBtn" value=" Relacionar Usuario y Lote " onclick="add();">
     </section>
   </div>
+  <div class="container-fluid" style="display: flex; justify-content: center;">
+    <section>
+      Selecciones el tipo de relación que desea visualizar
+      <select class="controls" name="vistarelacionpxp" id="vistarelacionpxp" style="margin-right:10px;">
+        <option value="1">Asociación</option>
+        <option value="0">Desasociación</option>
+        <input class="buttons" type="submit" id="viewBtn" value=" Actualizar " onclick="update();">
+        <br>
+      
+      </select>
+    </section>
+  </div>
   <br>
   <br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <table id="tablaItems" style="border: 2px solid #017bab;">
       <tr>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Usuario</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Número de Lote</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Operacion</th>
-      <!-- 
-      <tr class="linea" id="1">
-        <td>madrilag</td>
-        <td>4325</td>
-        <td>
-          <input class="buttons" type="submit" id="addBtn" value=" Editar " onclick="edit('erickmadrigal','7');">
-          <input class="buttons" type="submit" id="addBtn" value=" Eliminar " onclick="add();">
-        </td>
-      </tr>-->
+
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Identificación</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Lote</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha Registro</th>
+        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Operación</th>
+
+      </tr>
       <tbody id="tableBody"></tbody>
     </table>
   </div>

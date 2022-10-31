@@ -124,10 +124,10 @@ export const ReadPropiedadLote=  async (req, res) => {
 
 export const ReadPropiedadXUsuario=  async (req, res) => {
     const pool= await getConection() 
-    var lote = req.query.lote;
-    console.log(lote);
+    var opcion =req.query.opcion
+    console.log(opcion)
     const result= await pool.request()
-                    .input(inPropiedad, sql.VARCHAR(32),lote)
+                    .input('inEsAsociacion', sql.Bit, parseInt(opcion))
                     .output('outResultCode', sql.Int)
                     .execute('SP_ReadPropiedadXUsuario');
     res.json(result.recordset);   
@@ -140,7 +140,7 @@ export const ReadMovimientoConsumoAgua=  async (req, res) => {
                     output('outResultCode', sql.Int).
                     execute('SP_ReadMovimientoConsumoAgua');
         res.json(result.recordset);   
-}
+} 
 
 export const ReadPropiedadXUsuarioIn=  async (req, res) => {
     const pool= await getConection()
@@ -196,6 +196,8 @@ export const CreatePropiedad =  async (req, res) => {
                 .input('inMetrosCuadrados', sql.BIGINT,m2)
                 .input('inValorFiscal', sql.MONEY,valorFiscal)
                 .input('inFechaRegistro', sql.DATE,registro)
+                .input('inEventUser', sql.VARCHAR(16),uss)
+                .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
                 .execute('SP_CreatePropiedad');
         res.json(result.output.outResultCode);    
@@ -217,10 +219,14 @@ export const CreatePersonaXPropiedad =  async (req, res) => {
 
 export const CreateUsuarioXPropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {user,lote} = req.body;
+    const {iden,lote,fecha,uss,ip} = req.body;
+    console.log(iden,lote,fecha,uss,ip)
     const result= await pool.request() 
-                .input('inUsuarioUsername', sql.VARCHAR(16),user)
+                .input('inUsuarioUsername', sql.VARCHAR(16),iden)
                 .input('inPropiedadLote', sql.VARCHAR(32),lote)
+                .input('inFechaAsociacionUxP', sql.DATE,fecha)
+                .input('inEventUser', sql.VARCHAR(16),uss)
+                .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
                 .execute('SP_CreateUsuarioXPropiedad');
         res.json(result.output.outResultCode);    
@@ -304,7 +310,7 @@ export const UpdateUsuario =  async (req, res) => {
 
 export const UpdatePropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {oldLote,uso,zona,lote,m2,valorFiscal,registro} = req.body;
+    const {oldLote,uso,zona,lote,m2,valorFiscal,registro,uss,ip} = req.body;
     const result= await pool.request()
                 .input('inOldLote', sql.VARCHAR(32),oldLote)
                 .input('inUsoPropiedad', sql.VARCHAR(128),uso)
@@ -314,6 +320,8 @@ export const UpdatePropiedad =  async (req, res) => {
                 .input('inValorFiscal', sql.MONEY,valorFiscal)
                 .input('inFechaRegistro', sql.DATE,registro)
                 .output('outResultCode', sql.Int)
+                .input('inEventUser', sql.VARCHAR(16),uss)
+                .input('inEventIP', sql.VARCHAR(64),ip)
                 .execute('SP_UpdatePropiedad');
         res.json(result.output.outResultCode);    
     }

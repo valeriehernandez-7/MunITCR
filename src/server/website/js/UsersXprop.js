@@ -40,10 +40,12 @@ $(document).ready(function(){
   
   var add = (new URL(location.href)).searchParams.get('add')
   if(add== "0"){
-    var usuario = (new URL(location.href)).searchParams.get('usuario')
-    var lote = (new URL(location.href)).searchParams.get('lote')
-    //document.getElementById('usuario').value =usuario;
-    //document.getElementById('lote').value =lote;
+    var idPer = (new URL(location.href)).searchParams.get('nombre')
+    var idProp = (new URL(location.href)).searchParams.get('lote')
+    nombre = document.getElementById('nombre')
+    nombre.value = idPer
+    lote = document.getElementById('lote')
+    lote.value =idProp
   }
 })
 
@@ -51,9 +53,15 @@ async function add() {
   var url = "http://localhost:8000/CreateUsuarioXPropiedad"
   var user = $("#nombre").val()
   var lote = $("#lote").val();
+  var fecha = $("#date").val();
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
   const body={
-    user: user,
-    lote:lote
+    iden: user,
+    lote:lote,
+    fecha: fecha,
+    uss: uss,
+    ip: ip
   }
   const options = {
   method: "post",
