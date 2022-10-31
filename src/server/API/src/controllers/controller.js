@@ -177,6 +177,14 @@ export const ReadPropiedadXUsuarioIn=  async (req, res) => {
         res.json(result.recordset);    
 }
 
+export const ReadEventLog=  async (req, res) => {
+    const pool= await getConection()
+    const result= await pool.request().
+                    output('outResultCode', sql.Int).
+                    execute('SP_ReadEventLog');
+        res.json(result.recordset);    
+}
+
 
 export const CreatePersona=  async (req, res) => {
     const pool= await getConection()

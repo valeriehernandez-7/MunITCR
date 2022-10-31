@@ -23,6 +23,11 @@ function userXproperty() {
   var ip = (new URL(location.href)).searchParams.get('ip')
   location.replace(' ./listaUsersXprop.html?uss='+uss+"&ip="+ip);
 }
+function eventLog() {
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace(' ./EventLog.html?uss='+uss+"&ip="+ip);
+}
 function consult(){
   var uss = (new URL(location.href)).searchParams.get('uss')
   var ip = (new URL(location.href)).searchParams.get('ip')
