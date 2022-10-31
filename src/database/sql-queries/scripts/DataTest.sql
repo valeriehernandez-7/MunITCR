@@ -32,7 +32,7 @@ EXEC(@sqlText);
  SELECT * FROM [DetalleCCConsumoAgua]  
  SELECT * FROM [EntityType]  
  SELECT * FROM [ErrorLog]  
- SELECT * FROM [EventLog]  
+ SELECT * FROM [EventLog] ORDER BY [DateTime] DESC  
  SELECT * FROM [EventType]  
  SELECT * FROM [Factura]  
  SELECT * FROM [MedioPago]  
@@ -93,6 +93,10 @@ GO
 
 DELETE FROM [dbo].[PropiedadXConceptoCobro];
 DBCC CHECKIDENT ('[dbo].[PropiedadXConceptoCobro]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[UsuarioXPropiedad];
+DBCC CHECKIDENT ('[dbo].[UsuarioXPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[Propiedad];

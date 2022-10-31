@@ -30,9 +30,9 @@ BEGIN
 			BEGIN
 				/* Gets the PK of "Usuario" using @idUsuarioIdentificacion */
 				DECLARE @idUsuario INT;
-				SELECT @idUsuario = [Usr].[ID]
-				FROM [dbo].[Usuario] AS [Usr]
-				WHERE [Usr].[Username] = @inUsuarioUsername;
+				SELECT @idUsuario = [U].[ID]
+				FROM [dbo].[Usuario] AS [U]
+				WHERE [U].[Username] = @inUsuarioUsername;
 
 				/* Gets the PK of "Propiedad" using @inPropiedadLote */
 				DECLARE @idPropiedad INT;
@@ -79,7 +79,7 @@ BEGIN
 						AND [UXP].[IDPropiedad] = @idPropiedad
 						AND [UXP].[Activo] = 1)
 							BEGIN
-								BEGIN TRANSACTION [insertUsrXPro]
+								BEGIN TRANSACTION [insertUsuarioXPropiedad]
 									/* Insert new "UsuarioXPropiedad" as "Usuario" + "Propiedad" association */
 									INSERT INTO [dbo].[UsuarioXPropiedad] (
 										[IDUsuario],
@@ -96,13 +96,13 @@ BEGIN
 
 									SET @newData = ( -- event data
 										SELECT 
-											[UsrXPro].[IDUsuario] AS [IDUsuario],
-											[UsrXPro].[IDPropiedad] AS [IDPropiedad],
-											[UsrXPro].[FechaInicio] AS [FechadeAsociacion],
-											[UsrXPro].[FechaFin] AS [FechadeDesasociacion],
-											[UsrXPro].[Activo] AS [Activo]
-										FROM [dbo].[UsuarioXPropiedad] AS [UsrXPro]
-										WHERE [UsrXPro].[ID] = @lastEntityID
+											[UXP].[IDUsuario] AS [IDUsuario],
+											[UXP].[IDPropiedad] AS [IDPropiedad],
+											[UXP].[FechaInicio] AS [FechadeAsociacion],
+											[UXP].[FechaFin] AS [FechadeDesasociacion],
+											[UXP].[Activo] AS [Activo]
+										FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+										WHERE [UXP].[ID] = @lastEntityID
 										FOR JSON AUTO
 									);
 
@@ -135,7 +135,7 @@ BEGIN
 											SET @outResultCode = 5407;
 											RETURN;
 										END;
-								COMMIT TRANSACTION [insertUsrXPro]
+								COMMIT TRANSACTION [insertUsuarioXPropiedad]
 							END;
 						ELSE
 							BEGIN
@@ -164,7 +164,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [insertUsrXPro]
+				ROLLBACK TRANSACTION [insertUsuarioXPropiedad]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN
