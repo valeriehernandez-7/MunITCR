@@ -3,17 +3,17 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_CreateMovimientoConsumoAgua
+	@proc_name SP_CreateMovimientoConsumoAguaMedidorIn
 	@proc_description
-	@proc_param inPropiedadLote 
+	@proc_param inPropiedadMedidor 
 	@proc_param inTipo 
 	@proc_param inMonto 
 	@proc_param inFecha 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_CreateMovimientoConsumoAgua]
-	@inPropiedadLote VARCHAR(32),
+CREATE OR ALTER PROCEDURE [SP_CreateMovimientoConsumoAguaMedidorIn]
+	@inPropiedadMedidor VARCHAR(16),
 	@inTipo VARCHAR(128),
 	@inMonto INT,
 	@inFecha DATE,
@@ -24,7 +24,7 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 
-		IF (@inTipo IS NOT NULL) AND (@inPropiedadLote IS NOT NULL) AND (@inMonto IS NOT NULL)
+		IF (@inTipo IS NOT NULL) AND (@inPropiedadMedidor IS NOT NULL) AND (@inMonto IS NOT NULL)
 			BEGIN
 				/* Gets the PK of @inTipo */
 				DECLARE @idTipoMovimientoConsumoAgua INT;
@@ -32,7 +32,7 @@ BEGIN
 				FROM [dbo].[TipoMovimientoConsumoAgua] AS [TMCA]
 				WHERE [TMCA].[Nombre] = @inTipo;
 
-				/* Gets the PK of @idPropiedadXCCConsumoAgua based on @inPropiedadLote */
+				/* Gets the PK of @idPropiedadXCCConsumoAgua based on @inPropiedadMedidor */
 				DECLARE @idPropiedadXCCConsumoAgua INT;
 				SELECT @idPropiedadXCCConsumoAgua = [PXCCCA].[IDPropiedadXCC]
 				FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA]
@@ -40,7 +40,7 @@ BEGIN
 					ON [PXCC].[ID] = [PXCCCA].[IDPropiedadXCC]
 					INNER JOIN [dbo].[Propiedad] AS [Pro]
 					ON [Pro].[ID] = [PXCC].[IDPropiedad]
-				WHERE [Pro].[Lote] = @inPropiedadLote;
+				WHERE [PXCCCA].[Medidor] = @inPropiedadMedidor;
 
 				IF @inFecha IS NULL
 					BEGIN

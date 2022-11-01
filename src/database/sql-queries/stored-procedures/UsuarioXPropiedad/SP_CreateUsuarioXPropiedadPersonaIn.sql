@@ -3,18 +3,18 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_CreateUsuarioXPropiedad
+	@proc_name SP_CreateUsuarioXPropiedadPersonaIn
 	@proc_description
-	@proc_param inUsuarioUsername user's username
+	@proc_param inPersonaIdentificacion person's doc ID
 	@proc_param inPropiedadLote property identifier
-	@proc_param @inFechaAsociacionUxP association date
+	@proc_param inFechaAsociacionUxP association date
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_CreateUsuarioXPropiedad]
-	@inUsuarioUsername VARCHAR(16),
+CREATE OR ALTER PROCEDURE [SP_CreateUsuarioXPropiedadPersonaIn]
+	@inPersonaIdentificacion VARCHAR(64),
 	@inPropiedadLote VARCHAR(32),
 	@inFechaAsociacionUxP DATE,
 	@inEventUser VARCHAR(16),
@@ -26,13 +26,15 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 
-		IF (@inUsuarioUsername IS NOT NULL) AND (@inPropiedadLote IS NOT NULL)
+		IF (@inPersonaIdentificacion IS NOT NULL) AND (@inPropiedadLote IS NOT NULL)
 			BEGIN
-				/* Gets the PK of "Usuario" using @idUsuarioIdentificacion */
+				/* Gets the PK of "Usuario" using @inPersonaIdentificacion */
 				DECLARE @idUsuario INT;
 				SELECT @idUsuario = [U].[ID]
 				FROM [dbo].[Usuario] AS [U]
-				WHERE [U].[Username] = @inUsuarioUsername;
+					INNER JOIN [dbo].[Persona] AS [P]
+					ON [P].[ID] = [U].[IDPersona]
+				WHERE [P].[ValorDocIdentidad] = @inPersonaIdentificacion;
 
 				/* Gets the PK of "Propiedad" using @inPropiedadLote */
 				DECLARE @idPropiedad INT;
