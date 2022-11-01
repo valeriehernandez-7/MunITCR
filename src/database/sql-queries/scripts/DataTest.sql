@@ -19,6 +19,7 @@ EXEC(@sqlText);
 
 /* SHOW DB TABLE */
 
+ SELECT * FROM [CCArregloPago]  
  SELECT * FROM [CCBasura]  
  SELECT * FROM [CCConsumoAgua]  
  SELECT * FROM [CCImpuestoPropiedad]  
@@ -29,6 +30,7 @@ EXEC(@sqlText);
  SELECT * FROM [ComprobantePago]  
  SELECT * FROM [ConceptoCobro]  
  SELECT * FROM [DetalleCC]  
+ SELECT * FROM [DetalleCCArregloPago]  
  SELECT * FROM [DetalleCCConsumoAgua]  
  SELECT * FROM [EntityType]  
  SELECT * FROM [ErrorLog]  
@@ -36,6 +38,7 @@ EXEC(@sqlText);
  SELECT * FROM [EventType]  
  SELECT * FROM [Factura]  
  SELECT * FROM [MedioPago]  
+ SELECT * FROM [MovimientoArregloPago]  
  SELECT * FROM [MovimientoConsumoAgua]  
  SELECT * FROM [OrdenCorte]  
  SELECT * FROM [OrdenReconexion]  
@@ -48,10 +51,13 @@ EXEC(@sqlText);
  SELECT * FROM [Persona]  
  SELECT * FROM [PersonaXPropiedad]  
  SELECT * FROM [Propiedad]  
+ SELECT * FROM [PropiedadXCCArregloPago]  
  SELECT * FROM [PropiedadXCCConsumoAgua]  
  SELECT * FROM [PropiedadXConceptoCobro]  
+ SELECT * FROM [TasaInteres]  
  SELECT * FROM [TipoDocIdentidad]  
  SELECT * FROM [TipoMontoCC]  
+ SELECT * FROM [TipoMovimientoArregloPago]  
  SELECT * FROM [TipoMovimientoConsumoAgua]  
  SELECT * FROM [TipoParametro]  
  SELECT * FROM [TipoUsoPropiedad]  
@@ -80,8 +86,46 @@ DELETE FROM [dbo].[EntityType];
 DBCC CHECKIDENT ('[dbo].[EntityType]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
+DELETE FROM [dbo].[OrdenReconexion];
+DBCC CHECKIDENT ('[dbo].[OrdenReconexion]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[OrdenCorte];
+DBCC CHECKIDENT ('[dbo].[OrdenCorte]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[DetalleCC];
+DBCC CHECKIDENT ('[dbo].[DetalleCC]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[Factura];
+DBCC CHECKIDENT ('[dbo].[Factura]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[ComprobantePago];
+DBCC CHECKIDENT ('[dbo].[ComprobantePago]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[MedioPago];
+DBCC CHECKIDENT ('[dbo].[MedioPago]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
 DELETE FROM [dbo].[PersonaXPropiedad];
 DBCC CHECKIDENT ('[dbo].[PersonaXPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[DetalleCCArregloPago];
+GO
+
+DELETE FROM [dbo].[MovimientoArregloPago];
+DBCC CHECKIDENT ('[dbo].[MovimientoArregloPago]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[PropiedadXCCArregloPago];
+GO
+
+DELETE FROM [dbo].[TasaInteres];
+DBCC CHECKIDENT ('[dbo].[TasaInteres]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[DetalleCCConsumoAgua];
@@ -134,6 +178,10 @@ DELETE FROM [dbo].[TipoParametro];
 DBCC CHECKIDENT ('[dbo].[TipoParametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
+DELETE FROM [dbo].[TipoMovimientoArregloPago];
+DBCC CHECKIDENT ('[dbo].[TipoMovimientoArregloPago]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
 DELETE FROM [dbo].[TipoMovimientoConsumoAgua];
 DBCC CHECKIDENT ('[dbo].[TipoMovimientoConsumoAgua]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -171,6 +219,9 @@ GO
 DELETE FROM [dbo].[CCMantenimientoParque];
 GO
 
+DELETE FROM [dbo].[CCArregloPago];
+GO
+
 DELETE FROM [dbo].[ConceptoCobro];
 DBCC CHECKIDENT ('[dbo].[ConceptoCobro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -181,30 +232,6 @@ GO
 
 DELETE FROM [dbo].[TipoMontoCC];
 DBCC CHECKIDENT ('[dbo].[TipoMontoCC]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[OrdenReconexion];
-DBCC CHECKIDENT ('[dbo].[OrdenReconexion]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[OrdenCorte];
-DBCC CHECKIDENT ('[dbo].[OrdenCorte]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[DetalleCC];
-DBCC CHECKIDENT ('[dbo].[DetalleCC]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[Factura];
-DBCC CHECKIDENT ('[dbo].[Factura]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[ComprobantePago];
-DBCC CHECKIDENT ('[dbo].[ComprobantePago]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[MedioPago];
-DBCC CHECKIDENT ('[dbo].[MedioPago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 -- *************************************************************

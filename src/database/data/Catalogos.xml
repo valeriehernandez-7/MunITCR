@@ -18,6 +18,16 @@
         <TipodeMovimientoLecturadeMedidor Nombre="Ajuste Credito" />
         <TipodeMovimientoLecturadeMedidor Nombre="Ajuste Debito" />
     </TipodeMovimientoLecturadeMedidores>
+    <TiposMovimientoArregloPago>
+        <TipoMovimientoArregloPago Nombre="Credito" />
+        <TipoMovimientoArregloPago Nombre="Debito" />
+    </TiposMovimientoArregloPago>
+    <TasasInteresArregloPago>
+        <TasaInteresArregloPago PlazoMeses="3" InteresAnual="0.10" />
+        <TasaInteresArregloPago PlazoMeses="4" InteresAnual="0.11" />
+        <TasaInteresArregloPago PlazoMeses="5" InteresAnual="0.12" />
+        <TasaInteresArregloPago PlazoMeses="6" InteresAnual="0.13" />
+    </TasasInteresArregloPago>
     <TipoUsoPropiedades>
         <TipoUsoPropiedad Nombre="Habitacion" />
         <TipoUsoPropiedad Nombre="Comercial" />
@@ -82,7 +92,6 @@
     <ParametrosSistema>
         <ParametroSistema Nombre="Cantidad de dias para calculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
         <ParametroSistema Nombre="Cantidad de dias de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
-        <ParametroSistema Nombre="Cuota minima para arreglo de pago" NombreTipoPar="float" Valor="0.2" />
     </ParametrosSistema>
     <CCs>
         <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="5000" ValorMinimoM3="30" ValorM3="300" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
@@ -92,5 +101,6 @@
         <CC Nombre="Reconexion de agua" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
         <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
         <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Arreglo de pago" TipoMontoCC="" PeriodoMontoCC="" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
     </CCs>
 </Catalogo>
