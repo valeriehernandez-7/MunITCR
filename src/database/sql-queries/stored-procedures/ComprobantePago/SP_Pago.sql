@@ -6,6 +6,7 @@ GO
 	@proc_name SP_Pago
 	@proc_description
 	@proc_param inPropiedadLote 
+	@proc_param inFacturas 
 	@proc_param inReferencia 
 	@proc_param inMedioPago 
 	@proc_param inFecha 
@@ -14,6 +15,7 @@ GO
 */
 CREATE OR ALTER PROCEDURE [SP_Pago]
 	@inPropiedadLote VARCHAR(32),
+	@inFacturas INT,
 	@inReferencia BIGINT,
 	@inMedioPago VARCHAR(128),
 	@inFecha DATE,
@@ -24,7 +26,7 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 
-		IF (@inPropiedadLote IS NOT NULL) AND (@inMedioPago IS NOT NULL)
+		IF (@inPropiedadLote IS NOT NULL) AND (@inFacturas > 0) AND (@inMedioPago IS NOT NULL)
 			BEGIN
 				/* Gets the PK of "Propiedad" using @inPropiedadLote */
 				DECLARE @idPropiedad INT;
@@ -61,21 +63,28 @@ BEGIN
 				IF (@idPropiedad IS NOT NULL) AND (@idMedioPago IS NOT NULL) 
 				AND (@inReferencia IS NOT NULL) AND (@inFecha IS NOT NULL)
 					BEGIN
-						/* Get the oldest "fecha de factura" of 
-						"facturas pendientes" "no anuladas" of the property 
-						with @idPropiedad as PK */
-						DECLARE @fechaFactura DATE;
-						SELECT @fechaFactura = MIN([F].[Fecha])
+						/* Get the PK of the oldest "facturas pendientes" 
+						"no anuladas" of the property with @idPropiedad as PK */
+						DECLARE @TMPFactura TABLE (
+							[IDFacturaPendiente] INT
+						);
+						
+						INSERT INTO @TMPFactura (
+							[IDFacturaPendiente]
+						) SELECT TOP (@inFacturas)
+							[F].[ID]
 						FROM [dbo].[Factura] AS [F]
 							INNER JOIN [dbo].[Propiedad] AS [P]
 							ON [P].[ID] = [F].[IDPropiedad]
 						WHERE [P].[ID] = @idPropiedad 
 						AND [F].[IDComprobantePago] IS NULL 
-						AND [F].[Activo] = 1;
+						AND [F].[Activo] = 1
+						ORDER BY [F].[Fecha];
 
-						IF @fechaFactura IS NOT NULL
+						IF EXISTS (SELECT 1 FROM @TMPFactura)
 							BEGIN
 								BEGIN TRANSACTION [createPago]
+									/* Create "Comprobante de Pago" */
 									INSERT INTO [dbo].[ComprobantePago] (
 										[IDMedioPago],
 										[Referencia],
@@ -86,24 +95,21 @@ BEGIN
 										@inFecha
 									);
 									
+									/* Assign the last "comprobante de pago" 
+									as pay state of "factura pendientes" */
 									UPDATE [dbo].[Factura]
 										SET [IDComprobantePago] = SCOPE_IDENTITY()
 									FROM [dbo].[Factura] AS [F]
-										INNER JOIN [dbo].[Propiedad] AS [P]
-										ON [P].[ID] = [F].[IDPropiedad]
-									WHERE [P].[ID] = @idPropiedad 
-									AND [F].[IDComprobantePago] IS NULL 
-									AND [F].[Fecha] = @fechaFactura 
-									AND [F].[Activo] = 1;
+										INNER JOIN @TMPFactura AS [TF]
+										ON [TF].[IDFacturaPendiente] = [F].[ID];
 									
 									SET @outResultCode = 5200; /* OK */
 								COMMIT TRANSACTION [createPago]
 							END;
 						ELSE
 							BEGIN
-								/* Cannot insert the new "ComprobantePago" because a
-								there is no @fechaFactura to insert use as 
-								reference for the Factura */
+								/* Cannot insert the new "ComprobantePago" because 
+								there is no "facturas pendientes" */
 								SET @outResultCode = 5405; 
 								RETURN;
 							END;
@@ -120,7 +126,8 @@ BEGIN
 		ELSE
 			BEGIN
 				/* Cannot insert the new "Comprobante de Pago" 
-				because some params are null */
+				because some params are null or the amount of
+				"facturas pendientes" is not valid */
 				SET @outResultCode = 5400; 
 				RETURN;
 			END;

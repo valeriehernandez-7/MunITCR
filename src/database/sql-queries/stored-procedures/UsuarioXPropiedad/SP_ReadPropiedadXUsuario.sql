@@ -4,7 +4,8 @@ GO
 
 /* 
 	@proc_name SP_ReadPropiedadXUsuario
-	@proc_description
+	@proc_description 
+	@proc_param inEsAsociacion 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
