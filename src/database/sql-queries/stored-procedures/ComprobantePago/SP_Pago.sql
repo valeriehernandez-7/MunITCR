@@ -4,7 +4,7 @@ GO
 
 /* 
 	@proc_name SP_Pago
-	@proc_description
+	@proc_description 
 	@proc_param inPropiedadLote 
 	@proc_param inFacturas 
 	@proc_param inReferencia 

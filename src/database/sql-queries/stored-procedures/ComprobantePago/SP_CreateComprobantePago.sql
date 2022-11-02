@@ -4,13 +4,12 @@ GO
 
 /* 
 	@proc_name SP_CreateComprobantePago
-	@proc_description
+	@proc_description 
 	@proc_param inReferencia 
 	@proc_param inMedioPago 
 	@proc_param inFecha 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
-	@author <a href="https://github.com/efmz200">Erick F. Madrigal Zavala</a>
 */
 CREATE OR ALTER PROCEDURE [SP_CreateComprobantePago]
 	@inReferencia BIGINT,

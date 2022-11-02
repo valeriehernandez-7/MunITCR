@@ -4,7 +4,7 @@ GO
 
 /* 
 	@proc_name SP_ReadEventLog
-	@proc_description
+	@proc_description 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
@@ -30,7 +30,7 @@ BEGIN
 			ON [EVT].[ID] = [EL].[IDEventType]
 			INNER JOIN [dbo].[EntityType] AS [ENT]
 			ON [ENT].[ID] = [EL].[IDEntityType]
-		ORDER BY [EL].[DateTime] DESC;
+		ORDER BY [EL].[DateTime];
 		
 		SET @outResultCode = 5200; /* OK */
 	END TRY

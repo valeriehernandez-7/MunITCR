@@ -4,7 +4,7 @@ GO
 
 /* 
 	@proc_name SP_ReadPropiedad
-	@proc_description
+	@proc_description 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */

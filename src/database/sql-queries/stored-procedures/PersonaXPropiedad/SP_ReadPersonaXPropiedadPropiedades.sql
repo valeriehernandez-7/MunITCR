@@ -3,13 +3,13 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadPropiedadPersonaIn
-	@proc_description
-	@proc_param inPersonaIdentificacion person associated with the properties
+	@proc_name SP_ReadPersonaXPropiedadPropiedades
+	@proc_description 
+	@proc_param inPersonaIdentificacion 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadPropiedadPersonaIn]
+CREATE OR ALTER PROCEDURE [SP_ReadPersonaXPropiedadPropiedades]
 	@inPersonaIdentificacion VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
@@ -24,17 +24,19 @@ BEGIN
 			[Pro].[MetrosCuadrados] AS [Territorio],
 			[Pro].[ValorFiscal] AS [ValorFiscal], 
 			[Pro].[FechaRegistro] AS [FechadeRegistro]
-		FROM [dbo].[Propiedad] AS [Pro]
+		FROM [dbo].[PersonaXPropiedad] AS [PXP]
+			INNER JOIN [dbo].[Propiedad] AS [Pro]
+			ON [Pro].[ID] = [PXP].[IDPropiedad]
 			INNER JOIN [dbo].[TipoUsoPropiedad] AS [TU]
 			ON [TU].[ID] = [Pro].[IDTipoUsoPropiedad]
 			INNER JOIN [dbo].[TipoZonaPropiedad] AS [TZ]
 			ON [TZ].[ID] = [Pro].[IDTipoZonaPropiedad]
-			INNER JOIN [dbo].[PersonaXPropiedad] AS [PXP]
-			ON [PXP].[IDPropiedad] = [Pro].[ID]
 			INNER JOIN [dbo].[Persona] AS [Per]
 			ON [Per].[ID] = [PXP].[IDPersona]
-		WHERE [Pro].[Activo] = 1 AND [Per].[Activo] = 1
-		AND [Per].[ValorDocIdentidad] = @inPersonaIdentificacion
+		WHERE [Per].[ValorDocIdentidad] = @inPersonaIdentificacion
+		AND [PXP].[Activo] = 1
+		AND [Per].[Activo] = 1
+		AND [Pro].[Activo] = 1
 		ORDER BY [Pro].[Lote];
 		SET @outResultCode = 5200; /* OK */
 	END TRY

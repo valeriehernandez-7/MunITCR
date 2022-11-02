@@ -4,7 +4,7 @@ GO
 
 /* 
 	@proc_name SP_UpdatePersona
-	@proc_description
+	@proc_description 
 	@proc_param inOldIdentificacion person's current ID
 	@proc_param inNombre person's new name
 	@proc_param inTipoIdentificacion person's new ID Type

@@ -4,7 +4,7 @@ GO
 
 /* 
 	@proc_name SP_CreateMovimientoConsumoAguaMedidorIn
-	@proc_description
+	@proc_description 
 	@proc_param inPropiedadMedidor 
 	@proc_param inTipo 
 	@proc_param inMonto 

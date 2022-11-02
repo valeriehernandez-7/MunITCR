@@ -3,21 +3,21 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadTipoDocIdentidad
+	@proc_name SP_ReadEntityType
 	@proc_description 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadTipoDocIdentidad]
+CREATE OR ALTER PROCEDURE [SP_ReadEntityType]
 	@outResultCode INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
-		SELECT [TDI].[Nombre]
-		FROM [dbo].[TipoDocIdentidad] AS [TDI]
-		ORDER BY [TDI].[Nombre];
+		SELECT [ENT].[Name]
+		FROM [dbo].[EntityType] AS [ENT]
+		ORDER BY [ENT].[Name];
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH
