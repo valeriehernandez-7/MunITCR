@@ -2,7 +2,9 @@ USE [MunITCR]
 GO
 
 /* SHOW ALL DB TABLES NAME */
-SELECT * FROM information_schema.tables ORDER BY table_name;
+SELECT * FROM information_schema.tables 
+WHERE table_name <> 'sysdiagrams'
+ORDER BY table_name;
 GO
 
 -- *************************************************************
@@ -43,10 +45,7 @@ EXEC(@sqlText);
  SELECT * FROM [OrdenCorte]  
  SELECT * FROM [OrdenReconexion]  
  SELECT * FROM [Parametro]  
- SELECT * FROM [ParametroInteger]  
- SELECT * FROM [ParametroMoney]  
- SELECT * FROM [ParametroPorcentaje]  
- SELECT * FROM [ParametroTexto]  
+ SELECT * FROM [ParametroInteger]    
  SELECT * FROM [PeriodoMontoCC]  
  SELECT * FROM [Persona]  
  SELECT * FROM [PersonaXPropiedad]  
@@ -161,15 +160,6 @@ GO
 DELETE FROM [dbo].[ParametroInteger];
 GO
 
-DELETE FROM [dbo].[ParametroMoney];
-GO
-
-DELETE FROM [dbo].[ParametroPorcentaje];
-GO
-
-DELETE FROM [dbo].[ParametroTexto];
-GO
-
 DELETE FROM [dbo].[Parametro];
 DBCC CHECKIDENT ('[dbo].[Parametro]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -243,3 +233,10 @@ SELECT @sql += N'DROP PROCEDURE dbo.'+ QUOTENAME(name) + ';' FROM sys.procedures
 WHERE name LIKE N'sp[_]%'
 AND SCHEMA_NAME(schema_id) = N'dbo';
 EXEC sp_executesql @sql;
+
+/* SHOW ALL DB STORED PROCEDURES */
+SELECT * FROM sys.procedures 
+WHERE name LIKE N'SP[_]%'
+AND SCHEMA_NAME(schema_id) = N'dbo'
+ORDER BY name;
+GO
