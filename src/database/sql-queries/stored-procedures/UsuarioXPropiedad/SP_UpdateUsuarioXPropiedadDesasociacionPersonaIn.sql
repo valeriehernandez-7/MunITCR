@@ -3,20 +3,20 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_CreateUsuarioXPropiedadPersonaIn
+	@proc_name SP_UpdateUsuarioXPropiedadDesasociacionPersonaIn
 	@proc_description
 	@proc_param inPersonaIdentificacion person's doc ID
 	@proc_param inPropiedadLote property identifier
-	@proc_param inFechaAsociacionUxP association date
+	@proc_param inFechaDesasociacionUXP desassociation date
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_CreateUsuarioXPropiedadPersonaIn]
+CREATE OR ALTER PROCEDURE [SP_UpdateUsuarioXPropiedadDesasociacionPersonaIn]
 	@inPersonaIdentificacion VARCHAR(64),
 	@inPropiedadLote VARCHAR(32),
-	@inFechaAsociacionUxP DATE,
+	@inFechaDesasociacionUXP DATE,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
@@ -42,23 +42,31 @@ BEGIN
 				FROM [dbo].[Propiedad] AS [P]
 				WHERE [P].[Lote] = @inPropiedadLote;
 
-				IF @inFechaAsociacionUxP IS NULL
+				/* Gets the PK of "UsuarioXPropiedad" using @idUsuario and @idPropiedad */
+				DECLARE @idUsuarioXPropiedad INT;
+				SELECT @idUsuarioXPropiedad = [UXP].[ID]
+				FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+				WHERE [IDUsuario] = @idUsuario 
+				AND [IDPropiedad] = @idPropiedad
+				AND [UXP].[FechaFin] IS NULL
+				AND [UXP].[Activo] = 1;
+
+				IF @inFechaDesasociacionUXP IS NULL
 					BEGIN
-						SET @inFechaAsociacionUxP = GETDATE();
+						SET @inFechaDesasociacionUXP = GETDATE();
 					END;
 
 				/* Get the event params to create a new register at dbo.EventLog */
-				
+		
 				DECLARE 
 					@idEventType INT,
 					@idEntityType INT,
-					@lastEntityID INT,
 					@actualData NVARCHAR(MAX), 
 					@newData NVARCHAR(MAX);
 
 				SELECT @idEventType = [EVT].[ID] -- event data
 				FROM [dbo].[EventType] AS [EVT]
-				WHERE [EVT].[Name] = 'Create';
+				WHERE [EVT].[Name] = 'Update';
 
 				SELECT @idEntityType = [ENT].[ID] -- event data
 				FROM [dbo].[EntityType] AS [ENT]
@@ -73,29 +81,37 @@ BEGIN
 					BEGIN
 						SET @inEventIP = '0.0.0.0';
 					END;
-		
-				IF (@idUsuario IS NOT NULL) AND (@idPropiedad IS NOT NULL) AND (@inFechaAsociacionUxP IS NOT NULL)
+
+				IF (@idUsuarioXPropiedad IS NOT NULL)
 					BEGIN
-						IF NOT EXISTS (SELECT 1 FROM [dbo].[UsuarioXPropiedad] AS [UXP] 
-						WHERE [UXP].[IDUsuario] = @idUsuario 
-						AND [UXP].[IDPropiedad] = @idPropiedad
-						AND [UXP].[Activo] = 1)
+						IF (@idUsuario IS NOT NULL) AND (@idPropiedad IS NOT NULL) 
+						AND (@inFechaDesasociacionUXP IS NOT NULL)
 							BEGIN
-								BEGIN TRANSACTION [insertUsuarioXPropiedad]
-									/* Insert new "UsuarioXPropiedad" as "Usuario" + "Propiedad" association */
-									INSERT INTO [dbo].[UsuarioXPropiedad] (
-										[IDUsuario],
-										[IDPropiedad],
-										[FechaInicio]
-									) VALUES (
-										@idUsuario,
-										@idPropiedad,
-										@inFechaAsociacionUxP
+								BEGIN TRANSACTION [disassociateUsuarioXPropiedad]
+
+									/* Get "UsuarioXPropiedad" data before update */
+									SET @actualData = ( -- event data
+										SELECT 
+											[UXP].[IDUsuario] AS [IDUsuario],
+											[UXP].[IDPropiedad] AS [IDPropiedad],
+											[UXP].[FechaInicio] AS [FechaInicio],
+											[UXP].[FechaFin] AS [FechaFin],
+											[UXP].[Activo] AS [Activo]
+										FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+										WHERE [UXP].[ID] = @idUsuarioXPropiedad 
+										FOR JSON AUTO
 									);
 
-									/* GET new "UsuarioXPropiedad" PK */
-									SET @lastEntityID = SCOPE_IDENTITY(); -- event data
+									/* Update "UsuarioXPropiedad" using  @idUsuarioXPropiedad 
+									as "Usuario de propiedad" disassociation */
+									UPDATE [dbo].[UsuarioXPropiedad]
+										SET 
+											[IDUsuario] = @idUsuario,
+											[IDPropiedad] = @idPropiedad,
+											[FechaFin] = @inFechaDesasociacionUXP
+									WHERE [UsuarioXPropiedad].[ID] = @idUsuarioXPropiedad;
 
+									/* Get "UsuarioXPropiedad" data after update */
 									SET @newData = ( -- event data
 										SELECT 
 											[UXP].[IDUsuario] AS [IDUsuario],
@@ -104,11 +120,11 @@ BEGIN
 											[UXP].[FechaFin] AS [FechaFin],
 											[UXP].[Activo] AS [Activo]
 										FROM [dbo].[UsuarioXPropiedad] AS [UXP]
-										WHERE [UXP].[ID] = @lastEntityID
+										WHERE [UXP].[ID] = @idUsuarioXPropiedad 
 										FOR JSON AUTO
 									);
 
-									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL) AND (@lastEntityID IS NOT NULL)
+									IF (@idEventType IS NOT NULL) AND (@idEntityType IS NOT NULL)
 									AND (@inEventUser IS NOT NULL) AND (@inEventIP IS NOT NULL)
 										BEGIN
 											INSERT INTO [dbo].[EventLog] (
@@ -122,7 +138,7 @@ BEGIN
 											) VALUES (
 												@idEventType,
 												@idEntityType,
-												@lastEntityID,
+												@idUsuarioXPropiedad,
 												@actualData,
 												@newData,
 												@inEventUser,
@@ -137,28 +153,28 @@ BEGIN
 											SET @outResultCode = 5407;
 											RETURN;
 										END;
-								COMMIT TRANSACTION [insertUsuarioXPropiedad]
+								COMMIT TRANSACTION [disassociateUsuarioXPropiedad]
 							END;
 						ELSE
 							BEGIN
-								/* Cannot associate "Usuario" with "Propiedad" because the "Usuario" is already 
-								associate the "Propiedad" based on the @idUsuario and @idPropiedad */
-								SET @outResultCode = 5406;
+								/* Cannot update association "Usuario" with "Propiedad" because the "Usuario" with 
+								@idUsuario did not exist or "Propiedad" with @idPropiedad 
+								did not exist or @inFechaAsociacionUXP did not exist*/
+								SET @outResultCode = 5404; 
 								RETURN;
 							END;
 					END;
 				ELSE
 					BEGIN
-						/* Cannot associate "Usuario" with "Propiedad" because the "Usuario" with 
-						@idUsuario did not exist or "Propiedad" with @idPropiedad did not exist 
-						or @inFechaAsociacionPxP did not exist*/
-						SET @outResultCode = 5404; 
+						/* Cannot make the disassociation "Usuario" 
+						with "Propiedad" because is already disassociated */
+						SET @outResultCode = 5406; 
 						RETURN;
 					END;
 			END;
 		ELSE
 			BEGIN
-				/* Cannot associate "Usuario" with "Propiedad" because some params are null */
+				/* Cannot update association "Usuario" with "Propiedad" because some params are null */
 				SET @outResultCode = 5400; 
 				RETURN;
 			END;
@@ -166,7 +182,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [insertUsuarioXPropiedad]
+				ROLLBACK TRANSACTION [disassociateUsuarioXPropiedad]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN

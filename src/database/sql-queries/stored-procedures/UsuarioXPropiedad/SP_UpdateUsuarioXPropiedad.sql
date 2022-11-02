@@ -3,25 +3,25 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_UpdatePersonaXPropiedad
+	@proc_name SP_UpdateUsuarioXPropiedad
 	@proc_description
-	@proc_param inOldPersonaIdentificacion old person's doc ID
+	@@proc_param inOldUsuarioUsername old user's username
 	@proc_param inOldPropiedadLote old property identifier
-	@proc_param inPersonaIdentificacion new person's doc ID
+	@proc_param inUsuarioUsername new user's username
 	@proc_param inPropiedadLote new property identifier
-	@proc_param inFechaRelacionPXP association/disassociation date
+	@proc_param inFechaRelacionUXP association/disassociation date
 	@proc_param inEsAsociacion 
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_UpdatePersonaXPropiedad]
-	@inOldPersonaIdentificacion VARCHAR(64),
+CREATE OR ALTER PROCEDURE [SP_UpdateUsuarioXPropiedad]
+	@inOldUsuarioUsername VARCHAR(16),
 	@inOldPropiedadLote VARCHAR(32),
-	@inPersonaIdentificacion VARCHAR(64),
+	@inUsuarioUsername VARCHAR(16),
 	@inPropiedadLote VARCHAR(32),
-	@inFechaRelacionPXP DATE,
+	@inFechaRelacionUXP DATE,
 	@inEsAsociacion BIT,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
@@ -32,41 +32,41 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 
-		IF (@inOldPersonaIdentificacion IS NOT NULL) AND (@inOldPropiedadLote IS NOT NULL)
-		AND (@inPersonaIdentificacion IS NOT NULL) AND (@inPropiedadLote IS NOT NULL)
-		AND (@inFechaRelacionPXP IS NOT NULL) AND (@inEsAsociacion IS NOT NULL)
+		IF (@inOldUsuarioUsername IS NOT NULL) AND (@inOldPropiedadLote IS NOT NULL)
+		AND (@inUsuarioUsername IS NOT NULL) AND (@inPropiedadLote IS NOT NULL)
+		AND (@inFechaRelacionUXP IS NOT NULL) AND (@inEsAsociacion IS NOT NULL)
 			BEGIN
-				/* Gets the PK of old "Persona" using @inPersonaIdentificacion */
-				DECLARE @idOldPersona INT;
-				SELECT @idOldPersona = [Per].[ID]
-				FROM [dbo].[Persona] AS [Per]
-				WHERE [Per].[ValorDocIdentidad] = @inOldPersonaIdentificacion;
+				/* Gets the PK of old "Usuario" using @inOldUsuarioUsername */
+				DECLARE @idOldUsuario INT;
+				SELECT @idOldUsuario = [U].[ID]
+				FROM [dbo].[Usuario] AS [U]
+				WHERE [U].[Username] = @inOldUsuarioUsername;
 
-				/* Gets the PK of new "Persona" using @inPersonaIdentificacion */
-				DECLARE @idPersona INT;
-				SELECT @idPersona = [Per].[ID]
-				FROM [dbo].[Persona] AS [Per]
-				WHERE [Per].[ValorDocIdentidad] = @inPersonaIdentificacion;
+				/* Gets the PK of new "Usuario" using @inUsuarioIdentificacion */
+				DECLARE @idUsuario INT;
+				SELECT @idUsuario = [U].[ID]
+				FROM [dbo].[Usuario] AS [U]
+				WHERE [U].[Username] = @inUsuarioUsername;
 
 				/* Gets the PK of old "Propiedad" using @inPropiedadLote */
 				DECLARE @idOldPropiedad INT;
-				SELECT @idOldPropiedad = [Pro].[ID]
-				FROM [dbo].[Propiedad] AS [Pro]
-				WHERE [Pro].[Lote] = @inOldPropiedadLote;
+				SELECT @idOldPropiedad = [P].[ID]
+				FROM [dbo].[Propiedad] AS [P]
+				WHERE [P].[Lote] = @inOldPropiedadLote;
 
 				/* Gets the PK of new "Propiedad" using @inPropiedadLote */
 				DECLARE @idPropiedad INT;
-				SELECT @idPropiedad = [Pro].[ID]
-				FROM [dbo].[Propiedad] AS [Pro]
-				WHERE [Pro].[Lote] = @inPropiedadLote;
+				SELECT @idPropiedad = [P].[ID]
+				FROM [dbo].[Propiedad] AS [P]
+				WHERE [P].[Lote] = @inPropiedadLote;
 
-				/* Gets the PK of "PersonaXPropiedad" using @idOldPersona and @idOldPropiedad */
-				DECLARE @idPersonaXPropiedad INT;
-				SELECT @idPersonaXPropiedad = [PXP].[ID]
-				FROM [dbo].[PersonaXPropiedad] AS [PXP]
-				WHERE [IDPersona] = @idOldPersona 
+				/* Gets the PK of "UsuarioXPropiedad" using @idOldUsuario and @idOldPropiedad */
+				DECLARE @idUsuarioXPropiedad INT;
+				SELECT @idUsuarioXPropiedad = [UXP].[ID]
+				FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+				WHERE [IDUsuario] = @idOldUsuario 
 				AND [IDPropiedad] = @idOldPropiedad
-				AND [PXP].[Activo] = 1;
+				AND [UXP].[Activo] = 1;
 
 				/* Get the event params to create a new register at dbo.EventLog */
 		
@@ -82,7 +82,7 @@ BEGIN
 
 				SELECT @idEntityType = [ENT].[ID] -- event data
 				FROM [dbo].[EntityType] AS [ENT]
-				WHERE [ENT].[Name] = 'Propietario de Propiedad';
+				WHERE [ENT].[Name] = 'Usuario de Propiedad';
 
 				IF @inEventUser IS NULL -- event data
 					BEGIN
@@ -94,54 +94,54 @@ BEGIN
 						SET @inEventIP = '0.0.0.0';
 					END;
 
-				IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL)
-				AND (@idPersonaXPropiedad IS NOT NULL)
+				IF (@idUsuario IS NOT NULL) AND (@idPropiedad IS NOT NULL)
+				AND (@idUsuarioXPropiedad IS NOT NULL)
 					BEGIN
-						BEGIN TRANSACTION [updatePersonaXPropiedad]
+						BEGIN TRANSACTION [updateUsuarioXPropiedad]
 
-							/* Get "PersonaXPropiedad" data before update */
+							/* Get "UsuarioXPropiedad" data before update */
 							SET @actualData = ( -- event data
 								SELECT 
-									[PXP].[IDPersona] AS [IDPersona],
-									[PXP].[IDPropiedad] AS [IDPropiedad],
-									[PXP].[FechaInicio] AS [FechaInicio],
-									[PXP].[FechaFin] AS [FechaFin],
-									[PXP].[Activo] AS [Activo]
-								FROM [dbo].[PersonaXPropiedad] AS [PXP]
-								WHERE [PXP].[ID] = @idPersonaXPropiedad 
+									[UXP].[IDUsuario] AS [IDUsuario],
+									[UXP].[IDPropiedad] AS [IDPropiedad],
+									[UXP].[FechaInicio] AS [FechaInicio],
+									[UXP].[FechaFin] AS [FechaFin],
+									[UXP].[Activo] AS [Activo]
+								FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+								WHERE [UXP].[ID] = @idUsuarioXPropiedad 
 								FOR JSON AUTO
 							);
 
-							/* Update "PersonaXPropiedad" using  @idPersonaXPropiedad */
+							/* Update "UsuarioXPropiedad" using  @idUsuarioXPropiedad */
 							IF (@inEsAsociacion = 1)
 								BEGIN
-									UPDATE [dbo].[PersonaXPropiedad]
+									UPDATE [dbo].[UsuarioXPropiedad]
 									SET 
-										[IDPersona] = @idPersona,
+										[IDUsuario] = @idUsuario,
 										[IDPropiedad] = @idPropiedad,
-										[FechaInicio] = @inFechaRelacionPXP
-									WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
+										[FechaInicio] = @inFechaRelacionUXP
+									WHERE [UsuarioXPropiedad].[ID] = @idUsuarioXPropiedad;
 								END;
 							ELSE
 								BEGIN
-									UPDATE [dbo].[PersonaXPropiedad]
+									UPDATE [dbo].[UsuarioXPropiedad]
 									SET 
-										[IDPersona] = @idPersona,
+										[IDUsuario] = @idUsuario,
 										[IDPropiedad] = @idPropiedad,
-										[FechaFin] = @inFechaRelacionPXP
-									WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
+										[FechaFin] = @inFechaRelacionUXP
+									WHERE [UsuarioXPropiedad].[ID] = @idUsuarioXPropiedad;
 								END;
 
-							/* Get "PersonaXPropiedad" data after update */
+							/* Get "UsuarioXPropiedad" data after update */
 							SET @newData = ( -- event data
 								SELECT 
-									[PXP].[IDPersona] AS [IDPersona],
-									[PXP].[IDPropiedad] AS [IDPropiedad],
-									[PXP].[FechaInicio] AS [FechaInicio],
-									[PXP].[FechaFin] AS [FechaFin],
-									[PXP].[Activo] AS [Activo]
-								FROM [dbo].[PersonaXPropiedad] AS [PXP]
-								WHERE [PXP].[ID] = @idPersonaXPropiedad 
+									[UXP].[IDUsuario] AS [IDUsuario],
+									[UXP].[IDPropiedad] AS [IDPropiedad],
+									[UXP].[FechaInicio] AS [FechaInicio],
+									[UXP].[FechaFin] AS [FechaFin],
+									[UXP].[Activo] AS [Activo]
+								FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+								WHERE [UXP].[ID] = @idUsuarioXPropiedad 
 								FOR JSON AUTO
 							);
 
@@ -159,7 +159,7 @@ BEGIN
 									) VALUES (
 										@idEventType,
 										@idEntityType,
-										@idPersonaXPropiedad,
+										@idUsuarioXPropiedad,
 										@actualData,
 										@newData,
 										@inEventUser,
@@ -174,20 +174,20 @@ BEGIN
 									SET @outResultCode = 5407;
 									RETURN;
 								END;
-						COMMIT TRANSACTION [updatePersonaXPropiedad]
+						COMMIT TRANSACTION [updateUsuarioXPropiedad]
 					END;
 				ELSE
 					BEGIN
-						/* Cannot update association "Persona" with "Propiedad" because the "Persona" with 
-						@idPersona/@idOldPersona did not exist or "Propiedad" with @idPropiedad/@idOldPropiedad 
-						did not exist or @inFechaAsociacionPXP did not exist*/
+						/* Cannot update association "Usuario" with "Propiedad" because the "Usuario" with 
+						@idUsuario/@idOldUsuario did not exist or "Propiedad" with @idPropiedad/@idOldPropiedad 
+						did not exist or @inFechaAsociacionUXP did not exist*/
 						SET @outResultCode = 5404; 
 						RETURN;
 					END;
 			END;
 		ELSE
 			BEGIN
-				/* Cannot update association "Persona" with "Propiedad" because some params are null */
+				/* Cannot update association "Usuario" with "Propiedad" because some params are null */
 				SET @outResultCode = 5400; 
 				RETURN;
 			END;
@@ -195,7 +195,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [updatePersonaXPropiedad]
+				ROLLBACK TRANSACTION [updateUsuarioXPropiedad]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN

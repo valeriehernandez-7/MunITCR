@@ -3,13 +3,13 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadPersonaXPropiedadAsocDesasoc
+	@proc_name SP_ReadUsuarioXPropiedadAsocDesasoc
 	@proc_description 
 	@proc_param inEsAsociacion 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadPersonaXPropiedadAsocDesasoc]
+CREATE OR ALTER PROCEDURE [SP_ReadUsuarioXPropiedadAsocDesasoc]
 	@inEsAsociacion BIT,
 	@outResultCode INT OUTPUT
 AS
@@ -22,37 +22,37 @@ BEGIN
 			BEGIN
 				IF (@inEsAsociacion = 1)
 					BEGIN
-					/* Show active associations on dbo.PersonaXPropiedad */
+					/* Show active associations on dbo.UsuarioXPropiedad */
 						SELECT  
-							[Per].[ValorDocIdentidad] AS [Propietario],
-							[Pro].[Lote] AS [Propiedad],
-							[PXP].[FechaInicio] AS [FechadeRegistro]
-						FROM [dbo].[PersonaXPropiedad] AS [PXP]
-							LEFT JOIN [dbo].[Persona] AS [Per]
-							ON [PXP].[IDPersona] = [Per].[ID]
-							LEFT JOIN [dbo].[Propiedad] AS [Pro]
-							ON [PXP].[IDPropiedad] =  [Pro].[ID]
-						WHERE [PXP].[FechaFin] IS NULL
-						AND [PXP].[Activo] = 1
-						AND [Per].[Activo] = 1 
-						AND [Pro].[Activo] = 1;
+							[U].[Username] AS [Usuario],
+							[P].[Lote] AS [Propiedad],
+							[UXP].[FechaInicio] AS [FechadeRegistro]
+						FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+							LEFT JOIN [dbo].[Usuario] AS [U]
+							ON [UXP].[IDUsuario] = [U].[ID]
+							LEFT JOIN [dbo].[Propiedad] AS [P]
+							ON [UXP].[IDPropiedad] =  [P].[ID]
+						WHERE [UXP].[FechaFin] IS NULL
+						AND [UXP].[Activo] = 1
+						AND [U].[Activo] = 1 
+						AND [P].[Activo] = 1;
 					END;
 				ELSE
 					BEGIN
-						/* Show active dissociations on dbo.PersonaXPropiedad */
+						/* Show active dissociations on dbo.UsuarioXPropiedad */
 						SELECT  
-							[Per].[ValorDocIdentidad] AS [Propietario],
-							[Pro].[Lote] AS [Propiedad],
-							[PXP].[FechaFin] AS [FechadeRegistro]
-						FROM [dbo].[PersonaXPropiedad] AS [PXP]
-							LEFT JOIN [dbo].[Persona] AS [Per]
-							ON [PXP].[IDPersona] = [Per].[ID]
-							LEFT JOIN [dbo].[Propiedad] AS [Pro]
-							ON [PXP].[IDPropiedad] =  [Pro].[ID]
-						WHERE [PXP].[FechaFin] IS NOT NULL
-						AND [PXP].[Activo] = 1
-						AND [Per].[Activo] = 1 
-						AND [Pro].[Activo] = 1;
+							[U].[Username] AS [Usuario],
+							[P].[Lote] AS [Propiedad],
+							[UXP].[FechaFin] AS [FechadeRegistro]
+						FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+							LEFT JOIN [dbo].[Usuario] AS [U]
+							ON [UXP].[IDUsuario] = [U].[ID]
+							LEFT JOIN [dbo].[Propiedad] AS [P]
+							ON [UXP].[IDPropiedad] =  [P].[ID]
+						WHERE [UXP].[FechaFin] IS NOT NULL
+						AND [UXP].[Activo] = 1
+						AND [U].[Activo] = 1 
+						AND [P].[Activo] = 1;
 					END;
 
 				SET @outResultCode = 5200; /* OK */

@@ -7,8 +7,7 @@ GO
 	@proc_description
 	@proc_param inPersonaIdentificacion person's doc ID
 	@proc_param inPropiedadLote property identifier
-	@proc_param inFechaAsociacionPxP association date
-	@proc_param inFechaDesasociacionPxP desassociation date
+	@proc_param inFechaDesasociacionPXP desassociation date
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
@@ -17,7 +16,7 @@ GO
 CREATE OR ALTER PROCEDURE [SP_UpdatePersonaXPropiedadDesasociacion]
 	@inPersonaIdentificacion VARCHAR(64),
 	@inPropiedadLote VARCHAR(32),
-	@inFechaDesasociacionPxP DATE,
+	@inFechaDesasociacionPXP DATE,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
@@ -50,9 +49,9 @@ BEGIN
 				AND [PXP].[FechaFin] IS NULL
 				AND [PXP].[Activo] = 1;
 
-				IF @inFechaDesasociacionPxP IS NULL
+				IF @inFechaDesasociacionPXP IS NULL
 					BEGIN
-						SET @inFechaDesasociacionPxP = GETDATE();
+						SET @inFechaDesasociacionPXP = GETDATE();
 					END;
 
 				/* Get the event params to create a new register at dbo.EventLog */
@@ -84,7 +83,7 @@ BEGIN
 				IF (@idPersonaXPropiedad IS NOT NULL)
 					BEGIN
 						IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL) 
-						AND (@inFechaDesasociacionPxP IS NOT NULL)
+						AND (@inFechaDesasociacionPXP IS NOT NULL)
 							BEGIN
 								BEGIN TRANSACTION [disassociatePersonaXPropiedad]
 
@@ -107,7 +106,7 @@ BEGIN
 										SET 
 											[IDPersona] = @idPersona,
 											[IDPropiedad] = @idPropiedad,
-											[FechaFin] = @inFechaDesasociacionPxP
+											[FechaFin] = @inFechaDesasociacionPXP
 									WHERE [PersonaXPropiedad].[ID] = @idPersonaXPropiedad;
 
 									/* Get "PersonaXPropiedad" data after update */
@@ -157,8 +156,8 @@ BEGIN
 						ELSE
 							BEGIN
 								/* Cannot update association "Persona" with "Propiedad" because the "Persona" with 
-								@idPersona/@idOldPersona did not exist or "Propiedad" with @idPropiedad/@idOldPropiedad 
-								did not exist or @inFechaAsociacionPxP did not exist*/
+								@idPersona did not exist or "Propiedad" with @idPropiedad
+								did not exist or @inFechaAsociacionPXP did not exist*/
 								SET @outResultCode = 5404; 
 								RETURN;
 							END;

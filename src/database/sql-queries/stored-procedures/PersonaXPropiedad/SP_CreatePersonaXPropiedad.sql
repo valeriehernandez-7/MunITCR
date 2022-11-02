@@ -7,7 +7,7 @@ GO
 	@proc_description
 	@proc_param inPersonaIdentificacion person's doc ID
 	@proc_param inPropiedadLote property identifier
-	@proc_param inFechaAsociacionPxP association date
+	@proc_param inFechaAsociacionPXP association date
 	@proc_param inEventUser 
 	@proc_param inEventIP 
 	@proc_param outResultCode Procedure return value
@@ -16,7 +16,7 @@ GO
 CREATE OR ALTER PROCEDURE [SP_CreatePersonaXPropiedad]
 	@inPersonaIdentificacion VARCHAR(64),
 	@inPropiedadLote VARCHAR(32),
-	@inFechaAsociacionPxP DATE,
+	@inFechaAsociacionPXP DATE,
 	@inEventUser VARCHAR(16),
 	@inEventIP VARCHAR(64),
 	@outResultCode INT OUTPUT
@@ -40,9 +40,9 @@ BEGIN
 				FROM [dbo].[Propiedad] AS [Pro]
 				WHERE [Pro].[Lote] = @inPropiedadLote;
 
-				IF @inFechaAsociacionPxP IS NULL
+				IF @inFechaAsociacionPXP IS NULL
 					BEGIN
-						SET @inFechaAsociacionPxP = GETDATE();
+						SET @inFechaAsociacionPXP = GETDATE();
 					END;
 
 				/* Get the event params to create a new register at dbo.EventLog */
@@ -72,7 +72,7 @@ BEGIN
 						SET @inEventIP = '0.0.0.0';
 					END;
 		
-				IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL) AND (@inFechaAsociacionPxP IS NOT NULL)
+				IF (@idPersona IS NOT NULL) AND (@idPropiedad IS NOT NULL) AND (@inFechaAsociacionPXP IS NOT NULL)
 					BEGIN
 						IF NOT EXISTS (SELECT 1 FROM [dbo].[PersonaXPropiedad] AS [PXP] 
 						WHERE [PXP].[IDPersona] = @idPersona 
@@ -88,7 +88,7 @@ BEGIN
 									) VALUES (
 										@idPersona,
 										@idPropiedad,
-										@inFechaAsociacionPxP
+										@inFechaAsociacionPXP
 									);
 
 									/* GET new "PersonaXPropiedad" PK */
@@ -149,7 +149,7 @@ BEGIN
 					BEGIN
 						/* Cannot associate "Persona" with "Propiedad" because the "Persona" with 
 						@idPersona did not exist or "Propiedad" with @idPropiedad did not exist 
-						or @inFechaAsociacionPxP did not exist*/
+						or @inFechaAsociacionPXP did not exist*/
 						SET @outResultCode = 5404; 
 						RETURN;
 					END;

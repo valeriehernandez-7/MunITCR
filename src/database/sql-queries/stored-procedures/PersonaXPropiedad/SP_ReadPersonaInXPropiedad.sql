@@ -5,12 +5,12 @@ GO
 /* 
 	@proc_name SP_ReadPersonaInXPropiedad
 	@proc_description
-	@proc_param inPersona 
+	@proc_param inPersonaIdentificacion 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
 CREATE OR ALTER PROCEDURE [SP_ReadPersonaInXPropiedad]
-	@inPersona VARCHAR(64),
+	@inPersonaIdentificacion VARCHAR(64),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -19,15 +19,15 @@ BEGIN
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT 
 			[Pro].[Lote] AS [Propiedad],
-			[PxP].[FechaInicio] AS [FechadeAsociación],
-			[PxP].[FechaFin] AS [FechadeDesasociación]
-		FROM [dbo].[PersonaXPropiedad] AS [PxP]
+			[PXP].[FechaInicio] AS [FechadeAsociación],
+			[PXP].[FechaFin] AS [FechadeDesasociación]
+		FROM [dbo].[PersonaXPropiedad] AS [PXP]
 			LEFT JOIN [dbo].[Persona] AS [Per]
-			ON [PxP].[IDPropiedad] = [Per].[ID]
+			ON [PXP].[IDPropiedad] = [Per].[ID]
 			LEFT JOIN [dbo].[Propiedad] AS [Pro]
-			ON [PxP].[IDPropiedad] =  [Pro].[ID]
-		WHERE [Per].[ValorDocIdentidad] = @inPersona
-		AND [PxP].[Activo] = 1
+			ON [PXP].[IDPropiedad] =  [Pro].[ID]
+		WHERE [Per].[ValorDocIdentidad] = @inPersonaIdentificacion
+		AND [PXP].[Activo] = 1
 		AND [Per].[Activo] = 1
 		AND [Pro].[Activo] = 1;
 		SET @outResultCode = 5200; /* OK */

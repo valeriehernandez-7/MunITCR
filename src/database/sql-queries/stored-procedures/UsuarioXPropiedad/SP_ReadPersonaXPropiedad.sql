@@ -3,31 +3,31 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadPersonaXPropiedad
+	@proc_name SP_ReadUsuarioXPropiedad
 	@proc_description 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadPersonaXPropiedad]
+CREATE OR ALTER PROCEDURE [SP_ReadUsuarioXPropiedad]
 	@outResultCode INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
-	BEGIN TRY
+	BEGIN TRY 
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT  
-			[Per].[ValorDocIdentidad] AS [Propietario],
-			[Pro].[Lote] AS [Propiedad],
-			[PXP].[FechaInicio] AS [FechadeAsociación],
-			[PXP].[FechaFin] AS [FechadeDesasociación]
-		FROM [dbo].[PersonaXPropiedad] AS [PXP]
-			LEFT JOIN [dbo].[Persona] AS [Per]
-			ON [PXP].[IDPersona] = [Per].[ID]
-			LEFT JOIN [dbo].[Propiedad] AS [Pro]
-			ON [PXP].[IDPropiedad] =  [Pro].[ID]
-		WHERE [PXP].[Activo] = 1
-		AND [Per].[Activo] = 1 
-		AND [Pro].[Activo] = 1;
+			[U].[Username] AS [Usuario],
+			[P].[Lote] AS [Propiedad],
+			[UXP].[FechaInicio] AS [FechadeAsociación],
+			[UXP].[FechaFin] AS [FechadeDesasociación]
+		FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+			LEFT JOIN [dbo].[Usuario] AS [U]
+			ON [UXP].[IDUsuario] = [U].[ID]
+			LEFT JOIN [dbo].[Propiedad] AS [P]
+			ON [UXP].[IDPropiedad] =  [P].[ID]
+		WHERE [UXP].[Activo] = 1
+		AND [U].[Activo] = 1 
+		AND [P].[Activo] = 1;
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH

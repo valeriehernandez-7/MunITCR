@@ -98,8 +98,8 @@ BEGIN
 										SELECT 
 											[UXP].[IDUsuario] AS [IDUsuario],
 											[UXP].[IDPropiedad] AS [IDPropiedad],
-											[UXP].[FechaInicio] AS [FechadeAsociacion],
-											[UXP].[FechaFin] AS [FechadeDesasociacion],
+											[UXP].[FechaInicio] AS [FechaInicio],
+											[UXP].[FechaFin] AS [FechaFin],
 											[UXP].[Activo] AS [Activo]
 										FROM [dbo].[UsuarioXPropiedad] AS [UXP]
 										WHERE [UXP].[ID] = @lastEntityID
