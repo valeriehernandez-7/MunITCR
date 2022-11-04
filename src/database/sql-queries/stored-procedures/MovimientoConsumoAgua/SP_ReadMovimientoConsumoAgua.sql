@@ -38,7 +38,7 @@ BEGIN
 					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 					ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
 				WHERE [PXCC].[IDPropiedad] = @idPropiedad
-				ORDER BY [MCCA].[Fecha];
+				ORDER BY [MCCA].[Fecha] DESC;
 				SET @outResultCode = 5200; /* OK */
 			END;
 	END TRY

@@ -32,10 +32,11 @@ BEGIN
 			INNER JOIN [dbo].[Propiedad] AS [Pro]
 			ON [Pro].[ID] = [PXP].[IDPropiedad]
 		WHERE [Pro].[Lote] = @inPropiedadLote
+		AND [PXP].[FechaFin] IS NULL
 		AND [PXP].[Activo] = 1
 		AND [Per].[Activo] = 1
 		AND [Pro].[Activo] = 1
-		ORDER BY [Per].[ValorDocIdentidad];
+		ORDER BY [PXP].[FechaInicio] , [Per].[ValorDocIdentidad];
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH

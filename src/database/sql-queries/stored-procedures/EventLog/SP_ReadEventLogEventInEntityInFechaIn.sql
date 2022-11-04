@@ -57,6 +57,46 @@ BEGIN
 						WHERE [EL].[DateTime] BETWEEN @inFechaInicial AND @inFechaFinal 
 						ORDER BY [EL].[DateTime];
 					END;
+				ELSE IF (@idEventType IS NOT NULL) AND (@idEntityType IS NULL)
+					BEGIN
+						SELECT 
+							[EVT].[Name] AS [TipodeEvento],
+							[ENT].[Name] AS [Entidad],
+							[EL].[EntityID] AS [IDEntidad],
+							[EL].[BeforeUpdate] AS [Historial],
+							[EL].[AfterUpdate] AS [Actualizacion],
+							[EL].[Username] AS [Autor],
+							[EL].[UserIP] AS [IP],
+							[EL].[DateTime] AS [Fecha]
+						FROM [dbo].[EventLog] AS [EL]
+							INNER JOIN [dbo].[EventType] AS [EVT] 
+							ON [EVT].[ID] = [EL].[IDEventType]
+							INNER JOIN [dbo].[EntityType] AS [ENT] 
+							ON [ENT].[ID] = [EL].[IDEntityType]
+						WHERE [EL].[DateTime] BETWEEN @inFechaInicial AND @inFechaFinal 
+						AND [EVT].[ID] = @idEventType 
+						ORDER BY [EL].[DateTime];
+					END;
+				ELSE IF (@idEventType IS NULL) AND (@idEntityType IS NOT NULL)
+					BEGIN
+						SELECT 
+							[EVT].[Name] AS [TipodeEvento],
+							[ENT].[Name] AS [Entidad],
+							[EL].[EntityID] AS [IDEntidad],
+							[EL].[BeforeUpdate] AS [Historial],
+							[EL].[AfterUpdate] AS [Actualizacion],
+							[EL].[Username] AS [Autor],
+							[EL].[UserIP] AS [IP],
+							[EL].[DateTime] AS [Fecha]
+						FROM [dbo].[EventLog] AS [EL]
+							INNER JOIN [dbo].[EventType] AS [EVT] 
+							ON [EVT].[ID] = [EL].[IDEventType]
+							INNER JOIN [dbo].[EntityType] AS [ENT] 
+							ON [ENT].[ID] = [EL].[IDEntityType]
+						WHERE [EL].[DateTime] BETWEEN @inFechaInicial AND @inFechaFinal 
+						AND [ENT].[ID] = @idEntityType 
+						ORDER BY [EL].[DateTime];
+					END;
 				ELSE
 					BEGIN
 						SELECT 

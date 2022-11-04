@@ -3,12 +3,14 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadPropiedad
-	@proc_description 
+	@proc_name SP_ReadUsuarioXPropiedadPropiedades
+	@proc_description
+	@proc_param inUsuarioUsername 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadPropiedad]
+CREATE OR ALTER PROCEDURE [SP_ReadUsuarioXPropiedadPropiedades]
+	@inUsuarioUsername VARCHAR(16),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -22,14 +24,25 @@ BEGIN
 			[P].[MetrosCuadrados] AS [Territorio],
 			[P].[ValorFiscal] AS [ValorFiscal], 
 			[P].[FechaRegistro] AS [FechadeRegistro]
-		FROM [dbo].[Propiedad] AS [P]
-			LEFT JOIN [dbo].[TipoUsoPropiedad] AS [TU]
-			ON [TU].[ID] = [P].[IDTipoUsoPropiedad]
-			LEFT JOIN [dbo].[TipoZonaPropiedad] AS [TZ]
-			ON [TZ].[ID] = [P].[IDTipoZonaPropiedad]
-		WHERE [P].[Activo] = 1
-		ORDER BY [P].[FechaRegistro], [P].[Lote];
-		SET @outResultCode = 5200; /* OK */
+		FROM [dbo].[UsuarioXPropiedad] AS [UXP]
+			LEFT JOIN [dbo].[Usuario] AS [U]
+			ON [U].[ID] = [UXP].[IDUsuario] 
+			INNER JOIN [dbo].[Propiedad] AS [Pro]
+			ON [Pro].[ID] = [UXP].[IDPropiedad]
+			INNER JOIN [dbo].[TipoUsoPropiedad] AS [TU]
+			ON [P].[IDTipoUsoPropiedad] = [TU].[ID]
+			INNER JOIN [dbo].[TipoZonaPropiedad] AS [TZ]
+			ON [P].[IDTipoZonaPropiedad] = [TZ].[ID]
+			INNER JOIN [dbo].[Persona] AS [Per]
+			ON [Per].[ID] = [U].[IDPersona]
+		WHERE [U].[Username] = @inUsuarioUsername
+		AND [UXP].[FechaFin] IS NULL
+		AND [UXP].[Activo] = 1
+		AND [U].[Activo] = 1
+		AND [Pro].[Activo] = 1
+		AND [Per].[Activo] = 1
+		ORDER BY ORDER BY [UXP].[FechaInicio] , [Pro].[Lote];
+		SET @outResultCode = 5200; /* OK */ select * from Usuario select * from propiedad select * from UsuarioXPropiedad
 	END TRY
 	BEGIN CATCH
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */

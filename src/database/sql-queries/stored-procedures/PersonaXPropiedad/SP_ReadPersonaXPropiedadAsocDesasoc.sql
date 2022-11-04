@@ -35,7 +35,8 @@ BEGIN
 						WHERE [PXP].[FechaFin] IS NULL
 						AND [PXP].[Activo] = 1
 						AND [Per].[Activo] = 1 
-						AND [Pro].[Activo] = 1;
+						AND [Pro].[Activo] = 1
+						ORDER BY [PXP].[FechaInicio];
 					END;
 				ELSE
 					BEGIN
@@ -52,7 +53,8 @@ BEGIN
 						WHERE [PXP].[FechaFin] IS NOT NULL
 						AND [PXP].[Activo] = 1
 						AND [Per].[Activo] = 1 
-						AND [Pro].[Activo] = 1;
+						AND [Pro].[Activo] = 1
+						ORDER BY [PXP].[FechaFin];
 					END;
 
 				SET @outResultCode = 5200; /* OK */

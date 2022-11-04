@@ -17,6 +17,7 @@ BEGIN
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT [MP].[Nombre]
 		FROM [dbo].[MedioPago] AS [MP]
+		WHERE [MP].[Nombre] <> 'Arreglo de pago'
 		ORDER BY [MP].[Nombre];
 		SET @outResultCode = 5200; /* OK */
 	END TRY

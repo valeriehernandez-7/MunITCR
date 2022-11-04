@@ -25,7 +25,8 @@ BEGIN
 		FROM [dbo].[Persona] AS [P]
 			LEFT JOIN [dbo].[TipoDocIdentidad] AS [DI]
 			ON [P].[IdTipoDocIdentidad] = [DI].[ID]
-		WHERE [P].[Activo] = 1;
+		WHERE [P].[Activo] = 1
+		ORDER BY [P].[ValorDocIdentidad];
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH

@@ -25,34 +25,42 @@ BEGIN
 					/* Show active associations on dbo.UsuarioXPropiedad */
 						SELECT  
 							[U].[Username] AS [Usuario],
-							[P].[Lote] AS [Propiedad],
+							[Pro].[Lote] AS [Propiedad],
 							[UXP].[FechaInicio] AS [FechadeRegistro]
 						FROM [dbo].[UsuarioXPropiedad] AS [UXP]
-							LEFT JOIN [dbo].[Usuario] AS [U]
-							ON [UXP].[IDUsuario] = [U].[ID]
-							LEFT JOIN [dbo].[Propiedad] AS [P]
-							ON [UXP].[IDPropiedad] =  [P].[ID]
+							INNER JOIN [dbo].[Usuario] AS [U]
+							ON [U].[ID] = [UXP].[IDUsuario]
+							INNER JOIN [dbo].[Propiedad] AS [Pro]
+							ON [Pro].[ID] = [UXP].[IDPropiedad]
+							INNER JOIN [dbo].[Persona] AS [Per]
+							ON [Per].[ID] = [U].[IDPersona]
 						WHERE [UXP].[FechaFin] IS NULL
 						AND [UXP].[Activo] = 1
-						AND [U].[Activo] = 1 
-						AND [P].[Activo] = 1;
+						AND [U].[Activo] = 1
+						AND [Pro].[Activo] = 1
+						AND [Per].[Activo] = 1
+						ORDER BY [UXP].[FechaInicio];
 					END;
 				ELSE
 					BEGIN
 						/* Show active dissociations on dbo.UsuarioXPropiedad */
 						SELECT  
 							[U].[Username] AS [Usuario],
-							[P].[Lote] AS [Propiedad],
+							[Pro].[Lote] AS [Propiedad],
 							[UXP].[FechaFin] AS [FechadeRegistro]
 						FROM [dbo].[UsuarioXPropiedad] AS [UXP]
-							LEFT JOIN [dbo].[Usuario] AS [U]
-							ON [UXP].[IDUsuario] = [U].[ID]
-							LEFT JOIN [dbo].[Propiedad] AS [P]
-							ON [UXP].[IDPropiedad] =  [P].[ID]
+							INNER JOIN [dbo].[Usuario] AS [U]
+							ON [U].[ID] = [UXP].[IDUsuario]
+							INNER JOIN [dbo].[Propiedad] AS [Pro]
+							ON [Pro].[ID] = [UXP].[IDPropiedad]
+							INNER JOIN [dbo].[Persona] AS [Per]
+							ON [Per].[ID] = [U].[IDPersona]
 						WHERE [UXP].[FechaFin] IS NOT NULL
 						AND [UXP].[Activo] = 1
-						AND [U].[Activo] = 1 
-						AND [P].[Activo] = 1;
+						AND [U].[Activo] = 1
+						AND [Pro].[Activo] = 1
+						AND [Per].[Activo] = 1
+						ORDER BY [UXP].[FechaFin];
 					END;
 
 				SET @outResultCode = 5200; /* OK */

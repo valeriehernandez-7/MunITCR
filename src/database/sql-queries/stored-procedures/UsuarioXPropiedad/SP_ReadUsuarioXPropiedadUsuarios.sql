@@ -3,31 +3,39 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadUsuarioXPropiedad
+	@proc_name SP_ReadUsuarioXPropiedadUsuarios
 	@proc_description 
+	@proc_param inPropiedadLote 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadUsuarioXPropiedad]
+CREATE OR ALTER PROCEDURE [SP_ReadUsuarioXPropiedadUsuarios]
+	@inPropiedadLote VARCHAR(32),
 	@outResultCode INT OUTPUT
 AS
 BEGIN
 	SET NOCOUNT ON;
-	BEGIN TRY 
+	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
-		SELECT  
-			[U].[Username] AS [Usuario],
-			[P].[Lote] AS [Propiedad],
-			[UXP].[FechaInicio] AS [FechadeAsociación],
-			[UXP].[FechaFin] AS [FechadeDesasociación]
+		SELECT
+			[Per].[ValorDocIdentidad] AS [Persona],
+			[U].[Username] AS [Usuario], 
+			[U].[Password] AS [Contraseña],
+			[U].[Administrador] AS [TipodeUsuario]
 		FROM [dbo].[UsuarioXPropiedad] AS [UXP]
-			LEFT JOIN [dbo].[Usuario] AS [U]
-			ON [UXP].[IDUsuario] = [U].[ID]
-			LEFT JOIN [dbo].[Propiedad] AS [P]
-			ON [UXP].[IDPropiedad] =  [P].[ID]
-		WHERE [UXP].[Activo] = 1
-		AND [U].[Activo] = 1 
-		AND [P].[Activo] = 1;
+			INNER JOIN [dbo].[Usuario] AS [U]
+			ON [U].[ID] = [UXP].[IDUsuario]
+			INNER JOIN [dbo].[Propiedad] AS [Pro]
+			ON [Pro].[ID] = [UXP].[IDPropiedad]
+			INNER JOIN [dbo].[Persona] AS [Per]
+			ON [Per].[ID] = [U].[IDPersona]
+		WHERE [Pro].[Lote] = @inPropiedadLote
+		AND [UXP].[FechaFin] IS NULL
+		AND [UXP].[Activo] = 1
+		AND [U].[Activo] = 1
+		AND [Pro].[Activo] = 1
+		AND [Per].[Activo] = 1
+		ORDER BY [UXP].[FechaInicio] , [U].[Username];
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH
