@@ -30,7 +30,7 @@ BEGIN
 			ON [EVT].[ID] = [EL].[IDEventType]
 			INNER JOIN [dbo].[EntityType] AS [ENT]
 			ON [ENT].[ID] = [EL].[IDEntityType]
-		ORDER BY [EL].[DateTime];
+		ORDER BY [EL].[DateTime] DESC;
 		
 		SET @outResultCode = 5200; /* OK */
 	END TRY

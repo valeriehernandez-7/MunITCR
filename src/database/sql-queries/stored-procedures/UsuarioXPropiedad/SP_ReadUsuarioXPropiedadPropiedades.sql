@@ -18,21 +18,21 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT	
-			[P].[Lote] AS [Propiedad],
+			[Pro].[Lote] AS [Propiedad],
 			[TU].[Nombre] AS [UsodePropiedad], 
 			[TZ].[Nombre] AS [ZonadePropiedad],
-			[P].[MetrosCuadrados] AS [Territorio],
-			[P].[ValorFiscal] AS [ValorFiscal], 
-			[P].[FechaRegistro] AS [FechadeRegistro]
+			[Pro].[MetrosCuadrados] AS [Territorio],
+			[Pro].[ValorFiscal] AS [ValorFiscal], 
+			[Pro].[FechaRegistro] AS [FechadeRegistro]
 		FROM [dbo].[UsuarioXPropiedad] AS [UXP]
-			LEFT JOIN [dbo].[Usuario] AS [U]
+			INNER JOIN [dbo].[Usuario] AS [U]
 			ON [U].[ID] = [UXP].[IDUsuario] 
 			INNER JOIN [dbo].[Propiedad] AS [Pro]
 			ON [Pro].[ID] = [UXP].[IDPropiedad]
 			INNER JOIN [dbo].[TipoUsoPropiedad] AS [TU]
-			ON [P].[IDTipoUsoPropiedad] = [TU].[ID]
+			ON [Pro].[IDTipoUsoPropiedad] = [TU].[ID]
 			INNER JOIN [dbo].[TipoZonaPropiedad] AS [TZ]
-			ON [P].[IDTipoZonaPropiedad] = [TZ].[ID]
+			ON [Pro].[IDTipoZonaPropiedad] = [TZ].[ID]
 			INNER JOIN [dbo].[Persona] AS [Per]
 			ON [Per].[ID] = [U].[IDPersona]
 		WHERE [U].[Username] = @inUsuarioUsername
@@ -41,7 +41,7 @@ BEGIN
 		AND [U].[Activo] = 1
 		AND [Pro].[Activo] = 1
 		AND [Per].[Activo] = 1
-		ORDER BY ORDER BY [UXP].[FechaInicio] , [Pro].[Lote];
+		ORDER BY [UXP].[FechaInicio] , [Pro].[Lote];
 		SET @outResultCode = 5200; /* OK */ select * from Usuario select * from propiedad select * from UsuarioXPropiedad
 	END TRY
 	BEGIN CATCH
