@@ -31,6 +31,7 @@ EXECUTE SP_XML_PREPAREDOCUMENT @docOperaciones OUTPUT, @data; -- associate the i
 /* Tabla con fechas de operacion del archivo Operaciones.xml */
 DECLARE @TMPOperacion TABLE (
 	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[Mes] INT,
 	[Fecha] DATE
 );
 
@@ -53,6 +54,14 @@ DECLARE @TMPPropiedad TABLE (
 	[Lote] VARCHAR(32),
 	[Medidor] VARCHAR(16),
 	[MetrosCuadrados] BIGINT,
+	[ValorFiscal] MONEY
+);
+
+/* Tabla con informacion cambio de valor fiscal 
+de propiedades del archivo Operaciones.xml */
+DECLARE @TMPActualizacionPropiedad TABLE (
+	[ID] INT IDENTITY(1,1) PRIMARY KEY,
+	[Lote] VARCHAR(32),
 	[ValorFiscal] MONEY
 );
 
@@ -102,81 +111,113 @@ DECLARE @TMPComprobantePago TABLE (
 	[Referencia] BIGINT
 );
 
-/* Tabla con informacion cambio de valor fiscal 
-de propiedades del archivo Operaciones.xml */
-DECLARE @TMPActualizacionPropiedad TABLE (
-	[ID] INT IDENTITY(1,1) PRIMARY KEY,
-	[Lote] VARCHAR(32),
-	[ValorFiscal] MONEY
-);
-
 /* Agrega las fechas de todas las operaciones 
 del archivo Operaciones.xml */
 INSERT INTO @TMPOperacion (
-	Fecha
+	[Mes],
+	[Fecha]
 ) SELECT 
+	DATEPART(MONTH, DOC.Fecha.value ('@Fecha', 'DATE')),
 	DOC.Fecha.value ('@Fecha', 'DATE')
 FROM @data.nodes('Datos/Operacion') AS DOC(Fecha);
+
+SELECT * FROM @TMPOperacion; -- TO-DO: DELETE
+
+DECLARE 
+	@minIDOperacion INT,
+	@maxIDOperacion INT,
+	@minMesOperacion INT,
+	@maxMesOperacion INT,
+	@fechaOperacion DATE,
+	@fechaFinMes DATE;
+
 
 /* Obtiene el ID minimo y maximo de la tabla de operaciones 
 como limites de iteracion para la ejecucion de la 
 simulacion de operaciones */
-DECLARE 
-	@minOperacion INT,
-	@maxOperacion INT;
-
 SELECT 
-	@minOperacion = MIN([O].[ID]),
-	@maxOperacion = MAX([O].[ID])
+	@minMesOperacion = MIN([O].[Mes]),
+	@maxMesOperacion = MAX([O].[Mes])
 FROM @TMPOperacion AS [O];
+
+SELECT  -- TO-DO: DELETE
+	@minMesOperacion AS [minMesOperacion],
+	@maxMesOperacion AS [maxMesOperacion];
 
 
 /* Simluacion de procesamiento de operaciones de sistema municipal */
-WHILE (@minOperacion <= @maxOperacion)
+WHILE (@minMesOperacion <= @maxMesOperacion)
 	BEGIN
-		/* <Personas/Persona> : Procesar personas */
+		/* Obtener las fechas del mes de operacion */
+		SELECT 
+			@minIDOperacion = MIN([O].[ID]),
+			@maxIDOperacion = MAX([O].[ID]),
+			@fechaFinMes = MAX([O].[Fecha])
+		FROM @TMPOperacion AS [O]
+		WHERE [O].[Mes] = @minMesOperacion;
 
-		/* <Propiedades/Propiedad> : Procesar propiedades */
+		SELECT  -- TO-DO: DELETE
+			@minIDOperacion AS [minOperacion],
+			@maxIDOperacion AS [maxOperacion],
+			@fechaFinMes AS [fechaFinMes];
+		/* Procesar las fechas del mes de operacion */
+		WHILE (@minIDOperacion <= @maxIDOperacion)
+			BEGIN
+				/*Asignar la fecha de operacion actual como la fecha con PK @minIDOperacion */
+				SELECT @fechaOperacion = [O].[Fecha]
+				FROM @TMPOperacion AS [O]
+				WHERE [O].[ID] = @minIDOperacion;
 
-		/* <PersonasyPropiedades/PropiedadPersona> : 
-		Procesar asociación o des asociación entre personas y propiedades */
+				/* <Personas/Persona> : Procesar personas */
 
-		/* <Usuario/Usuario> : 
-		Procesar asociación o des asociación entre usuarios y personas */
+				/* <Propiedades/Propiedad> : Procesar propiedades */
 
-		/* <PropiedadesyUsuarios/UsuarioPropiedad> : 
-		Procesar asociación o des asociación entre usuarios y propiedades */
+				/* <PropiedadCambio/PropiedadCambios> : 
+				Procesar cambios de valor fiscal de propiedad */
 
-		/* <Lecturas/LecturaMedidor> : 
-		Procesar lecturas de medidor de propiedad */
+				/* <PersonasyPropiedades/PropiedadPersona> : 
+				Procesar asociación o des asociación entre personas y propiedades */
 
-		/* <Pago/Pago> : Procesar pagos factura mas vieja por propiedad */
+				/* <Usuario/Usuario> : 
+				Procesar asociación o des asociación entre usuarios y personas */
 
-		/* <PropiedadCambio/PropiedadCambios> : 
-		Procesar cambios de valor fiscal de propiedad */
+				/* <PropiedadesyUsuarios/UsuarioPropiedad> : 
+				Procesar asociación o des asociación entre usuarios y propiedades */
 
-		/* Procesar ordenes de reconexion de consumo de agua */
+				/* <Lecturas/LecturaMedidor> : 
+				Procesar lecturas de medidor de propiedad */
 
-		/* Generar facturas del mes, a la propiedad cuyo día respecto 
-		de fecha de creación coincide con el día de la fecha de operación */
+				/* <Pago/Pago> : Procesar pagos factura mas vieja por propiedad con medio de pago <> 'Arreglo de pago' */
 
-		/* Generar ordenes de corte de consumo de agua */
+				/* <Pago/Pago> : Procesar pagos factura mas vieja por propiedad con medio de pago 'Arreglo de pago' */
 
-		/* Procesar detalle de cobro por intereses moratorios en facturas vencidad */
+				/* Procesar ordenes de reconexion de consumo de agua */
 
-		/* Limpiar las tablas relacionadas a procesos de 
-		operacion antes de procesar la siguiente fecha de operacion */
-		DELETE FROM @TMPPersona;
-		DELETE FROM @TMPPropiedad;
-		DELETE FROM @TMPPersonaXPropiedad;
-		DELETE FROM @TMPUsuario;
-		DELETE FROM @TMPUsuarioXPropiedad;
-		DELETE FROM @TMPMovimientoConsumoAgua;
-		DELETE FROM @TMPComprobantePago;
-		DELETE FROM @TMPActualizacionPropiedad;
+				/* Generar ordenes de corte de consumo de agua */
 
-		/* Avanzar a la siguiente fecha de operacion */
-		SET @minOperacion = @minOperacion + 1;
+				/* Generar facturas del mes, a la propiedad cuyo día respecto 
+				de fecha de creación coincide con el día de la fecha de operación */
+
+				/* Procesar detalle de cobro por intereses moratorios en facturas vencidas */
+
+				/* Cancelar arreglos de pago */
+
+				/* Limpiar las tablas relacionadas a procesos de 
+				operacion antes de procesar la siguiente fecha de operacion */
+				DELETE FROM @TMPPersona;
+				DELETE FROM @TMPPropiedad;
+				DELETE FROM @TMPActualizacionPropiedad;
+				DELETE FROM @TMPPersonaXPropiedad;
+				DELETE FROM @TMPUsuario;
+				DELETE FROM @TMPUsuarioXPropiedad;
+				DELETE FROM @TMPMovimientoConsumoAgua;
+				DELETE FROM @TMPComprobantePago;
+
+				/* Avanzar a la siguiente fecha de operacion */
+				SET @minIDOperacion = @minIDOperacion + 1;
+			END;
+		/* Avanzar al siguiente mes de operaciones */
+		SET @minMesOperacion = @minMesOperacion + 1;
 	END;
 
 DELETE FROM @TMPOperacion;
