@@ -226,17 +226,16 @@ GO
 
 -- *************************************************************
 
-/* DELETE DB STORED PROCEDURES */
-
-DECLARE @sql NVARCHAR(MAX) = N'';
-SELECT @sql += N'DROP PROCEDURE dbo.'+ QUOTENAME(name) + ';' FROM sys.procedures
-WHERE name LIKE N'sp[_]%'
-AND SCHEMA_NAME(schema_id) = N'dbo';
-EXEC sp_executesql @sql;
-
 /* SHOW ALL DB STORED PROCEDURES */
 SELECT * FROM sys.procedures 
 WHERE name LIKE N'SP[_]%'
 AND SCHEMA_NAME(schema_id) = N'dbo'
 ORDER BY name;
 GO
+
+/* DELETE DB STORED PROCEDURES */
+DECLARE @sql NVARCHAR(MAX) = N'';
+SELECT @sql += N'DROP PROCEDURE dbo.'+ QUOTENAME(name) + ';' FROM sys.procedures
+WHERE name LIKE N'sp[_]%'
+AND SCHEMA_NAME(schema_id) = N'dbo';
+EXEC sp_executesql @sql;
