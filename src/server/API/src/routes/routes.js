@@ -21,6 +21,7 @@ import {ReadPersona,
         CreatePropiedad,
         CreatePersonaXPropiedad,
         CreateUsuarioXPropiedad,
+        UpdateUsuarioXPropiedad,
         UpdatePersona,
         ReadPropiedadPersonaIn,
         ReadPropiedadInPersona,
@@ -31,7 +32,16 @@ import {ReadPersona,
         ReadFacturaPagadaPropiedadIn,
         ReadFacturaPendientePropiedadIn,
         ReadMovimientoConsumoAgua,
-        ReadEventLog
+        ReadEventLog,
+        ReadMedioPago,
+        ReadEventType,
+        ReadEntityType,
+        ReadEventLogEventInEntityInFechaIn,
+        UpdatePersonaXPropiedadDesasociacion,
+        DeletePersona,
+        DeleteUsuario,
+        DeletePropiedad,
+        Pago
         } from '../controllers/controller'
 
 //lista de personas     
@@ -83,15 +93,29 @@ router.get('/ReadPropiedadXUsuario',ReadPropiedadXUsuario)
 //listas de faturas pagadas por propiedad
 router.get('/ReadFacturaPagadaPropiedadIn',ReadFacturaPagadaPropiedadIn)
 
-//listas de faturas pagadas por propiedad
+//listas de faturas pendientes por propiedad
 router.get('/ReadFacturaPendientePropiedadIn',ReadFacturaPendientePropiedadIn)
 
-//listas de faturas pagadas por propiedad
+//listas de movimientos de consumo de agua
 router.get('/ReadMovimientoConsumoAgua',ReadMovimientoConsumoAgua)
 
-//listas de faturas pagadas por propiedad
+//listas de eventos
 router.get('/ReadEventLog',ReadEventLog)
 
+//listas de medios de pago
+router.get('/ReadMedioPago',ReadMedioPago)
+
+//listas de tipos de eventos
+router.get('/ReadEventType',ReadEventType)
+
+//listas de  tipos de entidades
+router.get('/ReadEntityType',ReadEntityType)
+
+//Agrega una persona a la BD
+router.post('/ReadEventLogEventInEntityInFechaIn',ReadEventLogEventInEntityInFechaIn)
+
+//Pago de Facturas
+router.post('/Pago',Pago)
 
 //Agrega una persona a la BD
 router.post('/CreatePersona',CreatePersona)
@@ -107,6 +131,9 @@ router.post('/CreatePersonaXPropiedad',CreatePersonaXPropiedad)
 
 //Agrega una asociacion usuario/propiedad a la BD
 router.post('/CreateUsuarioXPropiedad',CreateUsuarioXPropiedad)
+
+//Agrega una asociacion usuario/propiedad a la BD
+router.post('/UpdateUsuarioXPropiedad',UpdateUsuarioXPropiedad)
 
 //Upgradear una persona
 router.post('/UpdatePersona',UpdatePersona)
@@ -135,6 +162,18 @@ router.post('/UpdatePropiedad',UpdatePropiedad)
 
 //update persona/propiedad
 router.post('/UpdatePersonaXPropiedad',UpdatePersonaXPropiedad)
+
+//update persona/propiedad
+router.post('/UpdatePersonaXPropiedadDesasociacion',UpdatePersonaXPropiedadDesasociacion)
+
+//Delete persona
+router.post('/DeletePersona',DeletePersona)
+
+//Delete usuario
+router.post('/DeleteUsuario',DeleteUsuario)
+
+//Delete propiedad
+router.post('/DeletePropiedad',DeletePropiedad)
 
 
 export default router
