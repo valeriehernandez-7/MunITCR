@@ -14,8 +14,7 @@ $(document).ready(function(){
   .then(response => {
     $("#tableBody > tbody").empty();
     for (var i = 0; i < response.length; i++) {
-      console.log(response[i])
-      var perXprop = response [i];      
+      var perXprop = response [i];    
       var Propietario = perXprop.Usuario;
       var Propiedad = perXprop.Propiedad;
       var FechaAsociación = perXprop.FechadeRegistro;
@@ -26,7 +25,7 @@ $(document).ready(function(){
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit(\'"+ Propietario +"\'," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Desasociar \" onclick=\"desasoc(\'"+ Propietario +"\'," + Propiedad +",\'"+ FechaAsociación + "\',\'" + FechaDesasociación +"\');\" >"
       //se debe cambiar el otro boton
-      if (opcion==1)
+      if (valor==1)
         tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       else
         tabla+= "<td>"+ boton + "</td></tr>"
@@ -66,25 +65,40 @@ function edit(nombre,lote,fechaI,fechaF){
   }  
   location.replace(url);
 }
-function desasoc (nombre,lote,fechaI,fechaF){
-  var url = "http://localhost:8000/UpdateUsuarioXPropiedad"  
-  var uss = (new URL(location.href)).searchParams.get('uss')
+function desasoc2(nombre,lote,fechaI,fechaF){
+  var d = new Date();
+
+  var month = d.getMonth()+1;
+  var day = d.getDate();
+
+  var output = d.getFullYear() + '-' +
+      (month<10 ? '0' : '') + month + '-' +
+      (day<10 ? '0' : '') + day;
+  console.log(output)
+  }
+function desasoc (id,lote){
+  var url = "http://localhost:8000/UpdateUsuarioXPropiedad"
+  var d = new Date();
+
+  var month = d.getMonth()+1;
+  var day = d.getDate();
+
+  var fecha = d.getFullYear() + '-' +
+      (month<10 ? '0' : '') + month + '-' +
+      (day<10 ? '0' : '') + day;  
+  var uss = (new URL(location.href)).searchParams.get('ip')
   var ip = (new URL(location.href)).searchParams.get('ip')
-  var opcion = 0
-  nombre=nombre.toString()
-  lote=lote.toString()
   const body={
-    oldId: nombre,
-    oldLote: lote,
-    id: nombre,
-    lote:lote,
-    fechaAsoc: fechaI,
-    fechaDesasoc: null,
+    oldusr:id,
+    oldlote: lote.toString(),
+    iden: id,
+    lote:lote.toString(),
+    fecha: fecha,
+    asoc:0,
     uss: uss,
     ip: ip,
-    opcion: opcion
-  }
-  const options = {
+  } 
+  const options = {  
   method: "post",
   body: JSON.stringify(body),
   headers: {"Content-Type": "application/json"},
@@ -106,7 +120,7 @@ function desasoc (nombre,lote,fechaI,fechaF){
         window.alert("Propiedad actualizada con exito");
         return
       }else {
-        window.alert("Ocurrio un error al actualizar los daots");
+        window.alert("Ocurrio un error al actualizar los datos");
       }
     }
     ).catch(e => {

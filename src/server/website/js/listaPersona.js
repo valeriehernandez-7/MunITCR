@@ -19,8 +19,9 @@ $(document).ready(function(){
       var tabla = "<tr><td> ";
       tabla += nombre + "</td><td>" + ID + "</td><td>" + IDKind + "</td><td>" + tel1 + "</td><td>" + tel2 + "</td><td>" + email + "</td>"
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Editar \" onclick=\"edit(\'"+nombre+"\'," + ID +",\'"+IDKind + "\'," + tel1+ ","+ tel2+ ",\'" +email+"\');\" >"
+      var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"delet(\'"+nombre+"\'," + ID +",\'"+IDKind + "\'," + tel1+ ","+ tel2+ ",\'" +email+"\');\" >"
       //se debe cambiar el otro boton
-      tabla+= "<td>"+ boton + boton + "</td></tr>"
+      tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       $("#tablaItems ").append(tabla);
     }
 
@@ -48,6 +49,51 @@ function edit(nombre,id,tipo,tel,tel2,email){
   url+='&tel2='+tel2
   url+='&email='+email
   location.replace(url);
+}
+
+function delet(nombre,id,tipo,tel,tel2,email){
+  var url = "http://localhost:8000/DeletePersona"
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  
+  const body={
+    id: id.toString(),
+    uss : uss,
+    ip : ip
+  }
+  const options = {
+  method: "post",
+  body: JSON.stringify(body),
+  headers: {"Content-Type": "application/json"},
+  };
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+    if(response == 5404){
+      window.alert("El tipo de Identificación no existe");
+      return
+    }
+    if(response == 5406){
+      window.alert("La persona ya existe");
+      return
+    }
+    if(response == 5400){
+      window.alert("Los parametros no deben ser null");
+      return
+    }
+    if(response == 5200){
+      window.alert("Persona eliminada con exito");
+      var uss = (new URL(location.href)).searchParams.get('uss')
+      var ip = (new URL(location.href)).searchParams.get('ip')
+      location.replace('./listaPersona.html?uss='+uss+"&ip="+ip);
+      return
+    }else {
+      window.alert("Ocurrio un error al borrar la persona");
+    }
+    
+    }
+  ).catch(e => {
+      console.log(e);
+    });
 }
 function ret(){
   var uss = (new URL(location.href)).searchParams.get('uss')

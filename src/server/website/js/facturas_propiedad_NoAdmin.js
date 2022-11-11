@@ -1,7 +1,5 @@
 $( document ).ready(function() {
-    var lote = (new URL(location.href)).searchParams.get('lote')
-    console.log(lote)
-    
+    var lote = (new URL(location.href)).searchParams.get('lote')   
     
     const options = {
       method: "get",
@@ -11,18 +9,22 @@ $( document ).ready(function() {
     var url = "http://localhost:8000/ReadFacturaPagadaPropiedadIn?lote="+lote
     fetch(url, options).then(response => response.json())
     .then(response => {
-      console.log(response[0])
       $("#tableBody > tbody").empty();
       for (var i = 0; i < response.length; i++) {
         var factura = response [i];      
-        var fecha = factura.Fecha.substring(0,10);
-        var fechaV = factura.FechaVencimiento.substring(0,10);
-        var moro = factura.Morosidades;
-        var sub = factura.Subtotal;
-        var total = factura.Total
+        var fecha = factura.FechadePago.substring(0,10);
+        var comprobante = factura.Comprobante;
+        if (comprobante == null){
+          comprobante = "No disponible"
+        }
+        var MediodePago = factura.MediodePago;
+        var FechadeFactura = factura.FechadeFactura.substring(0,10);
+        var FechaVencimientoFactura = factura.FechaVencimientoFactura.substring(0,10);
+        var Subtotal = factura.Subtotal;
+        var Morosidades = factura.Morosidades;
+        var Total = factura.Total;
         var tabla = "<tr><td> ";
-        tabla += fecha + "</td><td>" + fechaV + "</td><td>" + moro + "</td><td>" + sub + "</td><td>" + total + "</td></tr>"; 
-       
+        tabla += fecha + "</td><td>" + comprobante + "</td><td>" + MediodePago + "</td><td>" + FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total + "</td></tr>"; 
         $("#tablaItems ").append(tabla);
       }}).catch(e => {
         console.log(e);
