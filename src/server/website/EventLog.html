@@ -28,9 +28,27 @@
   </div>
 </header>
 <body style="background-color: #b4c5cd;">
-  <br><br><br>
-
-  
+  <br><br><br>   
+  <div class="container-fluid" style="display: flex; justify-content: center;">
+    <section>
+      <select class="controls" name="entityType" id="entityType" style="margin-right:10px;"></select>
+      Tipo de Entidad 
+      <select class="controls" name="eventType" id="eventType" style="margin-right:10px;"></select>
+      Tipo de Evento  
+      <section>        
+        <input class="controls" type="date" id="date" value = "2000-09-09" step="any" >
+        Fecha de Inicio
+      </section>
+      <section>  
+        <input class="controls" type="date" id="date2" value = "2023-01-01" step="any">
+        Fecha de Final
+      </section>
+      <input class="buttons" type="submit" id="viewBtn" value=" Filtrar " onclick="filter();">
+      <input class="buttons" type="submit" id="viewBtn" value=" No Filtrar " onclick="noFilter();">
+         
+    </section>
+  </div>       
+ 
   <br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <table id="tablaItems" style="border: 2px solid #017bab;">
