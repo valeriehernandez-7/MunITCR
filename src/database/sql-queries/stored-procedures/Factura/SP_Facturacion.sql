@@ -3,13 +3,13 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_CreateFacturaXConceptoCobro
-	@proc_description
-	@proc_param
+	@proc_name SP_Facturacion
+	@proc_description 
+	@proc_param inFechaOperacion
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_CreateFacturaXConceptoCobro]
+CREATE OR ALTER PROCEDURE [SP_Facturacion]
 	@inFechaOperacion DATE,
 	@outResultCode INT OUTPUT
 AS
@@ -25,46 +25,46 @@ BEGIN
 
 		IF (@inFechaOperacion IS NOT NULL)
 			BEGIN
+				DECLARE @fechaHaceUnMes DATE = DATEADD(MONTH, -1, DATEADD(DAY, 1, @inFechaOperacion));
 				DECLARE @diaFechaOperacion INT = DATEPART(DAY, @inFechaOperacion);
 				DECLARE @diaFechaFinMes INT = DATEPART(DAY, EOMONTH(@inFechaOperacion));
 
 				DECLARE @TMPPropiedad TABLE (
 					[ID] INT IDENTITY(1,1) PRIMARY KEY,
-					[IDPropiedad] INT,
-					[IDPropiedadXConceptoCobro] INT
+					[IDPropiedad] INT
 				);
 
 				IF (@diaFechaOperacion < @diaFechaFinMes)
 					BEGIN
 						INSERT INTO @TMPPropiedad (
-							[IDPropiedad],
-							[IDPropiedadXConceptoCobro]
-						) SELECT 
-							[P].[ID],
-							[PXCC].[ID]
+							[IDPropiedad]
+						) SELECT DISTINCT
+							[P].[ID]
 						FROM [dbo].[Propiedad] AS [P]
 							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 							ON [PXCC].[IDPropiedad] = [P].[ID]
-						WHERE DATEPART(DAY, [P].[FechaRegistro]) = @diaFechaOperacion
-						AND [PXCC].[FechaFin] IS NULL;
+						WHERE [P].[Activo] = 1
+						AND [PXCC].[FechaFin] IS NULL
+						AND DATEPART(DAY, [P].[FechaRegistro]) = @diaFechaOperacion
+						ORDER BY [P].[ID];
 					END;
 				ELSE
 					BEGIN
 						INSERT INTO @TMPPropiedad (
-							[IDPropiedad],
-							[IDPropiedadXConceptoCobro]
-						) SELECT 
-							[P].[ID],
-							[PXCC].[ID]
+							[IDPropiedad]
+						) SELECT DISTINCT
+							[P].[ID]
 						FROM [dbo].[Propiedad] AS [P]
 							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 							ON [PXCC].[IDPropiedad] = [P].[ID]
 							INNER JOIN [dbo].[Factura] AS [F]
 							ON [F].[IDPropiedad] = [P].[ID]
-						WHERE DATEPART(DAY, [P].[FechaRegistro]) >= @diaFechaFinMes
+						WHERE [P].[Activo] = 1
 						AND [PXCC].[FechaFin] IS NULL
-						AND DATEPART(MONTH, [F].[Fecha]) < DATEPART(MONTH, @inFechaOperacion)
-						AND DATEPART(YEAR, [F].[Fecha]) = DATEPART(YEAR, @inFechaOperacion);
+						AND DATEPART(DAY, [P].[FechaRegistro]) >= @diaFechaFinMes
+						AND [F].[IDPropiedad] = [P].[ID]
+						AND [F].[Fecha] NOT BETWEEN @fechaHaceUnMes AND @inFechaOperacion
+						ORDER BY [P].[ID];
 					END;
 				
 				IF EXISTS (SELECT 1 FROM @TMPPropiedad)
@@ -96,9 +96,37 @@ BEGIN
 										[IDFactura],
 										[IDPropiedadXConceptoCobro]
 									) SELECT 
-										SCOPE_IDENTITY(),
-										[TP].[IDPropiedadXConceptoCobro]
-									FROM @TMPPropiedad AS [TP];
+										[F].[ID],
+										[PXCC].[ID]
+									FROM @TMPPropiedad AS [TP]
+										INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+										ON [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+										INNER JOIN [dbo].[Factura] AS [F]
+										ON [F].[IDPropiedad] = [TP].[IDPropiedad]
+									WHERE [PXCC].[FechaFin] IS NULL
+									AND [F].[Fecha] = @inFechaOperacion;
+
+									INSERT INTO [dbo].[DetalleCCConsumoAgua] (
+										[IDDetalleCC],
+										[IDMovimientoConsumoAgua]
+									) SELECT 
+										[DCC].[ID],
+										[MCA].[ID]
+									FROM [dbo].[MovimientoConsumoAgua] AS [MCA]
+										INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+										ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
+										INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+										ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
+										INNER JOIN [dbo].[DetalleCC] AS [DCC]
+										ON [DCC].[IDPropiedadXConceptoCobro] = [PXCC].[ID]
+										INNER JOIN [dbo].[Factura] AS [F]
+										ON [F].[ID] = [DCC].[IDFactura]
+										INNER JOIN @TMPPropiedad AS [TP]
+										ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+									WHERE [MCA].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
+									AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+									AND [PXCC].[FechaFin] IS NULL
+									AND [F].[Fecha] = @inFechaOperacion;
 
 									SET @outResultCode = 5200; /* OK */
 								COMMIT TRANSACTION [createFacturaXConceptoCobro]
