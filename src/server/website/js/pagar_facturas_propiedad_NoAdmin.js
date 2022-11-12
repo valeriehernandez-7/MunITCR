@@ -24,9 +24,28 @@ $( document ).ready(function() {
         var sub = factura.Subtotal;
         var total = factura.Total
         var tabla = "<tr><td> ";
-        tabla += fecha + "</td><td>" + fechaV + "</td><td>" + moro + "</td><td>" + sub + "</td><td>" + total + "</td></tr>"; 
+        tabla += fecha + "</td><td>" + fechaV + "</td><td>" + sub + "</td><td>" + moro + "</td><td>" + total + "</td></tr>"; 
        
         $("#tablaItems ").append(tabla);
+      }}).catch(e => {
+        console.log(e);
+      });
+    
+    const $select2 = $("#metodoPago")  
+    const options2 = {
+      method: "get",
+      headers: {"Content-Type": "application/json"},
+    };
+    console.log(options2)
+    var url = "http://localhost:8000/ReadMedioPago"
+    fetch(url, options2).then(response => response.json())
+    .then(response => {
+      for (var i = 0; i < response.length; i++) {
+        $select2.append($("<option>", {
+          value: response[i].nombre,
+          text: response[i].Nombre
+        }))
+        
       }}).catch(e => {
         console.log(e);
       });
@@ -35,6 +54,46 @@ function add(){
     var uss = (new URL(location.href)).searchParams.get('uss')
     var ip = (new URL(location.href)).searchParams.get('ip') 
     location.replace('./UsersXprop.html?uss='+uss+"&ip="+ip);
+}
+
+
+function pagar(){
+  var url = "http://localhost:8000/Pago"
+  var cant = document.getElementById("cantFact").value;
+  if (cant == 0){
+    alert("Debe pagar al menos 1 factura")
+    return
+  }
+  var medio = document.getElementById("metodoPago").value;
+  var lote = (new URL(location.href)).searchParams.get('lote')
+  const body={
+    lote:lote.toString(),
+    cant : cant,
+    medio : medio
+  }
+  const options = {
+  method: "post",
+  body: JSON.stringify(body),
+  headers: {"Content-Type": "application/json"},
+  };
+  fetch(url, options).then(response => response.json())
+  .then(response => {    
+    console.log(response)
+    if(response == 5200){
+      window.alert("Se pagaron: "+cant+" facturas")
+      var uss = (new URL(location.href)).searchParams.get('uss')
+      var ip = (new URL(location.href)).searchParams.get('ip')
+      var lote = (new URL(location.href)).searchParams.get('lote')
+      location.replace('./pagar_facturas_propiedad_NoAdmin.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+      return
+    }else {
+      window.alert("Ocurrio un error al pagar las facturas");
+    }
+    
+    }
+  ).catch(e => {
+      console.log(e);
+    });
 }
 function ret(){
     var uss = (new URL(location.href)).searchParams.get('uss')
