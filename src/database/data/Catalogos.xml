@@ -51,10 +51,9 @@
         <MedioPago Nombre="Efectivo" />
         <MedioPago Nombre="Transferencia" />
         <MedioPago Nombre="Tarjeta" />
-        <MedioPago Nombre="Arreglo de pago" />
     </MediosPago>
     <PeriodoMontoCCs>
-        <PeriodoMontoCC Nombre="Unico no recurrente" QMeses="1" />
+        <PeriodoMontoCC Nombre="Mensual no recurrente" QMeses="1" />
         <PeriodoMontoCC Nombre="Mensual" QMeses="1" />
         <PeriodoMontoCC Nombre="Trimestral" QMeses="3" />
         <PeriodoMontoCC Nombre="Semestral" QMeses="6" />
@@ -94,13 +93,13 @@
         <ParametroSistema Nombre="Cantidad de dias de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
     </ParametrosSistema>
     <CCs>
-        <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="5000" ValorMinimoM3="30" ValorM3="300" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="100" />
-        <CC Nombre="Impuesto sobre propiedad" TipoMontoCC="Porcentual" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Recoleccion de basura y limpieza de canos" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="150" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="300" ValorM2Minimo="400" ValorTractosM2="200" ValorFijoM3Adicional="" />
-        <CC Nombre="Patente comercial" TipoMontoCC="Fijo" PeriodoMontoCC="Semestral" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Reconexion de agua" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="2000" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
-        <CC Nombre="Arreglo de pago" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" ValorFijoM3Adicional="" />
+        <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="5000" ValorMinimoM3="30" ValorM3="300" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" />
+        <CC Nombre="Impuesto sobre propiedad" TipoMontoCC="Porcentual" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" />
+        <CC Nombre="Recoleccion de basura y limpieza de canos" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="150" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="75" ValorM2Minimo="400" ValorTractosM2="200" />
+        <CC Nombre="Patente comercial" TipoMontoCC="Fijo" PeriodoMontoCC="Semestral" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" />
+        <CC Nombre="Reconexion de agua" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual no recurrente" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" />
+        <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual no recurrente" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" />
+        <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="10000" ValorM2Minimo="" ValorTractosM2="" />
+        <CC Nombre="Arreglo de pago" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" />
     </CCs>
 </Catalogo>
