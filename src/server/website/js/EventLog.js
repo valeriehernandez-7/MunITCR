@@ -70,13 +70,14 @@ $(document).ready(function(){
         }
         var Act = resp.Actualizacion 
         Actualizacion = ""
-        Act = Act.substring(1,Act.length-1)
-        ActJson = JSON.parse(Act)
-        var keys = Object.keys(ActJson);
-        Actualizacion += "<p>"
-        keys.forEach(element => Actualizacion += element+": " + ActJson[element]+ "  <br>");
-        Actualizacion += "</p>"
-
+        if (Act != null){
+          Act = Act.substring(1,Act.length-1)
+          ActJson = JSON.parse(Act)
+          var keys = Object.keys(ActJson);
+          Actualizacion += "<p>"        
+          keys.forEach(element => Actualizacion += element+": " + ActJson[element]+ "  <br>");
+          Actualizacion += "</p>"
+        }
 
 
         var Autor = resp.Autor;
@@ -131,13 +132,14 @@ $(document).ready(function(){
         }
         var Act = resp.Actualizacion 
         Actualizacion = ""
-        Act = Act.substring(1,Act.length-1)
-        ActJson = JSON.parse(Act)
-        var keys = Object.keys(ActJson);
-        Actualizacion += "<p>"
-        keys.forEach(element => Actualizacion += element+": " + ActJson[element]+ "  <br>");
-        Actualizacion += "</p>"
-
+        if (Act != null){
+          Act = Act.substring(1,Act.length-1)
+          ActJson = JSON.parse(Act)
+          var keys = Object.keys(ActJson);
+          Actualizacion += "<p>"
+          keys.forEach(element => Actualizacion += element+": " + ActJson[element]+ "  <br>");
+          Actualizacion += "</p>"
+        }
 
 
         var Autor = resp.Autor;

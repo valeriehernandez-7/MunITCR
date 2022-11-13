@@ -30,9 +30,11 @@ $( document ).ready(function() {
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"lecturas("+ lote +");\" >"
       var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"facturas("+ lote +");\" >"
       var boton3 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"facturasPendientes("+ lote +");\" >"
+      var boton4 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" VER \" onclick=\"arreglo_pago("+ lote +");\" >"
       tabla+= "<td>"+ boton + "</td>"
       tabla+= "<td>"+ boton2 + "</td>"
-      tabla+= "<td>"+ boton3 + "</td></tr>"
+      tabla+= "<td>"+ boton3 + "</td>"
+      tabla+= "<td>"+ boton4 + "</td></tr>"
       $("#tablaItems ").append(tabla);
     }}).catch(e => {
       console.log(e);
@@ -59,6 +61,12 @@ function comprobante(lote){
   var ip = (new URL(location.href)).searchParams.get('ip')
   location.replace('./comprobante_propiedad_NoAdmin.html?uss='+uss+"&ip="+ip+"&lote="+lote);
 }
+function arreglo_pago(lote){
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  //location.replace('./comprobante_propiedad_NoAdmin.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+}
+
 function ret(){
   location.replace('./index.html');
 }

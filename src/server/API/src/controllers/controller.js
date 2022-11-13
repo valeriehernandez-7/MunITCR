@@ -158,13 +158,17 @@ export const ReadMovimientoConsumoAgua=  async (req, res) => {
 export const ReadFacturaPendientePropiedadIn=  async (req, res) => {
     const pool= await getConection() 
     var lote = req.query.lote;
-    console.log(lote)
+    var cant = req.query.cant;
+    if (cant == 0)
+    {
+        cant = null
+    }
+    console.log(cant,lote)
     const result= await pool.request().
                     input('inPropiedadLote', sql.VARCHAR(32), lote).
+                    input('inFacturas', sql.Int, cant).
                     output('outResultCode', sql.Int).
-                    execute('SP_ReadFacturaPendientePropiedadIn');
-        console.log("facturas pendientes")
-        console.log(result.recordset)            
+                    execute('SP_ReadFacturaPendientePropiedadIn');        
         res.json(result.recordset);   
 } 
 

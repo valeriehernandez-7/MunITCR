@@ -8,7 +8,7 @@ $( document ).ready(function() {
       headers: {"Content-Type": "application/json"},
     };
     console.log(options)
-    var url = "http://localhost:8000/ReadFacturaPendientePropiedadIn?lote="+lote
+    var url = "http://localhost:8000/ReadFacturaPendientePropiedadIn?lote="+lote+"&cant=0"
     fetch(url, options).then(response => response.json())
     .then(response => {
       $("#tableBody > tbody").empty();
@@ -58,42 +58,74 @@ function add(){
 
 
 function pagar(){
-  var url = "http://localhost:8000/Pago"
+  var texto="Seguro que desea pagar las facturas:\n";
   var cant = document.getElementById("cantFact").value;
+  var lote = (new URL(location.href)).searchParams.get('lote')
+  console.log("cant ", cant)
   if (cant == 0){
-    alert("Debe pagar al menos 1 factura")
     return
   }
-  var medio = document.getElementById("metodoPago").value;
-  var lote = (new URL(location.href)).searchParams.get('lote')
-  const body={
-    lote:lote.toString(),
-    cant : cant,
-    medio : medio
-  }
-  const options = {
-  method: "post",
-  body: JSON.stringify(body),
-  headers: {"Content-Type": "application/json"},
+  const options2 = {
+    method: "get",
+    headers: {"Content-Type": "application/json"},
   };
-  fetch(url, options).then(response => response.json())
-  .then(response => {    
-    console.log(response)
-    if(response == 5200){
-      window.alert("Se pagaron: "+cant+" facturas")
-      var uss = (new URL(location.href)).searchParams.get('uss')
-      var ip = (new URL(location.href)).searchParams.get('ip')
-      var lote = (new URL(location.href)).searchParams.get('lote')
-      location.replace('./pagar_facturas_propiedad_NoAdmin.html?uss='+uss+"&ip="+ip+"&lote="+lote);
-      return
-    }else {
-      window.alert("Ocurrio un error al pagar las facturas");
-    }
-    
-    }
-  ).catch(e => {
+  
+  var url = "http://localhost:8000/ReadFacturaPendientePropiedadIn?lote="+lote+"&cant="+cant
+  fetch(url, options2).then(response => response.json())
+  .then(response => { 
+    for (var i = 0; i < response.length; i++) {
+      
+      var factura = response [i];      
+      var fecha = factura.Fecha.substring(0,10);
+      var fechaV = factura.FechaVencimiento.substring(0,10);
+      var total = factura.Total
+      texto += "Del "+fecha+" que vence el "+fechaV+" con por un valor de: " +total+"\n";           
+      }
+      if (confirm(texto) == true) {
+        var url = "http://localhost:8000/Pago"
+        var cant = document.getElementById("cantFact").value;
+        if (cant == 0){
+          alert("Debe pagar al menos 1 factura")
+          return
+        }
+        var medio = document.getElementById("metodoPago").value;
+        var lote = (new URL(location.href)).searchParams.get('lote')
+        const body={
+          lote:lote.toString(),
+          cant : cant,
+          medio : medio
+        }
+        const options = {
+        method: "post",
+        body: JSON.stringify(body),
+        headers: {"Content-Type": "application/json"},
+        };
+        fetch(url, options).then(response => response.json())
+        .then(response => {    
+          console.log(response)
+          if(response == 5200){
+            window.alert("Se pagaron: "+cant+" facturas")
+            var uss = (new URL(location.href)).searchParams.get('uss')
+            var ip = (new URL(location.href)).searchParams.get('ip')
+            var lote = (new URL(location.href)).searchParams.get('lote')
+            location.replace('./pagar_facturas_propiedad_NoAdmin.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+            return
+          }else {
+            window.alert("Ocurrio un error al pagar las facturas");
+          }
+          
+          }
+        ).catch(e => {
+            console.log(e);
+          });
+      }
+
+    }).catch(e => {
       console.log(e);
     });
+  
+  
+  
 }
 function ret(){
     var uss = (new URL(location.href)).searchParams.get('uss')
