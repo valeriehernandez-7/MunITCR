@@ -95,11 +95,11 @@
     <CCs>
         <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="5000" ValorMinimoM3="30" ValorM3="300" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" />
         <CC Nombre="Impuesto sobre propiedad" TipoMontoCC="Porcentual" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.01" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" />
-        <CC Nombre="Recoleccion de basura y limpieza de canos" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="150" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="75" ValorM2Minimo="400" ValorTractosM2="200" />
+        <CC Nombre="Recoleccion de basura y limpieza de cannos" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="150" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="75" ValorM2Minimo="400" ValorTractosM2="200" />
         <CC Nombre="Patente comercial" TipoMontoCC="Fijo" PeriodoMontoCC="Semestral" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="150000" ValorM2Minimo="" ValorTractosM2="" />
         <CC Nombre="Reconexion de agua" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual no recurrente" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" />
-        <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual no recurrente" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="30000" ValorM2Minimo="" ValorTractosM2="" />
-        <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="10000" ValorM2Minimo="" ValorTractosM2="" />
+        <CC Nombre="Intereses moratorios" TipoMontoCC="Porcentual" PeriodoMontoCC="Mensual no recurrente" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="0.02" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" />
+        <CC Nombre="Mantenimiento de parques y alumbrado publico" TipoMontoCC="Fijo" PeriodoMontoCC="Anual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="24000" ValorM2Minimo="" ValorTractosM2="" />
         <CC Nombre="Arreglo de pago" TipoMontoCC="Fijo" PeriodoMontoCC="Mensual" ValorMinimo="" ValorMinimoM3="" ValorM3="" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" />
     </CCs>
 </Catalogo>
