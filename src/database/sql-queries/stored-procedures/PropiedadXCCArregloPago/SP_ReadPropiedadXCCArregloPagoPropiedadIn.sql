@@ -22,12 +22,14 @@ BEGIN
 			BEGIN
 				/* Show active "arreglos de pago" of Property based on @inPropiedadLote */
 				SELECT 
-					[TI].[PlazoMeses] AS [PlazoEnMeses],
+					[PXCC].[FechaInicio] AS [FormalizacionContrato],
+					[PXCC].[FechaFin] AS [VencimientoContrato],
+					[TI].[PlazoMeses] AS [PlazoMeses],
 					([TI].[TasaInteresAnual] * 100) AS [TasaInteresAnual],
-					[PXCCAP].[MontoOriginal] AS [MontodeDeuda],
-					[PXCCAP].[MontoAcumuladoAmortizacion] AS [MontodeAmortizacion],
+					[PXCCAP].[MontoOriginal] AS [MontoDeuda],
+					[PXCCAP].[MontoAcumuladoAmortizacion] AS [MontoAmortizacion],
 					[PXCCAP].[MontoAcumuladoAplicado] AS [MontoCancelado],
-					[PXCCAP].[MontoSaldo] AS [Saldo],
+					[PXCCAP].[MontoSaldo] AS [Saldo]
 				FROM [dbo].[PropiedadXCCArregloPago] AS [PXCCAP]
 					INNER JOIN [dbo].[TasaInteres] AS [TI]
 					ON [TI].[ID] = [PXCCAP].[IDTasaInteres]
@@ -38,7 +40,6 @@ BEGIN
 				WHERE [P].[Lote] = @inPropiedadLote
 				AND [P].[Activo] = 1
 				AND [PXCCAP].[Activo] = 1
-				AND [PXCC].[FechaFin] IS NULL
 				ORDER BY [PXCC].[FechaInicio];
 				SET @outResultCode = 5200; /* OK */
 			END;

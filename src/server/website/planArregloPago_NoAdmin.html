@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title>MunITCR</title>
+  <link rel="stylesheet" href="css/list.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <script src="js/facturas_propiedad_NoAdmin.js"></script>
+</head>
+<header class="container-fluid">
+  <div class="row align-items-center" style="background-color: #017bab;">
+    <div class="col" style="text-align: left;">
+      <input class="buttons" type="submit" id="githubBtn" value="MunITCR" style="font-weight: bold;" onclick="window.location.href='https://github.com/valeriehernandez-7/MunITCR';">
+    </div>
+    <div class="col-md-auto">
+      <input class="buttons" type="submit" id="backBTN" value="Regresar" style="font-weight: bold;" onclick="ret();">
+    </div>
+    <div class="col" style="text-align: right;">
+      <input class="buttons" type="submit" id="logOutBtn" value="SALIR" style="font-weight: bold;" onclick="cerrar();">
+    </div>
+    <section class="container-fluid" style="display: flex; justify-content: center;">
+        <p style="color:#FFFFFF; text-align: center;">
+          <b>Arreglos de Pago</b><br>
+        </p>
+      </section>
+  </div>
+</header>
+<body style="background-color: #b4c5cd;">
+  <br><br><br>
+  <div class="container-fluid" style="display: flex; justify-content: center;">
+    <table id="tablaItems" style="border: 2px solid #017bab;">
+      <tr>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Formalización <br> de Contrato</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Vencimiento <br> de Contrato</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Plazo <br> en Meses</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tasa de <br> Interés Anual</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Monto de <br> Deuda</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Monto de <br> Amortizacion</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Monto <br> Cancelado</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Saldo</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Facturas <br> Pendientes</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Facturas <br> Pendientes</th>
+      </tr> 
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+  <br>
+  <br>
+</body>
+<footer class="container-fluid" style="background-color: #017bab;">
+  <!-- Copyright -->
+  <p style="color:#FFFFFF; text-align: center;">
+    <br>
+    <b>&copy; 2022 ✦ MunITCR</b><br>
+    <b href="https://github.com/efmz200">Erick F. Madrigal Zavala</b><br>
+    <b href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</b>
+  </p>
+  <br>
+</footer>
+</html>

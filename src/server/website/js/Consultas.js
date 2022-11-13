@@ -18,6 +18,11 @@ function userProp() {
   var ip = (new URL(location.href)).searchParams.get('ip')
   location.replace('./userProp.html?uss='+uss+"&ip="+ip); 
 }
+function apProp() {
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  location.replace('./planArregloPago_Admin.html?uss='+uss+"&ip="+ip); 
+}
 function ret() {
   var uss = (new URL(location.href)).searchParams.get('uss')
   var ip = (new URL(location.href)).searchParams.get('ip')
