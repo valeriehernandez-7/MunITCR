@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="UTF-8">
-        <title>MunITC</title>
+        <title>MunITCR</title>
         <link rel="stylesheet" href="css/Usuario.css">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -11,13 +11,12 @@
     <body>
         <section class= "form-usuario">
             <h5>Usuario y Propiedad</h5>
-            Nombre de Usuario
-            <select class="controls" name="nombre" id="nombre"><option value="tipo">Usuario</option></select>
-            Numero de Lote
+            Username de Usuario
+            <select class="controls" name="nombre" id="nombre"><option value="tipo">Username</option></select>
+            Lote de Propiedad
             <select class="controls" name="lote" id="lote"><option value="tipo">Lote</option></select>
             Fecha de Registro
             <input class="controls" type="date" id="date" value = "2000-09-09" step="any">
-            
             <section>
               <input class="buttons" type="submit" id="addBtn" value="Agregar" onclick="add();">
               <input class="buttons" type="submit" id="backBTN" value="Regresar" onclick="ret();">

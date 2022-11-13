@@ -22,7 +22,7 @@
     </div>
     <section class="container-fluid" style="display: flex; justify-content: center;">
       <p style="color:#FFFFFF; text-align: center;">
-        <b> Propiedad visible a Usuarios</b><br>
+        <b>Usuarios de Propiedad</b><br>
       </p>
     </section>
   </div>
@@ -31,8 +31,8 @@
   <br><br><br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <section class="filt">
-      <input class="controls" type="number" id="user" value="" placeholder="Lote">
-      <input class="buttons" type="submit" id="descBtn" value=" Filtrar Numero de Finca " onclick="users();">
+      <input class="controls" type="number" id="user" value="" placeholder="Lote de Propiedad">
+      <input class="buttons" type="submit" id="descBtn" value="Mostrar Usuarios" onclick="users();">
     </section>
   </div>
 
@@ -41,10 +41,10 @@
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <table id="tablaItems" style="border: 2px solid #017bab;">
       <tr>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Identificación</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Usuario</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Contraseña</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tipo de Usuario</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Identificación</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Usuario</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Contraseña</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Tipo de Usuario</th>
       </tr>      
       <tbody id="tableBody"></tbody>
     </table>

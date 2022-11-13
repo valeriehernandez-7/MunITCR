@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="UTF-8">
-        <title>MunITC</title>
+        <title>MunITCR</title>
         <link rel="stylesheet" href="css/AdminOptions.css">
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -12,15 +12,14 @@
         <section class= "form-adminOpts">
             <h5>Opciones de Administrador</h5>
 
+            <input class="buttons" type="submit" id="consult" value="Historial" onclick="eventLog();">
             <input class="buttons" type="submit" id="peopleBtn" value="Personas" onclick="people();">
             <input class="buttons" type="submit" id="UserBtn" value="Usuarios" onclick="usr();">
             <input class="buttons" type="submit" id="propertyBtn" value="Propiedades" onclick="property();">
-            <input class="buttons" type="submit" id="pplxprop" value="Asociones Persona/Propiedad" onclick="personXproperty();">
-            <input class="buttons" type="submit" id="usrxprop" value="Asociones Usuario/Propiedad" onclick="userXproperty();">
-            <input class="buttons" type="submit" id="consult" value="Consultas" onclick="consult();">
-            <input class="buttons" type="submit" id="consult" value="EventLog" onclick="eventLog();">
+            <input class="buttons" type="submit" id="pplxprop" value="Asociaciones Persona con Propiedad" onclick="personXproperty();">
+            <input class="buttons" type="submit" id="usrxprop" value="Asociaciones Usuario con Propiedad" onclick="userXproperty();">
+            <input class="buttons" type="submit" id="consult" value="Más opciones" onclick="consult();">
             <input class="buttons" type="submit" id="backBTN" value="Regresar" onclick="ret();">
-
         </section>
     </body>
 </html>

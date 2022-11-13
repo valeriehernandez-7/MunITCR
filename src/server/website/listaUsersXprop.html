@@ -22,7 +22,7 @@
     </div>
     <section class="container-fluid" style="display: flex; justify-content: center;">
       <p style="color:#FFFFFF; text-align: center;">
-        <b>Asociones Usuario/Propiedades</b><br>
+        <b>Asociaciones Usuario con Propiedad</b><br>
       </p>
     </section>
   </div>
@@ -31,18 +31,17 @@
   <br><br><br>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <section>
-      <input class="buttons" type="submit" id="addBtn" value=" Relacionar Usuario y Lote " onclick="add();">
+      <input class="buttons" type="submit" id="addBtn" value=" Vincular Usuario con Propiedad " onclick="add();">
     </section>
   </div>
   <div class="container-fluid" style="display: flex; justify-content: center;">
     <section>
-      Selecciones el tipo de relación que desea visualizar
+      Seleccione el tipo de operación que desea visualizar
       <select class="controls" name="vistarelacionpxp" id="vistarelacionpxp" style="margin-right:10px;">
         <option value="1">Asociación</option>
         <option value="0">Desasociación</option>
         <input class="buttons" type="submit" id="viewBtn" value=" Actualizar " onclick="update();">
         <br>
-      
       </select>
     </section>
   </div>
@@ -52,10 +51,10 @@
     <table id="tablaItems" style="border: 2px solid #017bab;">
       <tr>
 
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Usuario</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Lote</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha Registro</th>
-        <th style="text-align:center; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Operación</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Usuario</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Propiedad</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Fecha de Registro</th>
+        <th style="text-align:center; vertical-align:middle; color: #FFFFFF; background-color: #017bab; border: 2px solid #017bab;">Operaciones</th>
 
       </tr>
       <tbody id="tableBody"></tbody>

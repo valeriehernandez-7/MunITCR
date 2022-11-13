@@ -57,13 +57,13 @@ BEGIN
 						FROM [dbo].[Propiedad] AS [P]
 							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 							ON [PXCC].[IDPropiedad] = [P].[ID]
-							INNER JOIN [dbo].[Factura] AS [F]
+							LEFT OUTER JOIN [dbo].[Factura] AS [F]
 							ON [F].[IDPropiedad] = [P].[ID]
 						WHERE [P].[Activo] = 1
 						AND [PXCC].[FechaFin] IS NULL
 						AND DATEPART(DAY, [P].[FechaRegistro]) >= @diaFechaFinMes
-						AND [F].[IDPropiedad] = [P].[ID]
-						AND [F].[Fecha] NOT BETWEEN @fechaHaceUnMes AND @inFechaOperacion
+						AND [F].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
+						AND [F].[Activo] = 1
 						ORDER BY [P].[ID];
 					END;
 				
@@ -104,7 +104,8 @@ BEGIN
 										INNER JOIN [dbo].[Factura] AS [F]
 										ON [F].[IDPropiedad] = [TP].[IDPropiedad]
 									WHERE [PXCC].[FechaFin] IS NULL
-									AND [F].[Fecha] = @inFechaOperacion;
+									AND [F].[Fecha] = @inFechaOperacion
+									AND [F].[Activo] = 1;
 
 									INSERT INTO [dbo].[DetalleCCConsumoAgua] (
 										[IDDetalleCC],
@@ -113,6 +114,8 @@ BEGIN
 										[DCC].[ID],
 										[MCA].[ID]
 									FROM [dbo].[MovimientoConsumoAgua] AS [MCA]
+										LEFT OUTER JOIN [dbo].[DetalleCCConsumoAgua] AS [DCCCA]
+										ON [DCCCA].[IDMovimientoConsumoAgua] = [MCA].[ID]
 										INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
 										ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
 										INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
@@ -126,7 +129,8 @@ BEGIN
 									WHERE [MCA].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
 									AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
 									AND [PXCC].[FechaFin] IS NULL
-									AND [F].[Fecha] = @inFechaOperacion;
+									AND [F].[Fecha] = @inFechaOperacion
+									AND [F].[Activo] = 1;
 
 									SET @outResultCode = 5200; /* OK */
 								COMMIT TRANSACTION [createFacturaXConceptoCobro]
