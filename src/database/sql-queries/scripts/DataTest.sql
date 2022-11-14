@@ -62,7 +62,7 @@ EXEC(@sqlText);
  SELECT * FROM [TipoUsoPropiedad]  
  SELECT * FROM [TipoZonaPropiedad]  
  SELECT * FROM [Usuario]  
- SELECT * FROM [UsuarioXPropiedad] 
+ SELECT * FROM [UsuarioXPropiedad]  
  
 
 -- *************************************************************
