@@ -61,9 +61,13 @@ BEGIN
 								[MovimientoConsumoAgua].[LecturaMedidor] = @inMonto 
 								[MovimientoConsumoAgua].[MontoM3] = @inMonto - [PropiedadXCCConsumoAgua].[LecturaMedidor] 
 								*/
-								SET @lecturaMedidor = @inMonto;
-								SELECT @montoM3 = (@inMonto - [PXCCCA].[LecturaMedidor])
-								FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA];
+								IF (@inMonto >= (SELECT [PXCCCA].[LecturaMedidor] FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA] WHERE [PXCCCA].[IDPropiedadXCC] = @idPropiedadXCCConsumoAgua))
+									BEGIN
+										SET @lecturaMedidor = @inMonto;
+										SELECT @montoM3 = (@inMonto - [PXCCCA].[LecturaMedidor])
+										FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA]
+										WHERE [PXCCCA].[IDPropiedadXCC] = @idPropiedadXCCConsumoAgua;
+									END;
 							END;
 
 						IF (@inTipo = 'Ajuste Credito')
@@ -73,7 +77,8 @@ BEGIN
 								[MovimientoConsumoAgua].[MontoM3] = @inMonto  
 								*/
 								SELECT @lecturaMedidor = ([PXCCCA].[LecturaMedidor] + @inMonto)
-								FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA];
+								FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA]
+								WHERE [PXCCCA].[IDPropiedadXCC] = @idPropiedadXCCConsumoAgua;
 								SET @montoM3 = @inMonto;
 							END;
 
@@ -83,9 +88,13 @@ BEGIN
 								[MovimientoConsumoAgua].[LecturaMedidor] = [PropiedadXCCConsumoAgua].[LecturaMedidor] - @inMonto 
 								[MovimientoConsumoAgua].[MontoM3] = @inMonto  
 								*/
-								SELECT @lecturaMedidor = ([PXCCCA].[LecturaMedidor] - @inMonto)
-								FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA];
-								SET @montoM3 = @inMonto;
+								IF (@inMonto <= (SELECT [PXCCCA].[LecturaMedidor] FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA] WHERE [PXCCCA].[IDPropiedadXCC] = @idPropiedadXCCConsumoAgua))
+									BEGIN
+										SELECT @lecturaMedidor = ([PXCCCA].[LecturaMedidor] - @inMonto)
+										FROM [dbo].[PropiedadXCCConsumoAgua] AS [PXCCCA]
+										WHERE [PXCCCA].[IDPropiedadXCC] = @idPropiedadXCCConsumoAgua;
+										SET @montoM3 = @inMonto;
+									END;
 							END;
 						
 						IF (@lecturaMedidor IS NOT NULL) AND (@montoM3 IS NOT NULL)

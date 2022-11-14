@@ -5,7 +5,7 @@ GO
 /* 
 	@proc_name SP_Facturacion
 	@proc_description 
-	@proc_param inFechaOperacion
+	@proc_param inFechaOperacion 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
@@ -129,8 +129,37 @@ BEGIN
 									WHERE [MCA].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
 									AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
 									AND [PXCC].[FechaFin] IS NULL
+									AND [DCC].[Activo] = 1
 									AND [F].[Fecha] = @inFechaOperacion
 									AND [F].[Activo] = 1;
+
+									/* Update the total of "DetalleCC" associate to "CCConsumoAgua"
+									of "Factura" from @inFechaOperacion of Property at @TMPPropiedad */
+									UPDATE [dbo].[DetalleCC]
+										SET [Monto] = 
+											CASE
+												WHEN ([PXCA].[LecturaMedidor] - [PXCA].[LecturaMedidorUltimaFactura]) > [CCCA].[MinimoM3]
+												THEN [CCCA].[MontoMinimo] + ((([PXCA].[LecturaMedidor] - [PXCA].[LecturaMedidorUltimaFactura]) - [CCCA].[MinimoM3]) * [CCCA].[MontoMinimoM3])
+												ELSE [CCCA].[MontoMinimo]
+											END
+									FROM [dbo].[DetalleCC] AS [DCC]
+										INNER JOIN [dbo].[Factura] AS [F]
+										ON [F].[ID] = [DCC].[IDFactura]
+										INNER JOIN @TMPPropiedad AS [TP]
+										ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+										INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+										ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+										INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+										ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+										INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
+										ON [CCCA].[IDCC] = [CC].[ID]
+										INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+										ON [PXCA].[IDPropiedadXCC] = [PXCC].[ID]
+									WHERE [DCC].[Activo] = 1
+									AND [F].[Fecha] = @inFechaOperacion
+									AND [F].[Activo] = 1
+									AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+									AND [PXCC].[FechaFin] IS NULL;
 
 									SET @outResultCode = 5200; /* OK */
 								COMMIT TRANSACTION [createFacturaXConceptoCobro]
