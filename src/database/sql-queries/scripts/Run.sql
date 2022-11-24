@@ -640,27 +640,35 @@ BEGIN TRY
 						END;
 				END;
 
+			/* Aplicacion de arreglos de pago aquellas facturas recien pagadas y tal factura
+			asociadas con un AP no cancelado. Se desencadena un proceso para “pagar real” 
+			las facturas con plan de arreglo de pago */
+			--EXECUTE [SP_ArregloPagoAplicacion] @fechaOperacion, @outResultCode OUTPUT;
 
 			/* Procesar ordenes de reconexion de consumo de agua
 			a aquellas propiedades que pagaron la factura que genero su orden de corte
 			de servicio de agua */
 			--EXECUTE [SP_CreateOrdenReconexion] @fechaOperacion, @outResultCode OUTPUT;
 
-			/* Procesar ordenes de corte de consumo de agua
-			a aquellas propiedades que tienen mas de 1 factura pendiente
-			 asociada a cobro de consumo de agua */
-			--EXECUTE [SP_CreateOrdenCorte] @fechaOperacion, @outResultCode OUTPUT;
-
 			/* Generar facturas del mes a la propiedad cuyo dia respecto 
 			de fecha de creacion coincide con el dia de la fecha de operacion */
 			EXECUTE [SP_Facturacion] @fechaOperacion, @outResultCode OUTPUT;
 
-			/* Procesar detalle de cobro por intereses moratorios en facturas vencidas 
-			en fecha de operacion y no asociadas a arreglo de pago */
-			--EXECUTE [SP_FacturacionInteresMoratorio] @fechaOperacion, @outResultCode OUTPUT;
+			/* Procesar ordenes de corte de consumo de agua
+			a aquellas propiedades que tienen mas de 1 factura pendiente
+			 asociada a cobro de consumo de agua mediante el detalle de cobro
+			 de reconexion de agua a facturas generadas en fecha de operacion */
+			--EXECUTE [SP_CreateOrdenCorte] @fechaOperacion, @outResultCode OUTPUT;
 
-			/* Cancelar aquellos arreglos de pago relacionados a facturas que tengas 1 mes o + pendiente */
-			--EXECUTE [SP_RevisionPlanArregloPago] @fechaOperacion, @outResultCode OUTPUT;
+			/* Procesar detalle de cobro por arreglo de pago en facturas generadas
+			en fecha de operacion y asociadas a arreglo de pago */
+			--EXECUTE [SP_FacturacionArregloPago] @fechaOperacion, @outResultCode OUTPUT;
+
+			/* Procesar detalle de cobro por intereses moratorios en facturas vencidas 
+			en fecha de operacion y no asociadas a arreglo de pago. Ademas, 
+			Cancelar aquellos arreglos de pago relacionados a facturas que tengan 
+			1 mes o + pendiente */
+			--EXECUTE [SP_FacturacionInteresMoratorio&APCancelacion] @fechaOperacion, @outResultCode OUTPUT;
 
 			/* Avanzar a la siguiente fecha de operacion */
 			SET @minIDOperacion = @minIDOperacion + 1;
