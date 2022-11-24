@@ -114,6 +114,7 @@ DBCC CHECKIDENT ('[dbo].[PersonaXPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[DetalleCCArregloPago];
+DBCC CHECKIDENT ('[dbo].[DetalleCCArregloPago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[MovimientoArregloPago];
@@ -128,6 +129,7 @@ DBCC CHECKIDENT ('[dbo].[TasaInteres]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[DetalleCCConsumoAgua];
+DBCC CHECKIDENT ('[dbo].[DetalleCCConsumoAgua]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[MovimientoConsumoAgua];

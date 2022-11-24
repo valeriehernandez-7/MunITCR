@@ -57,117 +57,130 @@ BEGIN
 						FROM [dbo].[Propiedad] AS [P]
 							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 							ON [PXCC].[IDPropiedad] = [P].[ID]
-							LEFT OUTER JOIN [dbo].[Factura] AS [F]
-							ON [F].[IDPropiedad] = [P].[ID]
 						WHERE [P].[Activo] = 1
 						AND [PXCC].[FechaFin] IS NULL
 						AND DATEPART(DAY, [P].[FechaRegistro]) >= @diaFechaFinMes
-						AND [F].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
-						AND [F].[Activo] = 1
 						ORDER BY [P].[ID];
 					END;
 				
 				IF EXISTS (SELECT 1 FROM @TMPPropiedad)
 					BEGIN
-						/* Get the bill expiration date based on system parameters */
-						DECLARE @diasVencimiento INT;
-						SELECT @diasVencimiento = [PI].[Valor]
-						FROM [dbo].[ParametroInteger] AS [PI]
-							INNER JOIN [dbo].[Parametro] AS [PS]
-							ON [PS].[ID] = [PI].[IDParametro]
-						WHERE [PS].[Descripcion] = 'Cantidad de dias para calculo de fecha de vencimiento';
-
-						DECLARE @fechaVencimiento DATE = DATEADD(DAY, @diasVencimiento, @inFechaOperacion);
-
-						IF (@fechaVencimiento IS NOT NULL)
-							BEGIN
-								BEGIN TRANSACTION [createFacturaXConceptoCobro]
-									INSERT INTO [dbo].[Factura] (
-										[IDPropiedad],
-										[Fecha],
-										[FechaVencimiento]
-									) SELECT
-										[TP].[IDPropiedad],
-										@inFechaOperacion,
-										@fechaVencimiento
-									FROM @TMPPropiedad AS [TP];
-
-									INSERT INTO [dbo].[DetalleCC] (
-										[IDFactura],
-										[IDPropiedadXConceptoCobro]
-									) SELECT 
-										[F].[ID],
-										[PXCC].[ID]
-									FROM @TMPPropiedad AS [TP]
-										INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-										ON [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-										INNER JOIN [dbo].[Factura] AS [F]
-										ON [F].[IDPropiedad] = [TP].[IDPropiedad]
-									WHERE [PXCC].[FechaFin] IS NULL
-									AND [F].[Fecha] = @inFechaOperacion
-									AND [F].[Activo] = 1;
-
-									INSERT INTO [dbo].[DetalleCCConsumoAgua] (
-										[IDDetalleCC],
-										[IDMovimientoConsumoAgua]
-									) SELECT 
-										[DCC].[ID],
-										[MCA].[ID]
-									FROM [dbo].[MovimientoConsumoAgua] AS [MCA]
-										LEFT OUTER JOIN [dbo].[DetalleCCConsumoAgua] AS [DCCCA]
-										ON [DCCCA].[IDMovimientoConsumoAgua] = [MCA].[ID]
-										INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
-										ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
-										INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-										ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
-										INNER JOIN [dbo].[DetalleCC] AS [DCC]
-										ON [DCC].[IDPropiedadXConceptoCobro] = [PXCC].[ID]
-										INNER JOIN [dbo].[Factura] AS [F]
-										ON [F].[ID] = [DCC].[IDFactura]
+						IF NOT EXISTS ( SELECT 1 
+									FROM [dbo].[Factura] AS [F]
 										INNER JOIN @TMPPropiedad AS [TP]
 										ON [TP].[IDPropiedad] = [F].[IDPropiedad]
-									WHERE [MCA].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
-									AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-									AND [PXCC].[FechaFin] IS NULL
-									AND [DCC].[Activo] = 1
-									AND [F].[Fecha] = @inFechaOperacion
-									AND [F].[Activo] = 1;
-
-									/* Update the total of "DetalleCC" associate to "CCConsumoAgua"
-									of "Factura" from @inFechaOperacion of Property at @TMPPropiedad */
-									UPDATE [dbo].[DetalleCC]
-										SET [Monto] = 
-											CASE
-												WHEN ([PXCA].[LecturaMedidor] - [PXCA].[LecturaMedidorUltimaFactura]) > [CCCA].[MinimoM3]
-												THEN [CCCA].[MontoMinimo] + ((([PXCA].[LecturaMedidor] - [PXCA].[LecturaMedidorUltimaFactura]) - [CCCA].[MinimoM3]) * [CCCA].[MontoMinimoM3])
-												ELSE [CCCA].[MontoMinimo]
-											END
-									FROM [dbo].[DetalleCC] AS [DCC]
-										INNER JOIN [dbo].[Factura] AS [F]
-										ON [F].[ID] = [DCC].[IDFactura]
-										INNER JOIN @TMPPropiedad AS [TP]
-										ON [TP].[IDPropiedad] = [F].[IDPropiedad]
-										INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-										ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
-										INNER JOIN [dbo].[ConceptoCobro] AS [CC]
-										ON [CC].[ID] = [PXCC].[IDConceptoCobro]
-										INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
-										ON [CCCA].[IDCC] = [CC].[ID]
-										INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
-										ON [PXCA].[IDPropiedadXCC] = [PXCC].[ID]
-									WHERE [DCC].[Activo] = 1
-									AND [F].[Fecha] = @inFechaOperacion
+									WHERE ([F].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion)
 									AND [F].[Activo] = 1
-									AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-									AND [PXCC].[FechaFin] IS NULL;
+						)
+							BEGIN
+								/* Get the bill expiration date based on system parameters */
+								DECLARE @diasVencimiento INT;
+								SELECT @diasVencimiento = [PI].[Valor]
+								FROM [dbo].[ParametroInteger] AS [PI]
+									INNER JOIN [dbo].[Parametro] AS [PS]
+									ON [PS].[ID] = [PI].[IDParametro]
+								WHERE [PS].[Descripcion] = 'Cantidad de dias para calculo de fecha de vencimiento';
 
-									SET @outResultCode = 5200; /* OK */
-								COMMIT TRANSACTION [createFacturaXConceptoCobro]
+								DECLARE @fechaVencimiento DATE = DATEADD(DAY, @diasVencimiento, @inFechaOperacion);
+
+								IF (@fechaVencimiento IS NOT NULL)
+									BEGIN
+										BEGIN TRANSACTION [createFacturaXConceptoCobro]
+											INSERT INTO [dbo].[Factura] (
+												[IDPropiedad],
+												[Fecha],
+												[FechaVencimiento]
+											) SELECT
+												[TP].[IDPropiedad],
+												@inFechaOperacion,
+												@fechaVencimiento
+											FROM @TMPPropiedad AS [TP];
+
+											INSERT INTO [dbo].[DetalleCC] (
+												[IDFactura],
+												[IDPropiedadXConceptoCobro]
+											) SELECT 
+												[F].[ID],
+												[PXCC].[ID]
+											FROM @TMPPropiedad AS [TP]
+												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+												ON [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+												INNER JOIN [dbo].[Factura] AS [F]
+												ON [F].[IDPropiedad] = [TP].[IDPropiedad]
+											WHERE [PXCC].[FechaFin] IS NULL
+											AND [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1;
+
+											INSERT INTO [dbo].[DetalleCCConsumoAgua] (
+												[IDDetalleCC],
+												[IDMovimientoConsumoAgua]
+											) SELECT 
+												[DCC].[ID],
+												[MCA].[ID]
+											FROM [dbo].[MovimientoConsumoAgua] AS [MCA]
+												LEFT OUTER JOIN [dbo].[DetalleCCConsumoAgua] AS [DCCCA]
+												ON [DCCCA].[IDMovimientoConsumoAgua] = [MCA].[ID]
+												INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+												ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
+												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+												ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
+												INNER JOIN [dbo].[DetalleCC] AS [DCC]
+												ON [DCC].[IDPropiedadXConceptoCobro] = [PXCC].[ID]
+												INNER JOIN [dbo].[Factura] AS [F]
+												ON [F].[ID] = [DCC].[IDFactura]
+												INNER JOIN @TMPPropiedad AS [TP]
+												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+											WHERE [DCCCA].[IDMovimientoConsumoAgua] IS NULL
+											AND [MCA].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
+											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+											AND [PXCC].[FechaFin] IS NULL
+											AND [DCC].[Activo] = 1
+											AND [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1;
+
+											/* Update the total of "DetalleCC" associate to "CCConsumoAgua"
+											of "Factura" from @inFechaOperacion of Property at @TMPPropiedad */
+											UPDATE [dbo].[DetalleCC]
+												SET [Monto] = 
+													CASE
+														WHEN ([PXCA].[LecturaMedidor] - [PXCA].[LecturaMedidorUltimaFactura]) > [CCCA].[MinimoM3]
+														THEN [CCCA].[MontoMinimo] + ((([PXCA].[LecturaMedidor] - [PXCA].[LecturaMedidorUltimaFactura]) - [CCCA].[MinimoM3]) * [CCCA].[MontoMinimoM3])
+														ELSE [CCCA].[MontoMinimo]
+													END
+											FROM [dbo].[DetalleCC] AS [DCC]
+												INNER JOIN [dbo].[Factura] AS [F]
+												ON [F].[ID] = [DCC].[IDFactura]
+												INNER JOIN @TMPPropiedad AS [TP]
+												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+												ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+												INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+												ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+												INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
+												ON [CCCA].[IDCC] = [CC].[ID]
+												INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+												ON [PXCA].[IDPropiedadXCC] = [PXCC].[ID]
+											WHERE [DCC].[Activo] = 1
+											AND [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1
+											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+											AND [PXCC].[FechaFin] IS NULL;
+
+											SET @outResultCode = 5200; /* OK */
+										COMMIT TRANSACTION [createFacturaXConceptoCobro]
+									END;
+								ELSE
+									BEGIN
+										/* ERROR : Cannot start the billing process because
+										some params are null */
+										SET @outResultCode = 5403; 
+										RETURN;
+									END;
 							END;
 						ELSE
 							BEGIN
 								/* ERROR : Cannot start the billing process because
-								some params are null */
+								some Property has already bills on @inFechaOperacion */
 								SET @outResultCode = 5402; 
 								RETURN;
 							END;
