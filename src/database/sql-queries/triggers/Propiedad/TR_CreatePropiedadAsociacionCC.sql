@@ -70,7 +70,7 @@ BEGIN
 				[CC].[ID],
 				@fechaNuevaPropiedad
 			FROM [dbo].[ConceptoCobro] AS [CC]
-			WHERE [CC].[Nombre] = 'Recoleccion de basura y limpieza de canos';
+			WHERE [CC].[Nombre] = 'Recoleccion de basura y limpieza de cannos';
 		END;
 
 
