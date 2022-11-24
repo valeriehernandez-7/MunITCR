@@ -83,99 +83,180 @@ BEGIN
 
 								DECLARE @fechaVencimiento DATE = DATEADD(DAY, @diasVencimiento, @inFechaOperacion);
 
-								IF (@fechaVencimiento IS NOT NULL)
+								DECLARE 
+									@minIDTMPPropiedad INT,
+									@maxIDTMPPropiedad INT;
+								SELECT 
+									@minIDTMPPropiedad = MIN([TP].[ID]),
+									@maxIDTMPPropiedad = MAX([TP].[ID])
+								FROM @TMPPropiedad AS [TP];
+
+								DECLARE @LecturaMedidorUltimaFacturaXPropiedad TABLE (
+									[ID] INT IDENTITY(1,1) PRIMARY KEY,
+									[LecturaMedidorUltimaFactura] INT,
+									[IDPropiedad] INT
+								);
+
+								WHILE (@minIDTMPPropiedad <= @maxIDTMPPropiedad)
 									BEGIN
-										BEGIN TRANSACTION [createFacturaXConceptoCobro]
-											INSERT INTO [dbo].[Factura] (
-												[IDPropiedad],
-												[Fecha],
-												[FechaVencimiento]
-											) SELECT
-												[TP].[IDPropiedad],
-												@inFechaOperacion,
-												@fechaVencimiento
-											FROM @TMPPropiedad AS [TP];
+										-- INSERT INTO @LecturaMedidorUltimaFacturaXPropiedad (
+										-- 	[LecturaMedidorUltimaFactura],
+										-- 	[IDPropiedad]
+										-- ) SELECT
+										-- 	MAX([MCA].[LecturaMedidor]),
+										-- 	[TP].[IDPropiedad]
+										-- FROM [dbo].[MovimientoConsumoAgua] AS [MCA]
+										-- 	INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+										-- 	ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
+										-- 	INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+										-- 	ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
+										-- 	INNER JOIN @TMPPropiedad AS [TP]
+										-- 	ON [TP].[IDPropiedad] = [PXCC].[IDPropiedad]
+										-- WHERE [MCA].[Fecha] < @fechaHaceUnMes
+										-- AND [TP].[ID] = @minIDTMPPropiedad
+										-- GROUP BY [TP].[IDPropiedad];
 
-											INSERT INTO [dbo].[DetalleCC] (
-												[IDFactura],
-												[IDPropiedadXConceptoCobro]
-											) SELECT 
-												[F].[ID],
-												[PXCC].[ID]
-											FROM @TMPPropiedad AS [TP]
-												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-												ON [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-												INNER JOIN [dbo].[Factura] AS [F]
-												ON [F].[IDPropiedad] = [TP].[IDPropiedad]
-											WHERE [PXCC].[FechaFin] IS NULL
-											AND [F].[Fecha] = @inFechaOperacion
-											AND [F].[Activo] = 1;
+										INSERT INTO @LecturaMedidorUltimaFacturaXPropiedad (
+											[LecturaMedidorUltimaFactura],
+											[IDPropiedad]
+										) SELECT
+											(CASE
+												WHEN (
+													SELECT 
+														MAX([MCA].[LecturaMedidor]) 
+													FROM [dbo].[MovimientoConsumoAgua] AS [MCA] 
+														INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+														ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
+														INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+														ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
+														INNER JOIN @TMPPropiedad AS [TP]
+														ON [TP].[IDPropiedad] = [PXCC].[IDPropiedad]
+													WHERE [MCA].[Fecha] <= @fechaHaceUnMes
+													AND [TP].[ID] = @minIDTMPPropiedad
+													GROUP BY [TP].[IDPropiedad]
+												) IS NULL THEN 0
+												ELSE (
+													SELECT 
+														MAX([MCA].[LecturaMedidor]) 
+													FROM [dbo].[MovimientoConsumoAgua] AS [MCA] 
+														INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+														ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
+														INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+														ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
+														INNER JOIN @TMPPropiedad AS [TP]
+														ON [TP].[IDPropiedad] = [PXCC].[IDPropiedad]
+													WHERE [MCA].[Fecha] <= @fechaHaceUnMes
+													AND [TP].[ID] = @minIDTMPPropiedad
+													GROUP BY [TP].[IDPropiedad]
+												)
+											END),
+											[TP].[IDPropiedad]
+										FROM @TMPPropiedad AS [TP]
+											INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+											ON [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+											INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+											ON [PXCA].[IDPropiedadXCC] = [PXCC].[ID]
+										WHERE [TP].[ID] = @minIDTMPPropiedad;
 
-											INSERT INTO [dbo].[DetalleCCConsumoAgua] (
-												[IDDetalleCC],
-												[IDMovimientoConsumoAgua]
-											) SELECT 
-												[DCC].[ID],
-												[MCA].[ID]
-											FROM [dbo].[MovimientoConsumoAgua] AS [MCA]
-												LEFT OUTER JOIN [dbo].[DetalleCCConsumoAgua] AS [DCCCA]
-												ON [DCCCA].[IDMovimientoConsumoAgua] = [MCA].[ID]
-												INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
-												ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
-												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-												ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
-												INNER JOIN [dbo].[DetalleCC] AS [DCC]
-												ON [DCC].[IDPropiedadXConceptoCobro] = [PXCC].[ID]
-												INNER JOIN [dbo].[Factura] AS [F]
-												ON [F].[ID] = [DCC].[IDFactura]
-												INNER JOIN @TMPPropiedad AS [TP]
-												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
-											WHERE [DCCCA].[IDMovimientoConsumoAgua] IS NULL
-											AND [MCA].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
-											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-											AND [PXCC].[FechaFin] IS NULL
-											AND [DCC].[Activo] = 1
-											AND [F].[Fecha] = @inFechaOperacion
-											AND [F].[Activo] = 1;
-
-											/* Update the total of "DetalleCC" associate to "CCConsumoAgua"
-											of "Factura" from @inFechaOperacion of Property at @TMPPropiedad */
-											UPDATE [dbo].[DetalleCC]
-												SET [Monto] = 
-													CASE
-														WHEN ([PXCA].[LecturaMedidor] - [PXCA].[LecturaMedidorUltimaFactura]) > [CCCA].[MinimoM3]
-														THEN [CCCA].[MontoMinimo] + ((([PXCA].[LecturaMedidor] - [PXCA].[LecturaMedidorUltimaFactura]) - [CCCA].[MinimoM3]) * [CCCA].[MontoMinimoM3])
-														ELSE [CCCA].[MontoMinimo]
-													END
-											FROM [dbo].[DetalleCC] AS [DCC]
-												INNER JOIN [dbo].[Factura] AS [F]
-												ON [F].[ID] = [DCC].[IDFactura]
-												INNER JOIN @TMPPropiedad AS [TP]
-												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
-												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-												ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
-												INNER JOIN [dbo].[ConceptoCobro] AS [CC]
-												ON [CC].[ID] = [PXCC].[IDConceptoCobro]
-												INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
-												ON [CCCA].[IDCC] = [CC].[ID]
-												INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
-												ON [PXCA].[IDPropiedadXCC] = [PXCC].[ID]
-											WHERE [DCC].[Activo] = 1
-											AND [F].[Fecha] = @inFechaOperacion
-											AND [F].[Activo] = 1
-											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-											AND [PXCC].[FechaFin] IS NULL;
-
-											SET @outResultCode = 5200; /* OK */
-										COMMIT TRANSACTION [createFacturaXConceptoCobro]
+										SET @minIDTMPPropiedad = @minIDTMPPropiedad + 1;
 									END;
-								ELSE
-									BEGIN
-										/* ERROR : Cannot start the billing process because
-										some params are null */
-										SET @outResultCode = 5403; 
-										RETURN;
-									END;
+
+								SELECT * FROM @TMPPropiedad;
+								SELECT * FROM @LecturaMedidorUltimaFacturaXPropiedad;
+
+								-- IF EXISTS (SELECT 1 FROM @LecturaMedidorUltimaFacturaXPropiedad) AND (@fechaVencimiento IS NOT NULL)
+								-- 	BEGIN
+								-- 		BEGIN TRANSACTION [createFacturaXConceptoCobro]
+								-- 			INSERT INTO [dbo].[Factura] (
+								-- 				[IDPropiedad],
+								-- 				[Fecha],
+								-- 				[FechaVencimiento]
+								-- 			) SELECT
+								-- 				[TP].[IDPropiedad],
+								-- 				@inFechaOperacion,
+								-- 				@fechaVencimiento
+								-- 			FROM @TMPPropiedad AS [TP];
+
+								-- 			INSERT INTO [dbo].[DetalleCC] (
+								-- 				[IDFactura],
+								-- 				[IDPropiedadXConceptoCobro]
+								-- 			) SELECT 
+								-- 				[F].[ID],
+								-- 				[PXCC].[ID]
+								-- 			FROM @TMPPropiedad AS [TP]
+								-- 				INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+								-- 				ON [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+								-- 				INNER JOIN [dbo].[Factura] AS [F]
+								-- 				ON [F].[IDPropiedad] = [TP].[IDPropiedad]
+								-- 			WHERE [PXCC].[FechaFin] IS NULL
+								-- 			AND [F].[Fecha] = @inFechaOperacion
+								-- 			AND [F].[Activo] = 1;
+
+								-- 			INSERT INTO [dbo].[DetalleCCConsumoAgua] (
+								-- 				[IDDetalleCC],
+								-- 				[IDMovimientoConsumoAgua]
+								-- 			) SELECT 
+								-- 				[DCC].[ID],
+								-- 				[MCA].[ID]
+								-- 			FROM [dbo].[MovimientoConsumoAgua] AS [MCA]
+								-- 				LEFT OUTER JOIN [dbo].[DetalleCCConsumoAgua] AS [DCCCA]
+								-- 				ON [DCCCA].[IDMovimientoConsumoAgua] = [MCA].[ID]
+								-- 				INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+								-- 				ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
+								-- 				INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+								-- 				ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
+								-- 				INNER JOIN [dbo].[DetalleCC] AS [DCC]
+								-- 				ON [DCC].[IDPropiedadXConceptoCobro] = [PXCC].[ID]
+								-- 				INNER JOIN [dbo].[Factura] AS [F]
+								-- 				ON [F].[ID] = [DCC].[IDFactura]
+								-- 				INNER JOIN @TMPPropiedad AS [TP]
+								-- 				ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+								-- 			WHERE [DCCCA].[IDMovimientoConsumoAgua] IS NULL
+								-- 			AND [MCA].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
+								-- 			AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+								-- 			AND [PXCC].[FechaFin] IS NULL
+								-- 			AND [DCC].[Activo] = 1
+								-- 			AND [F].[Fecha] = @inFechaOperacion
+								-- 			AND [F].[Activo] = 1;
+
+								-- 			/* Update the total of "DetalleCC" associate to "CCConsumoAgua"
+								-- 			of "Factura" from @inFechaOperacion of Property at @TMPPropiedad */
+								-- 			UPDATE [dbo].[DetalleCC]
+								-- 				SET [Monto] = 
+								-- 					CASE
+								-- 						WHEN ([PXCA].[LecturaMedidor] - [LUF].LecturaMedidorUltimaFactura) > [CCCA].[MinimoM3]
+								-- 						THEN [CCCA].[MontoMinimo] + ((([PXCA].[LecturaMedidor] - [LUF].[LecturaMedidorUltimaFactura]) - [CCCA].[MinimoM3]) * [CCCA].[MontoMinimoM3])
+								-- 						ELSE [CCCA].[MontoMinimo]
+								-- 					END
+								-- 			FROM [dbo].[DetalleCC] AS [DCC]
+								-- 				INNER JOIN [dbo].[Factura] AS [F]
+								-- 				ON [F].[ID] = [DCC].[IDFactura]
+								-- 				INNER JOIN @LecturaMedidorUltimaFacturaXPropiedad AS [LUF]
+								-- 				ON [LUF].[IDPropiedad] = [F].[IDPropiedad]
+								-- 				INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+								-- 				ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+								-- 				INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+								-- 				ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+								-- 				INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
+								-- 				ON [CCCA].[IDCC] = [CC].[ID]
+								-- 				INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
+								-- 				ON [PXCA].[IDPropiedadXCC] = [PXCC].[ID]
+								-- 			WHERE [DCC].[Activo] = 1
+								-- 			AND [F].[Fecha] = @inFechaOperacion
+								-- 			AND [F].[Activo] = 1
+								-- 			AND [PXCC].[IDPropiedad] = [LUF].[IDPropiedad]
+								-- 			AND [PXCC].[FechaFin] IS NULL;
+
+								-- 			SET @outResultCode = 5200; /* OK */
+								-- 		COMMIT TRANSACTION [createFacturaXConceptoCobro]
+								-- 	END;
+								-- ELSE
+								-- 	BEGIN
+								-- 		/* ERROR : Cannot start the billing process because
+								-- 		some params are null */
+								-- 		SET @outResultCode = 5403; 
+								-- 		RETURN;
+								-- 	END;
 							END;
 						ELSE
 							BEGIN
