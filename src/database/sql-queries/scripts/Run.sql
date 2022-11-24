@@ -653,7 +653,7 @@ BEGIN TRY
 
 			/* Generar facturas del mes a la propiedad cuyo dia respecto 
 			de fecha de creacion coincide con el dia de la fecha de operacion */
-			--EXECUTE [SP_Facturacion] @fechaOperacion, @outResultCode OUTPUT;
+			EXECUTE [SP_Facturacion] @fechaOperacion, @outResultCode OUTPUT;
 
 			/* Procesar detalle de cobro por intereses moratorios en facturas vencidas 
 			en fecha de operacion y no asociadas a arreglo de pago */

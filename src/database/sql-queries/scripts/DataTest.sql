@@ -93,6 +93,14 @@ DELETE FROM [dbo].[OrdenCorte];
 DBCC CHECKIDENT ('[dbo].[OrdenCorte]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
+DELETE FROM [dbo].[DetalleCCConsumoAgua];
+DBCC CHECKIDENT ('[dbo].[DetalleCCConsumoAgua]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
+DELETE FROM [dbo].[DetalleCCArregloPago];
+DBCC CHECKIDENT ('[dbo].[DetalleCCArregloPago]', RESEED, 0) WITH NO_INFOMSGS;
+GO
+
 DELETE FROM [dbo].[DetalleCC];
 DBCC CHECKIDENT ('[dbo].[DetalleCC]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -113,10 +121,6 @@ DELETE FROM [dbo].[PersonaXPropiedad];
 DBCC CHECKIDENT ('[dbo].[PersonaXPropiedad]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
-DELETE FROM [dbo].[DetalleCCArregloPago];
-DBCC CHECKIDENT ('[dbo].[DetalleCCArregloPago]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
 DELETE FROM [dbo].[MovimientoArregloPago];
 DBCC CHECKIDENT ('[dbo].[MovimientoArregloPago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
@@ -126,10 +130,6 @@ GO
 
 DELETE FROM [dbo].[TasaInteres];
 DBCC CHECKIDENT ('[dbo].[TasaInteres]', RESEED, 0) WITH NO_INFOMSGS;
-GO
-
-DELETE FROM [dbo].[DetalleCCConsumoAgua];
-DBCC CHECKIDENT ('[dbo].[DetalleCCConsumoAgua]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[MovimientoConsumoAgua];

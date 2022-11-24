@@ -105,7 +105,8 @@ BEGIN
 
 								WHILE (@minIDTMPPropiedad <= @maxIDTMPPropiedad)
 									BEGIN
-										SELECT @lecturaMedidorUltimaFactura = MAX([MCA].[LecturaMedidor]) 
+										SELECT TOP 1
+											@lecturaMedidorUltimaFactura = [MCA].[LecturaMedidor]
 										FROM [dbo].[MovimientoConsumoAgua] AS [MCA] 
 											INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
 											ON [PXCA].[IDPropiedadXCC] = [MCA].[IDPropiedadXCCConsumoAgua]
@@ -113,9 +114,9 @@ BEGIN
 											ON [PXCC].[ID] = [PXCA].[IDPropiedadXCC]
 											INNER JOIN @TMPPropiedad AS [TP]
 											ON [TP].[IDPropiedad] = [PXCC].[IDPropiedad]
-										WHERE [MCA].[Fecha] <= @fechaHaceUnMes
+										WHERE [MCA].[Fecha] < @fechaHaceUnMes
 										AND [TP].[ID] = @minIDTMPPropiedad
-										GROUP BY [TP].[IDPropiedad];
+										ORDER BY [MCA].[ID] DESC;
 
 										UPDATE @TMPPropiedad 
 											SET [LecturaMedidorUltimaFactura] =
