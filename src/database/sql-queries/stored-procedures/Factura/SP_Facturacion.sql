@@ -136,7 +136,7 @@ BEGIN
 
 								IF (@fechaVencimiento IS NOT NULL)
 									BEGIN
-										BEGIN TRANSACTION [createFacturaXConceptoCobro]
+										BEGIN TRANSACTION [createFacturaXPropiedad]
 											/* Create the monthly bill for the properties on @TMPPropiedad */
 											INSERT INTO [dbo].[Factura] (
 												[IDPropiedad],
@@ -326,9 +326,37 @@ BEGIN
 											AND [F].[Activo] = 1
 											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
 											AND [PXCC].[FechaFin] IS NULL;
+											
+											/* Calculates the "MontoOriginal" of the generated bill 
+											being the sum of the "DetalleCC.Monto" associated to the bill*/
+											UPDATE [dbo].[Factura]
+												SET [MontoOriginal] = (
+													SELECT SUM([DCC].[Monto])
+													FROM [dbo].[Factura] AS [FA]
+														INNER JOIN [dbo].[DetalleCC] AS [DCC]
+														ON [DCC].[IDFactura] = [FA].[ID]
+													WHERE [FA].[ID] = [F].[ID]
+													AND [DCC].[Activo] = 1
+													GROUP BY [DCC].[IDFactura]
+												)
+											FROM [dbo].[Factura] AS [F]
+												INNER JOIN @TMPPropiedad AS [TP]
+												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+											WHERE [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1;
+
+											/* Match the "MontoPagar" and the "MontoOriginal"
+											of the generated bill */
+											UPDATE [dbo].[Factura]
+												SET [MontoPagar] = [MontoOriginal]
+											FROM [dbo].[Factura] AS [F]
+												INNER JOIN @TMPPropiedad AS [TP]
+												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+											WHERE [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1;
 
 											SET @outResultCode = 5200; /* OK */
-										COMMIT TRANSACTION [createFacturaXConceptoCobro]
+										COMMIT TRANSACTION [createFacturaXPropiedad]
 									END;
 								ELSE
 									BEGIN
@@ -364,7 +392,7 @@ BEGIN
 	BEGIN CATCH
 		IF @@TRANCOUNT > 0
 			BEGIN
-				ROLLBACK TRANSACTION [createFacturaXConceptoCobro]
+				ROLLBACK TRANSACTION [createFacturaXPropiedad]
 			END;
 		IF OBJECT_ID(N'dbo.ErrorLog', N'U') IS NOT NULL /* Check Error table existence */
 			BEGIN
