@@ -3,13 +3,13 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadDetalleCCPropiedadIn
+	@proc_name SP_ReadDetalleCCXFacturaPropiedadIn
 	@proc_description 
 	@proc_param inPropiedadLote 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 */
-CREATE OR ALTER PROCEDURE [SP_ReadDetalleCCPropiedadIn]
+CREATE OR ALTER PROCEDURE [SP_ReadDetalleCCXFacturaPropiedadIn]
 	@inPropiedadLote VARCHAR(32),
 	@outResultCode INT OUTPUT
 AS
@@ -18,20 +18,27 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 		SELECT 
-			[P].[Lote] AS [LotePropiedad],
-			[P].[MetrosCuadrados] AS [MetrosCuadradosPropiedad],
-			[P].[ValorFiscal] AS [ValorFiscalPropiedad],
-			[P].[FechaRegistro] AS [FechaRegistroPropiedad],
 			[F].[ID] AS [IDFactura],
 			[F].[Fecha] AS [FechaFactura],
 			[F].[FechaVencimiento] AS [FechaVencimientoFactura],
 			[F].[MontoOriginal] AS [MontoOriginalFactura],
-			(SELECT [F].[MontoPagar] - [F].[MontoOriginal]) AS [MorosidadesFactura],
+			([F].[MontoPagar] - [F].[MontoOriginal]) AS [MorosidadesFactura],
 			[F].[MontoPagar] AS [MontoPagarFactura],
 			[F].[IDComprobantePago] AS [IDComprobantePago],
+			(CASE 
+				WHEN [F].[PlanArregloPago] = 0 THEN 'No'
+				WHEN [F].[PlanArregloPago] = 1 THEN 'Si'
+			END) AS [ArregloPagoFactura],
+			(CASE 
+				WHEN [F].[Activo] = 0 THEN 'Anulada'
+				WHEN [F].[Activo] = 1 THEN 'Activa'
+			END) AS [EstadoFactura],
 			[DCC].[ID] AS [IDDetalleCC],
-			[DCC].[IDPropiedadXConceptoCobro] AS [IDPropiedadXConceptoCobro],
 			[DCC].[Monto] AS [MontoDetalleCC],
+			(CASE 
+				WHEN [DCC].[Activo] = 0 THEN 'Anulado'
+				WHEN [DCC].[Activo] = 1 THEN 'Activo'
+			END) AS [EstadoDetalleCC],
 			[CC].[Nombre] AS [ConceptoCobro],
 			[PMCC].[Nombre] AS [PeriodoMontoCC],
 			[TMCC].[Nombre] AS [TipoMontoCC]
@@ -49,8 +56,7 @@ BEGIN
 			INNER JOIN [dbo].[TipoMontoCC] AS [TMCC]
 			ON [TMCC].[ID] = [CC].[IDTipoMontoCC]
 		WHERE [P].[Lote] = @inPropiedadLote
-		AND [P].[Activo] = 1
-		AND [DCC].[Activo] = 1;
+		ORDER BY [F].[Fecha];
 		SET @outResultCode = 5200; /* OK */
 	END TRY
 	BEGIN CATCH

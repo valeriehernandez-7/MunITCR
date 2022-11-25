@@ -16,4 +16,5 @@ SELECT [P].[Lote] FROM [dbo].[Propiedad] AS [P];
 SELECT [TP].[PropiedadLote] FROM @TMPPropiedad AS [TP];
 
 SET @propiedadLote = '';
-EXECUTE [SP_ReadDetalleCCPropiedadIn] @propiedadLote, @outResultCode OUTPUT;
+EXECUTE [SP_ReadPropiedadLoteIn] @propiedadLote, @outResultCode OUTPUT;
+EXECUTE [SP_ReadDetalleCCXFacturaPropiedadIn] @propiedadLote, @outResultCode OUTPUT;
