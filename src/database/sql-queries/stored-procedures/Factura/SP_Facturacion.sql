@@ -194,7 +194,8 @@ BEGIN
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1;
 
-											/* Update the total of "DetalleCC" associate to "CCConsumoAgua"
+											/* Update the total of "DetalleCC" associate to "CCConsumoAgua" as 
+											"ConceptoCobro.Nombre = Consumo de agua"
 											of "Factura" from @inFechaOperacion of property at @TMPPropiedad */
 											UPDATE [dbo].[DetalleCC]
 												SET [Monto] = 
@@ -216,6 +217,36 @@ BEGIN
 												ON [CCCA].[IDCC] = [CC].[ID]
 												INNER JOIN [dbo].[PropiedadXCCConsumoAgua] AS [PXCA]
 												ON [PXCA].[IDPropiedadXCC] = [PXCC].[ID]
+											WHERE [DCC].[Activo] = 1
+											AND [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1
+											AND [TP].[LecturaMedidorUltimaFactura] IS NOT NULL
+											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+											AND [PXCC].[FechaFin] IS NULL;
+
+											/* Update the total of "DetalleCC" associate to "CCBasura" as 
+											"ConceptoCobro.Nombre = Recoleccion de basura y limpieza de cannos"
+											of "Factura" from @inFechaOperacion of property at @TMPPropiedad */
+											UPDATE [dbo].[DetalleCC]
+												SET [Monto] = 
+													CASE
+														WHEN [P].[MetrosCuadrados] > [CCB].[MontoMinimoM2]
+														THEN [CCB].[MontoMinimo] + (FLOOR((([P].[MetrosCuadrados] - [CCB].[MontoMinimoM2]) / [CCB].[MontoTractoM2])) * [CCB].[MontoFijo])
+														ELSE [CCB].[MontoMinimo]
+													END
+											FROM [dbo].[DetalleCC] AS [DCC]
+												INNER JOIN [dbo].[Factura] AS [F]
+												ON [F].[ID] = [DCC].[IDFactura]
+												INNER JOIN @TMPPropiedad AS [TP]
+												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+												INNER JOIN [dbo].[Propiedad] AS [P]
+												ON [P].[ID] = [TP].[IDPropiedad]
+												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+												ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+												INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+												ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+												INNER JOIN [dbo].[CCBasura] AS [CCB]
+												ON [CCB].[IDCC] = [CC].[ID]
 											WHERE [DCC].[Activo] = 1
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1
