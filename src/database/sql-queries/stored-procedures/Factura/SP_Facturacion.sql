@@ -250,7 +250,80 @@ BEGIN
 											WHERE [DCC].[Activo] = 1
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1
-											AND [TP].[LecturaMedidorUltimaFactura] IS NOT NULL
+											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+											AND [PXCC].[FechaFin] IS NULL;
+
+											/* Update the total of "DetalleCC" associate to "CCPantenteComercial" as 
+											"ConceptoCobro.Nombre = Patente comercial"
+											of "Factura" from @inFechaOperacion of property at @TMPPropiedad */
+											UPDATE [dbo].[DetalleCC]
+												SET [Monto] = ([CCPC].[MontoFijo] / [PMCC].[Meses])
+											FROM [dbo].[DetalleCC] AS [DCC]
+												INNER JOIN [dbo].[Factura] AS [F]
+												ON [F].[ID] = [DCC].[IDFactura]
+												INNER JOIN @TMPPropiedad AS [TP]
+												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+												ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+												INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+												ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+												INNER JOIN [dbo].[CCPatenteComercial] AS [CCPC]
+												ON [CCPC].[IDCC] = [CC].[ID]
+												INNER JOIN [dbo].[PeriodoMontoCC] AS [PMCC]
+												ON [PMCC].[ID] = [CC].[IDPeriodoCC]
+											WHERE [DCC].[Activo] = 1
+											AND [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1
+											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+											AND [PXCC].[FechaFin] IS NULL;
+
+											/* Update the total of "DetalleCC" associate to "CCMantenimientoParque" as 
+											"ConceptoCobro.Nombre = Mantenimiento de parques y alumbrado publico"
+											of "Factura" from @inFechaOperacion of property at @TMPPropiedad */
+											UPDATE [dbo].[DetalleCC]
+												SET [Monto] = ([CCMP].[MontoFijo] / [PMCC].[Meses])
+											FROM [dbo].[DetalleCC] AS [DCC]
+												INNER JOIN [dbo].[Factura] AS [F]
+												ON [F].[ID] = [DCC].[IDFactura]
+												INNER JOIN @TMPPropiedad AS [TP]
+												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+												ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+												INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+												ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+												INNER JOIN [dbo].[CCMantenimientoParque] AS [CCMP]
+												ON [CCMP].[IDCC] = [CC].[ID]
+												INNER JOIN [dbo].[PeriodoMontoCC] AS [PMCC]
+												ON [PMCC].[ID] = [CC].[IDPeriodoCC]
+											WHERE [DCC].[Activo] = 1
+											AND [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1
+											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
+											AND [PXCC].[FechaFin] IS NULL;
+
+											/* Update the total of "DetalleCC" associate to "CCImpuestoPropiedad" as 
+											"ConceptoCobro.Nombre = Impuesto sobre propiedad"
+											of "Factura" from @inFechaOperacion of property at @TMPPropiedad */
+											UPDATE [dbo].[DetalleCC]
+												SET [Monto] = (([P].[ValorFiscal] * [CCIP].[MontoPorcentual]) / [PMCC].[Meses])
+											FROM [dbo].[DetalleCC] AS [DCC]
+												INNER JOIN [dbo].[Factura] AS [F]
+												ON [F].[ID] = [DCC].[IDFactura]
+												INNER JOIN @TMPPropiedad AS [TP]
+												ON [TP].[IDPropiedad] = [F].[IDPropiedad]
+												INNER JOIN [dbo].[Propiedad] AS [P]
+												ON [P].[ID] = [TP].[IDPropiedad]
+												INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+												ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+												INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+												ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+												INNER JOIN [dbo].[CCImpuestoPropiedad] AS [CCIP]
+												ON [CCIP].[IDCC] = [CC].[ID]
+												INNER JOIN [dbo].[PeriodoMontoCC] AS [PMCC]
+												ON [PMCC].[ID] = [CC].[IDPeriodoCC]
+											WHERE [DCC].[Activo] = 1
+											AND [F].[Fecha] = @inFechaOperacion
+											AND [F].[Activo] = 1
 											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
 											AND [PXCC].[FechaFin] IS NULL;
 
