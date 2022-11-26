@@ -3,12 +3,13 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadTasasInteresSolictudAPIn
+	@proc_name SP_ReadTasasInteresSolictudAP
 	@proc_description 
 	@proc_param inPropiedadLote 
+	@proc_param inFechaOperacion 
 	@proc_param outResultCode Procedure return value
 */
-CREATE OR ALTER PROCEDURE [SP_ReadTasasInteresSolictudAPIn]
+CREATE OR ALTER PROCEDURE [SP_ReadTasasInteresSolictudAP]
 	@inPropiedadLote VARCHAR(32),
 	@inFechaOperacion DATE,
 	@outResultCode INT OUTPUT
@@ -45,7 +46,7 @@ BEGIN
 					PlazoMeses AS Plazo,
 					TasaInteresAnual*100 AS Tasa,
 					(@TotalAPagar/PlazoMeses + @TotalAPagar*(TasaInteresAnual/12)) AS Cuota,
-					DATEADD(month, PlazoMeses, GETDATE()) AS FechaFin
+					DATEADD(month, PlazoMeses, @inFechaOperacion) AS FechaFin
 				FROM [dbo].[TasaInteres]
 
 				SET @outResultCode = 5200; /* OK */
