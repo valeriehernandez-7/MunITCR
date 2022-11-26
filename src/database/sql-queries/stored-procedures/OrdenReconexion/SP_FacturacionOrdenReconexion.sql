@@ -60,7 +60,7 @@ BEGIN
 					AND [F].[Activo] = 1
 					AND [DCC].[Activo] = 1
 					AND [P].[Activo] = 1
-					AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion;
+					AND [PXCC].[FechaFin] IS NULL;
 
 					/*  */
 					UPDATE [dbo].[PropiedadXConceptoCobro]
@@ -76,7 +76,7 @@ BEGIN
 						ON [CC].[ID] = [PXCC].[IDConceptoCobro]
 						INNER JOIN [dbo].[CCReconexion] AS [CCR]
 						ON [CCR].[IDCC] = [CC].[ID]
-					WHERE [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+					WHERE [PXCC].[FechaFin] IS NULL
 					AND [DCC].[Activo] = 1
 					AND [F].[IDComprobantePago] IS NOT NULL
 					AND [F].[Activo] = 1
