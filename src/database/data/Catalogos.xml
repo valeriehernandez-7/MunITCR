@@ -90,7 +90,6 @@
     </TipoParametroSistema>
     <ParametrosSistema>
         <ParametroSistema Nombre="Cantidad de dias para calculo de fecha de vencimiento" NombreTipoPar="int" Valor="8" />
-        <ParametroSistema Nombre="Cantidad de dias de gracia para corte de agua" NombreTipoPar="int" Valor="10" />
     </ParametrosSistema>
     <CCs>
         <CC Nombre="Consumo de agua" TipoMontoCC="Variable" PeriodoMontoCC="Mensual" ValorMinimo="5000" ValorMinimoM3="30" ValorM3="300" ValorPorcentual="" ValorFijo="" ValorM2Minimo="" ValorTractosM2="" />

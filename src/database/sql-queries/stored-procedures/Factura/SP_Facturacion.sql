@@ -50,7 +50,7 @@ BEGIN
 							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 							ON [PXCC].[IDPropiedad] = [P].[ID]
 						WHERE [P].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL
+						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
 						AND [P].[FechaRegistro] <= @inFechaOperacion
 						AND DATEPART(DAY, [P].[FechaRegistro]) = @diaFechaOperacion
 						ORDER BY [P].[ID];
@@ -65,7 +65,7 @@ BEGIN
 							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 							ON [PXCC].[IDPropiedad] = [P].[ID]
 						WHERE [P].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL
+						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
 						AND [P].[FechaRegistro] <= @inFechaOperacion
 						AND DATEPART(DAY, [P].[FechaRegistro]) >= @diaFechaFinMes
 						ORDER BY [P].[ID];
@@ -161,7 +161,7 @@ BEGIN
 												ON [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
 												INNER JOIN [dbo].[Factura] AS [F]
 												ON [F].[IDPropiedad] = [TP].[IDPropiedad]
-											WHERE [PXCC].[FechaFin] IS NULL
+											WHERE [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1;
 											
@@ -189,7 +189,7 @@ BEGIN
 											WHERE [DCCCA].[IDMovimientoConsumoAgua] IS NULL
 											AND [MCA].[Fecha] BETWEEN @fechaHaceUnMes AND @inFechaOperacion
 											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-											AND [PXCC].[FechaFin] IS NULL
+											AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
 											AND [DCC].[Activo] = 1
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1;
@@ -222,7 +222,7 @@ BEGIN
 											AND [F].[Activo] = 1
 											AND [TP].[LecturaMedidorUltimaFactura] IS NOT NULL
 											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-											AND [PXCC].[FechaFin] IS NULL;
+											AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion;
 
 											/* Update the total of "DetalleCC" associate to "CCBasura" as 
 											"ConceptoCobro.Nombre = Recoleccion de basura y limpieza de cannos"
@@ -251,7 +251,7 @@ BEGIN
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1
 											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-											AND [PXCC].[FechaFin] IS NULL;
+											AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion;
 
 											/* Update the total of "DetalleCC" associate to "CCPantenteComercial" as 
 											"ConceptoCobro.Nombre = Patente comercial"
@@ -275,7 +275,7 @@ BEGIN
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1
 											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-											AND [PXCC].[FechaFin] IS NULL;
+											AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion;
 
 											/* Update the total of "DetalleCC" associate to "CCMantenimientoParque" as 
 											"ConceptoCobro.Nombre = Mantenimiento de parques y alumbrado publico"
@@ -299,7 +299,7 @@ BEGIN
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1
 											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-											AND [PXCC].[FechaFin] IS NULL;
+											AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion;
 
 											/* Update the total of "DetalleCC" associate to "CCImpuestoPropiedad" as 
 											"ConceptoCobro.Nombre = Impuesto sobre propiedad"
@@ -325,7 +325,7 @@ BEGIN
 											AND [F].[Fecha] = @inFechaOperacion
 											AND [F].[Activo] = 1
 											AND [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
-											AND [PXCC].[FechaFin] IS NULL;
+											AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion;
 											
 											/* Calculates the "MontoOriginal" of the generated bill 
 											being the sum of the "DetalleCC.Monto" associated to the bill*/
