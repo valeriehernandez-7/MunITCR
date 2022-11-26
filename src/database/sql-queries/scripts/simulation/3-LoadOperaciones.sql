@@ -18,9 +18,15 @@ BEGIN TRY
 
 	SET @outResultCode = 0; /* OK */
 
-	IF (@inRDSFilePath IS NULL)
+	IF (@inRDSFilePath IS NULL) /* @inRDSFilePath default value */
 		BEGIN
-			SET @inRDSFilePath = 'D:\S3\Operaciones.xml'; /* @inRDSFilePath default value */
+			/* Archivo con todas las operaciones de marzo a agosto, 
+			se ejecuta antes de la formalizacion de AP */
+			SET @inRDSFilePath = 'D:\S3\Operaciones-0.xml';
+
+			/* Archivo con solo con pagos de septiembre a octubre, 
+			se ejecuta despues de la formalizacion de AP */
+			--SET @inRDSFilePath = 'D:\S3\Operaciones-1.xml';
 		END;
 
 	DECLARE
