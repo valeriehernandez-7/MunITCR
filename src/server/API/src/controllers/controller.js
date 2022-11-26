@@ -233,6 +233,16 @@ export const ReadMedioPago=  async (req, res) => {
         res.json(result.recordset);    
 }
 
+export const ReadTasasInteresSolictudAPIn =  async (req, res) => {
+    const pool= await getConection()
+    var lote = req.query.lote;
+    const result= await pool.request()
+                    .input('inPropiedadLote', sql.VARCHAR(32),lote)
+                    .input('inFechaOperacion', sql.DATE,null)
+                    .output('outResultCode', sql.Int).
+                    execute('SP_ReadTasasInteresSolictudAPIn');
+        res.json(result.recordset);    
+}
 
 export const CreatePersona=  async (req, res) => {
     const pool= await getConection()

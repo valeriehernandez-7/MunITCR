@@ -34,6 +34,7 @@ import {ReadPersona,
         ReadMovimientoConsumoAgua,
         ReadEventLog,
         ReadMedioPago,
+        ReadTasasInteresSolictudAPIn,
         ReadEventType,
         ReadEntityType,
         ReadEventLogEventInEntityInFechaIn,
@@ -104,6 +105,9 @@ router.get('/ReadEventLog',ReadEventLog)
 
 //listas de medios de pago
 router.get('/ReadMedioPago',ReadMedioPago)
+
+//listas de medios de pago
+router.get('/ReadTasasInteresSolictudAPIn',ReadTasasInteresSolictudAPIn)
 
 //listas de tipos de eventos
 router.get('/ReadEventType',ReadEventType)

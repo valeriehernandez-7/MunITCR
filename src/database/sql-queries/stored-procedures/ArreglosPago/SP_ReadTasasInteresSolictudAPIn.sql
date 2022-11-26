@@ -3,13 +3,13 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadTasasInteresSolictudAP
+	@proc_name SP_ReadTasasInteresSolictudAPIn
 	@proc_description 
 	@proc_param inPropiedadLote 
 	@proc_param inFechaOperacion 
 	@proc_param outResultCode Procedure return value
 */
-CREATE OR ALTER PROCEDURE [SP_ReadTasasInteresSolictudAP]
+CREATE OR ALTER PROCEDURE [SP_ReadTasasInteresSolictudAPIn]
 	@inPropiedadLote VARCHAR(32),
 	@inFechaOperacion DATE,
 	@outResultCode INT OUTPUT
