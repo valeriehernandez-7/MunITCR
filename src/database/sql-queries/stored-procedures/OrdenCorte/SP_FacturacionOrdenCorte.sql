@@ -90,7 +90,7 @@ BEGIN
 						WHERE [P].[Activo] = 1
 						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
 						AND [P].[FechaRegistro] <= @inFechaOperacion
-						AND DATEPART(DAY, [P].[FechaRegistro]) = @diaFechaOperacion
+						AND DATEPART(DAY, [P].[FechaRegistro]) >= @diaFechaFinMes
 						AND [F].[IDComprobantePago] IS NULL
 						AND [F].[Activo] = 1
 						AND [DCC].[Activo] = 1
@@ -98,6 +98,20 @@ BEGIN
 						GROUP BY [P].[ID]
 						HAVING COUNT([F].[ID]) > 1
 						ORDER BY [P].[ID];
+					END;
+
+				DELETE FROM @TMPFacturaPendiente
+				FROM @TMPFacturaPendiente AS [TFP]
+					INNER JOIN [dbo].[DetalleCC] AS [DCC]
+					ON [DCC].[IDFactura] = [TFP].[IDFactura]
+					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+					ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+					INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+					ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+					INNER JOIN [dbo].[CCReconexion] AS [CCR]
+					ON [CCR].[IDCC] = [CC].[ID]
+				WHERE [DCC].[Activo] = 1
+				AND [PXCC].[FechaFin] > @inFechaOperacion;
 
 				IF EXISTS (SELECT 1 FROM @TMPFacturaPendiente)
 					BEGIN
