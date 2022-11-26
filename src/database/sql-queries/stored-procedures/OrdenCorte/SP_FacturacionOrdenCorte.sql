@@ -32,34 +32,72 @@ BEGIN
 
 		IF (@inFechaOperacion IS NOT NULL) AND (@idCCReconexion IS NOT NULL)
 			BEGIN
+				DECLARE @diaFechaOperacion INT = DATEPART(DAY, @inFechaOperacion);
+				DECLARE @diaFechaFinMes INT = DATEPART(DAY, EOMONTH(@inFechaOperacion));
+				
 				DECLARE @TMPFacturaPendiente TABLE (
 					[ID] INT IDENTITY(1,1) PRIMARY KEY,
 					[IDFactura] INT
 				);
 
-				INSERT INTO @TMPFacturaPendiente (
-					[IDFactura]
-				) SELECT 
-					MIN([F].[ID])
-				FROM [dbo].[Propiedad] AS [P] 
-					INNER JOIN [dbo].[Factura] AS [F]
-					ON [F].[IDPropiedad] = [P].[ID]
-					INNER JOIN [dbo].[DetalleCC] AS [DCC]
-					ON [DCC].[IDFactura] = [F].[ID]
-					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-					ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
-					INNER JOIN [dbo].[ConceptoCobro] AS [CC]
-					ON [CC].[ID] = [PXCC].[IDConceptoCobro]
-					INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
-					ON [CCCA].[IDCC] = [CC].[ID]
-				WHERE [P].[Activo] = 1
-				AND [F].[IDComprobantePago] IS NULL
-				AND [F].[Activo] = 1
-				AND [DCC].[Activo] = 1
-				AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
-				GROUP BY [P].[ID]
-				HAVING COUNT([F].[ID]) > 1
-				ORDER BY [P].[ID];
+				/*  */
+				IF (@diaFechaOperacion < @diaFechaFinMes)
+					BEGIN
+						INSERT INTO @TMPFacturaPendiente (
+							[IDFactura]
+						) SELECT 
+							MIN([F].[ID])
+						FROM [dbo].[Propiedad] AS [P] 
+							INNER JOIN [dbo].[Factura] AS [F]
+							ON [F].[IDPropiedad] = [P].[ID]
+							INNER JOIN [dbo].[DetalleCC] AS [DCC]
+							ON [DCC].[IDFactura] = [F].[ID]
+							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+							ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+							INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+							ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+							INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
+							ON [CCCA].[IDCC] = [CC].[ID]
+						WHERE [P].[Activo] = 1
+						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+						AND [P].[FechaRegistro] <= @inFechaOperacion
+						AND DATEPART(DAY, [P].[FechaRegistro]) = @diaFechaOperacion
+						AND [F].[IDComprobantePago] IS NULL
+						AND [F].[Activo] = 1
+						AND [DCC].[Activo] = 1
+						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+						GROUP BY [P].[ID]
+						HAVING COUNT([F].[ID]) > 1
+						ORDER BY [P].[ID];
+					END;
+				ELSE
+					BEGIN
+						INSERT INTO @TMPFacturaPendiente (
+							[IDFactura]
+						) SELECT 
+							MIN([F].[ID])
+						FROM [dbo].[Propiedad] AS [P] 
+							INNER JOIN [dbo].[Factura] AS [F]
+							ON [F].[IDPropiedad] = [P].[ID]
+							INNER JOIN [dbo].[DetalleCC] AS [DCC]
+							ON [DCC].[IDFactura] = [F].[ID]
+							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+							ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+							INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+							ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+							INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
+							ON [CCCA].[IDCC] = [CC].[ID]
+						WHERE [P].[Activo] = 1
+						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+						AND [P].[FechaRegistro] <= @inFechaOperacion
+						AND DATEPART(DAY, [P].[FechaRegistro]) = @diaFechaOperacion
+						AND [F].[IDComprobantePago] IS NULL
+						AND [F].[Activo] = 1
+						AND [DCC].[Activo] = 1
+						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+						GROUP BY [P].[ID]
+						HAVING COUNT([F].[ID]) > 1
+						ORDER BY [P].[ID];
 
 				IF EXISTS (SELECT 1 FROM @TMPFacturaPendiente)
 					BEGIN
@@ -74,7 +112,7 @@ BEGIN
 								[F].[IDPropiedad],
 								@idCCReconexion,
 								@inFechaOperacion,
-								DATEADD(MONTH, 1, @inFechaOperacion)
+								DATEADD(MONTH, 1, (DATEADD(DAY, -1, @inFechaOperacion)))
 							FROM @TMPFacturaPendiente AS [TFP]
 								INNER JOIN [dbo].[Factura] AS [F]
 								ON [F].[ID] = [TFP].[IDFactura]
