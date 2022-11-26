@@ -59,13 +59,13 @@ BEGIN
 							INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
 							ON [CCCA].[IDCC] = [CC].[ID]
 						WHERE [P].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+						AND [PXCC].[FechaFin] IS NULL
 						AND [P].[FechaRegistro] <= @inFechaOperacion
 						AND DATEPART(DAY, [P].[FechaRegistro]) = @diaFechaOperacion
 						AND [F].[IDComprobantePago] IS NULL
 						AND [F].[Activo] = 1
 						AND [DCC].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+						AND [PXCC].[FechaFin] IS NULL
 						GROUP BY [P].[ID]
 						HAVING COUNT([F].[ID]) > 1
 						ORDER BY [P].[ID];
@@ -88,13 +88,13 @@ BEGIN
 							INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
 							ON [CCCA].[IDCC] = [CC].[ID]
 						WHERE [P].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+						AND [PXCC].[FechaFin] IS NULL
 						AND [P].[FechaRegistro] <= @inFechaOperacion
 						AND DATEPART(DAY, [P].[FechaRegistro]) >= @diaFechaFinMes
 						AND [F].[IDComprobantePago] IS NULL
 						AND [F].[Activo] = 1
 						AND [DCC].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion
+						AND [PXCC].[FechaFin] IS NULL
 						GROUP BY [P].[ID]
 						HAVING COUNT([F].[ID]) > 1
 						ORDER BY [P].[ID];
@@ -110,8 +110,10 @@ BEGIN
 					ON [CC].[ID] = [PXCC].[IDConceptoCobro]
 					INNER JOIN [dbo].[CCReconexion] AS [CCR]
 					ON [CCR].[IDCC] = [CC].[ID]
+					INNER JOIN [dbo].[OrdenCorte] AS [OC]
+					ON [OC].[IDFactura] = [TFP].[IDFactura]
 				WHERE [DCC].[Activo] = 1
-				AND [PXCC].[FechaFin] > @inFechaOperacion;
+				AND [OC].[Activo] = 1;
 
 				IF EXISTS (SELECT 1 FROM @TMPFacturaPendiente)
 					BEGIN
@@ -130,14 +132,7 @@ BEGIN
 							FROM @TMPFacturaPendiente AS [TFP]
 								INNER JOIN [dbo].[Factura] AS [F]
 								ON [F].[ID] = [TFP].[IDFactura]
-							WHERE [F].[Activo] = 1
-							AND NOT EXISTS (
-								SELECT 1 
-								FROM [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-								WHERE [PXCC].[FechaFin] > @inFechaOperacion 
-								AND [PXCC].[IDPropiedad] = [F].[IDPropiedad]
-								AND [PXCC].[IDConceptoCobro] = @idCCReconexion 
-							);
+							WHERE [F].[Activo] = 1;
 
 							/*  */
 							INSERT INTO [dbo].[DetalleCC] (
