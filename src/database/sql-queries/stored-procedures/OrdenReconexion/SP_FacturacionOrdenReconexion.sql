@@ -25,65 +25,94 @@ BEGIN
 
 		IF (@inFechaOperacion IS NOT NULL)
 			BEGIN
-				BEGIN TRANSACTION [createOrdenReconexionAgua]
-					/*  */
-					UPDATE [dbo].[OrdenCorte]
-						SET [Activo] = 0
-					FROM [dbo].[OrdenCorte] AS [OC]
-						INNER JOIN [dbo].[Factura] AS [F]
-						ON [F].[ID] = [OC].[IDFactura]
-					WHERE [OC].[Activo] = 1
-					AND [F].[IDComprobantePago] IS NOT NULL;
+				DECLARE @TMPPropiedadSinMorosidad TABLE (
+					[ID] INT IDENTITY(1,1) PRIMARY KEY,
+					[IDPropiedad] INT
+				);
 
-					/*  */
-					INSERT INTO [dbo].[OrdenReconexion] (
-						[IDOrdenCorte],
-						[Fecha]
-					) SELECT
-						[OC].[ID],
-						@inFechaOperacion
-					FROM [dbo].[OrdenCorte] AS [OC]
-						INNER JOIN [dbo].[Factura] AS [F]
-						ON [F].[ID] = [OC].[IDFactura]
-						INNER JOIN [dbo].[DetalleCC] AS [DCC]
-						ON [DCC].[IDFactura] = [F].[ID]
-						INNER JOIN [dbo].[Propiedad] AS [P]
-						ON [P].[ID] = [F].[IDPropiedad]
-						INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-						ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
-						INNER JOIN [dbo].[ConceptoCobro] AS [CC]
-						ON [CC].[ID] = [PXCC].[IDConceptoCobro]
-						INNER JOIN [dbo].[CCReconexion] AS [CCR]
-						ON [CCR].[IDCC] = [CC].[ID]
-					WHERE [OC].[Activo] = 0
-					AND [F].[IDComprobantePago] IS NOT NULL
-					AND [F].[Activo] = 1
-					AND [DCC].[Activo] = 1
-					AND [P].[Activo] = 1
-					AND [PXCC].[FechaFin] IS NULL;
+				/*  */
+				INSERT INTO @TMPPropiedadSinMorosidad (
+					[IDPropiedad]
+				) SELECT 
+					[P].[ID]
+				FROM [dbo].[Propiedad] AS [P] 
+					INNER JOIN [dbo].[Factura] AS [F]
+					ON [F].[IDPropiedad] = [P].[ID]
+					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+					ON [PXCC].[IDPropiedad] = [F].[IDPropiedad]
+					INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+					ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+					INNER JOIN [dbo].[CCReconexion] AS [CCR]
+					ON [CCR].[IDCC] = [CC].[ID]
+				WHERE [P].[Activo] = 1
+				AND [PXCC].[FechaFin] IS NULL
+				AND [F].[IDComprobantePago] IS NULL
+				AND [F].[FechaVencimiento] < @inFechaOperacion
+				AND [F].[Activo] = 1
+				AND [PXCC].[FechaFin] IS NULL
+				GROUP BY [P].[ID]
+				HAVING COUNT([F].[ID]) = 0
+				ORDER BY [P].[ID];
 
-					/*  */
-					UPDATE [dbo].[PropiedadXConceptoCobro]
-						SET [FechaFin] = @inFechaOperacion
-					FROM [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-						INNER JOIN [dbo].[DetalleCC] AS [DCC]
-						ON [DCC].[IDPropiedadXConceptoCobro] = [PXCC].[ID]
-						INNER JOIN [dbo].[Factura] AS [F]
-						ON [F].[ID] = [DCC].[IDFactura]
-						INNER JOIN [dbo].[OrdenCorte] AS [OC]
-						ON [OC].[IDFactura] = [F].[ID]
-						INNER JOIN [dbo].[ConceptoCobro] AS [CC]
-						ON [CC].[ID] = [PXCC].[IDConceptoCobro]
-						INNER JOIN [dbo].[CCReconexion] AS [CCR]
-						ON [CCR].[IDCC] = [CC].[ID]
-					WHERE [PXCC].[FechaFin] IS NULL
-					AND [DCC].[Activo] = 1
-					AND [F].[IDComprobantePago] IS NOT NULL
-					AND [F].[Activo] = 1
-					AND [OC].[Activo] = 0;
+				IF EXISTS (SELECT 1 FROM @TMPPropiedadSinMorosidad)
+					BEGIN
+						BEGIN TRANSACTION [createOrdenReconexionAgua]
+							/*  */
+							UPDATE [dbo].[PropiedadXConceptoCobro]
+								SET [FechaFin] = @inFechaOperacion
+							FROM [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+								INNER JOIN [dbo].[Propiedad] AS [P]
+								ON [P].[ID] = [PXCC].[IDPropiedad]
+								INNER JOIN @TMPPropiedadSinMorosidad AS [TPSM]
+								ON [TPSM].[IDPropiedad] = [P].[ID]
+								INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+								ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+								INNER JOIN [dbo].[CCReconexion] AS [CCR]
+								ON [CCR].[IDCC] = [CC].[ID]
+							WHERE [PXCC].[FechaFin] IS NULL;
 
-					SET @outResultCode = 5200; /* OK */
-				COMMIT TRANSACTION [createOrdenReconexionAgua]
+							/*  */
+							UPDATE [dbo].[OrdenCorte]
+								SET [Activo] = 0
+							FROM [dbo].[OrdenCorte] AS [OC]
+								INNER JOIN [dbo].[Factura] AS [F]
+								ON [F].[ID] = [OC].[IDFactura]
+								INNER JOIN [dbo].[Propiedad] AS [P]
+								ON [P].[ID] = [F].[IDPropiedad]
+								INNER JOIN @TMPPropiedadSinMorosidad AS [TPSM]
+								ON [TPSM].[IDPropiedad] = [P].[ID]
+							WHERE [OC].[Activo] = 1
+							AND [OC].[Fecha] <= @inFechaOperacion
+							AND [F].[IDComprobantePago] IS NOT NULL;
+
+							/*  */
+							INSERT INTO [dbo].[OrdenReconexion] (
+								[IDOrdenCorte],
+								[Fecha]
+							) SELECT
+								MAX([OC].[ID]),
+								@inFechaOperacion
+							FROM [dbo].[OrdenCorte] AS [OC]
+								INNER JOIN [dbo].[Factura] AS [F]
+								ON [F].[ID] = [OC].[IDFactura]
+								INNER JOIN [dbo].[Propiedad] AS [P]
+								ON [P].[ID] = [F].[IDPropiedad]
+								INNER JOIN @TMPPropiedadSinMorosidad AS [TPSM]
+								ON [TPSM].[IDPropiedad] = [P].[ID]
+							WHERE [OC].[Activo] = 0
+							AND [OC].[Fecha] <= @inFechaOperacion
+							AND [F].[IDComprobantePago] IS NOT NULL
+							GROUP BY [P].[ID];
+
+							SET @outResultCode = 5200; /* OK */
+						COMMIT TRANSACTION [createOrdenReconexionAgua]
+					END;
+				ELSE 
+					BEGIN
+						/* There is no property to process */
+						SET @outResultCode = 5401; 
+						RETURN;
+					END;
 			END;
 		ELSE
 			BEGIN
