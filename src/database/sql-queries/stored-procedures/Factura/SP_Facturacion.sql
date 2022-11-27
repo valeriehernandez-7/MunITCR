@@ -161,9 +161,14 @@ BEGIN
 												ON [PXCC].[IDPropiedad] = [TP].[IDPropiedad]
 												INNER JOIN [dbo].[Factura] AS [F]
 												ON [F].[IDPropiedad] = [TP].[IDPropiedad]
+												INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+												ON [CC].[ID] = [PXCC].[IDConceptoCobro]
 											WHERE ([PXCC].[FechaFin] IS NULL OR [PXCC].[FechaFin] > @inFechaOperacion)
 											AND [F].[Fecha] = @inFechaOperacion
-											AND [F].[Activo] = 1;
+											AND [F].[Activo] = 1
+											AND [CC].[ID] <> (SELECT [CCR].[IDCC] FROM [dbo].[CCReconexion] AS [CCR])
+											AND [CC].[ID] <> (SELECT [CCIM].[IDCC] FROM [dbo].[CCInteresMoratorio] AS [CCIM])
+											AND [CC].[ID] <> (SELECT [CCAP].[IDCC] FROM [dbo].[CCArregloPago] AS [CCAP]);
 											
 											/* Associate "DetalleCC" with "MovimientoConsumoAgua" 
 											of property based on Propiedad.ID */

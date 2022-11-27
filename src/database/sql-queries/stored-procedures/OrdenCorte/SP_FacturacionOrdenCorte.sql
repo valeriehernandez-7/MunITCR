@@ -41,79 +41,47 @@ BEGIN
 				);
 
 				/*  */
-				IF (@diaFechaOperacion < @diaFechaFinMes)
-					BEGIN
-						INSERT INTO @TMPFacturaPendiente (
-							[IDFactura]
-						) SELECT 
-							MIN([F].[ID])
-						FROM [dbo].[Propiedad] AS [P] 
-							INNER JOIN [dbo].[Factura] AS [F]
-							ON [F].[IDPropiedad] = [P].[ID]
-							INNER JOIN [dbo].[DetalleCC] AS [DCC]
-							ON [DCC].[IDFactura] = [F].[ID]
-							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-							ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
-							INNER JOIN [dbo].[ConceptoCobro] AS [CC]
-							ON [CC].[ID] = [PXCC].[IDConceptoCobro]
-							INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
-							ON [CCCA].[IDCC] = [CC].[ID]
-						WHERE [P].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL
-						AND [P].[FechaRegistro] <= @inFechaOperacion
-						AND DATEPART(DAY, [P].[FechaRegistro]) = @diaFechaOperacion
-						AND [F].[IDComprobantePago] IS NULL
-						AND [F].[Activo] = 1
-						AND [DCC].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL
-						GROUP BY [P].[ID]
-						HAVING COUNT([F].[ID]) > 1
-						ORDER BY [P].[ID];
-					END;
-				ELSE
-					BEGIN
-						INSERT INTO @TMPFacturaPendiente (
-							[IDFactura]
-						) SELECT 
-							MIN([F].[ID])
-						FROM [dbo].[Propiedad] AS [P] 
-							INNER JOIN [dbo].[Factura] AS [F]
-							ON [F].[IDPropiedad] = [P].[ID]
-							INNER JOIN [dbo].[DetalleCC] AS [DCC]
-							ON [DCC].[IDFactura] = [F].[ID]
-							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-							ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
-							INNER JOIN [dbo].[ConceptoCobro] AS [CC]
-							ON [CC].[ID] = [PXCC].[IDConceptoCobro]
-							INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
-							ON [CCCA].[IDCC] = [CC].[ID]
-						WHERE [P].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL
-						AND [P].[FechaRegistro] <= @inFechaOperacion
-						AND DATEPART(DAY, [P].[FechaRegistro]) >= @diaFechaFinMes
-						AND [F].[IDComprobantePago] IS NULL
-						AND [F].[Activo] = 1
-						AND [DCC].[Activo] = 1
-						AND [PXCC].[FechaFin] IS NULL
-						GROUP BY [P].[ID]
-						HAVING COUNT([F].[ID]) > 1
-						ORDER BY [P].[ID];
-					END;
-
-				DELETE FROM @TMPFacturaPendiente
-				FROM @TMPFacturaPendiente AS [TFP]
+				INSERT INTO @TMPFacturaPendiente (
+					[IDFactura]
+				) SELECT 
+					MIN([F].[ID])
+				FROM [dbo].[Propiedad] AS [P] 
+					INNER JOIN [dbo].[Factura] AS [F]
+					ON [F].[IDPropiedad] = [P].[ID]
 					INNER JOIN [dbo].[DetalleCC] AS [DCC]
-					ON [DCC].[IDFactura] = [TFP].[IDFactura]
+					ON [DCC].[IDFactura] = [F].[ID]
 					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
 					ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
 					INNER JOIN [dbo].[ConceptoCobro] AS [CC]
 					ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+					INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
+					ON [CCCA].[IDCC] = [CC].[ID]
+				WHERE [P].[Activo] = 1
+				AND [PXCC].[FechaFin] IS NULL
+				AND [F].[IDComprobantePago] IS NULL
+				AND [F].[FechaVencimiento] < @inFechaOperacion
+				AND [F].[Activo] = 1
+				AND [DCC].[Activo] = 1
+				AND [PXCC].[FechaFin] IS NULL
+				GROUP BY [P].[ID]
+				HAVING COUNT([F].[ID]) > 1
+				ORDER BY [P].[ID];
+
+				DELETE FROM @TMPFacturaPendiente
+				FROM @TMPFacturaPendiente AS [TFP]
+					INNER JOIN [dbo].[Factura] AS [F]
+					ON [F].[ID] = [TFP].[IDFactura]
+					INNER JOIN [dbo].[Propiedad] AS [P]
+					ON [P].[ID] = [F].[IDPropiedad]
+					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+					ON [PXCC].[IDPropiedad] = [P].[ID]
+					INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+					ON [CC].[ID] = [PXCC].[IDConceptoCobro]
 					INNER JOIN [dbo].[CCReconexion] AS [CCR]
 					ON [CCR].[IDCC] = [CC].[ID]
-					INNER JOIN [dbo].[OrdenCorte] AS [OC]
-					ON [OC].[IDFactura] = [TFP].[IDFactura]
-				WHERE [DCC].[Activo] = 1
-				AND [OC].[Activo] = 1;
+				WHERE [F].[Activo] = 1
+				AND [P].[Activo] = 1
+				AND [PXCC].[FechaFin] IS NULL;
 
 				IF EXISTS (SELECT 1 FROM @TMPFacturaPendiente)
 					BEGIN
@@ -122,13 +90,11 @@ BEGIN
 							INSERT INTO [dbo].[PropiedadXConceptoCobro] (
 								[IDPropiedad],
 								[IDConceptoCobro],
-								[FechaInicio],
-								[FechaFin]
+								[FechaInicio]
 							) SELECT
 								[F].[IDPropiedad],
 								@idCCReconexion,
-								@inFechaOperacion,
-								DATEADD(MONTH, 1, (DATEADD(DAY, -1, @inFechaOperacion)))
+								@inFechaOperacion
 							FROM @TMPFacturaPendiente AS [TFP]
 								INNER JOIN [dbo].[Factura] AS [F]
 								ON [F].[ID] = [TFP].[IDFactura]
