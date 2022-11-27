@@ -34,24 +34,28 @@ BEGIN
 				INSERT INTO @TMPPropiedadSinMorosidad (
 					[IDPropiedad]
 				) SELECT 
-					[P].[ID]
+					[P].[Lote]
 				FROM [dbo].[Propiedad] AS [P] 
 					INNER JOIN [dbo].[Factura] AS [F]
 					ON [F].[IDPropiedad] = [P].[ID]
-					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-					ON [PXCC].[IDPropiedad] = [F].[IDPropiedad]
-					INNER JOIN [dbo].[ConceptoCobro] AS [CC]
-					ON [CC].[ID] = [PXCC].[IDConceptoCobro]
-					INNER JOIN [dbo].[CCReconexion] AS [CCR]
-					ON [CCR].[IDCC] = [CC].[ID]
+					INNER JOIN [dbo].[OrdenCorte] AS [OC]
+					ON [OC].[IDFactura] = [F].[ID]
 				WHERE [P].[Activo] = 1
-				AND [PXCC].[FechaFin] IS NULL
-				AND [F].[IDComprobantePago] IS NULL
-				AND [F].[FechaVencimiento] < @inFechaOperacion
+				AND ([F].[IDComprobantePago] IS NOT NULL OR [F].[PlanArregloPago] = 1)
 				AND [F].[Activo] = 1
-				AND [PXCC].[FechaFin] IS NULL
-				GROUP BY [P].[ID]
-				HAVING COUNT([F].[ID]) = 0
+				AND [OC].[Activo] = 1
+				AND (
+					SELECT COUNT([F].[ID])
+					FROM [dbo].[Propiedad] AS [PP] 
+						INNER JOIN [dbo].[Factura] AS [F]
+						ON [F].[IDPropiedad] = [PP].[ID]
+					WHERE [PP].[ID] = [P].[ID]
+					AND [F].[PlanArregloPago] = 0
+					AND [F].[IDComprobantePago] IS NULL
+					AND [F].[FechaVencimiento] < @inFechaOperacion
+					AND [F].[Activo] = 1
+					GROUP BY [PP].[ID]
+					) IS NULL
 				ORDER BY [P].[ID];
 
 				IF EXISTS (SELECT 1 FROM @TMPPropiedadSinMorosidad)
@@ -83,7 +87,7 @@ BEGIN
 								ON [TPSM].[IDPropiedad] = [P].[ID]
 							WHERE [OC].[Activo] = 1
 							AND [OC].[Fecha] <= @inFechaOperacion
-							AND [F].[IDComprobantePago] IS NOT NULL;
+							AND ([F].[IDComprobantePago] IS NOT NULL OR [F].[PlanArregloPago] = 1);
 
 							/*  */
 							INSERT INTO [dbo].[OrdenReconexion] (
@@ -101,7 +105,7 @@ BEGIN
 								ON [TPSM].[IDPropiedad] = [P].[ID]
 							WHERE [OC].[Activo] = 0
 							AND [OC].[Fecha] <= @inFechaOperacion
-							AND [F].[IDComprobantePago] IS NOT NULL
+							AND ([F].[IDComprobantePago] IS NOT NULL OR [F].[PlanArregloPago] = 1)
 							GROUP BY [P].[ID];
 
 							SET @outResultCode = 5200; /* OK */
