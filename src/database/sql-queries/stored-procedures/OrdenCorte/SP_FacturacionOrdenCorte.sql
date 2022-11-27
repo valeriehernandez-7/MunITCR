@@ -69,18 +69,19 @@ BEGIN
 
 				DELETE FROM @TMPFacturaPendiente
 				FROM @TMPFacturaPendiente AS [TFP]
-					INNER JOIN [dbo].[DetalleCC] AS [DCC]
-					ON [DCC].[IDFactura] = [TFP].[IDFactura]
+					INNER JOIN [dbo].[Factura] AS [F]
+					ON [F].[ID] = [TFP].[IDFactura]
+					INNER JOIN [dbo].[Propiedad] AS [P]
+					ON [P].[ID] = [F].[IDPropiedad]
 					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-					ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+					ON [PXCC].[IDPropiedad] = [P].[ID]
 					INNER JOIN [dbo].[ConceptoCobro] AS [CC]
 					ON [CC].[ID] = [PXCC].[IDConceptoCobro]
 					INNER JOIN [dbo].[CCReconexion] AS [CCR]
 					ON [CCR].[IDCC] = [CC].[ID]
-					INNER JOIN [dbo].[OrdenCorte] AS [OC]
-					ON [OC].[IDFactura] = [TFP].[IDFactura]
-				WHERE [DCC].[Activo] = 1
-				AND [OC].[Activo] = 1;
+				WHERE [F].[Activo] = 1
+				AND [P].[Activo] = 1
+				AND [PXCC].[FechaFin] IS NULL;
 
 				IF EXISTS (SELECT 1 FROM @TMPFacturaPendiente)
 					BEGIN
@@ -89,13 +90,11 @@ BEGIN
 							INSERT INTO [dbo].[PropiedadXConceptoCobro] (
 								[IDPropiedad],
 								[IDConceptoCobro],
-								[FechaInicio],
-								[FechaFin]
+								[FechaInicio]
 							) SELECT
 								[F].[IDPropiedad],
 								@idCCReconexion,
-								@inFechaOperacion,
-								DATEADD(MONTH, 1, (DATEADD(DAY, -1, @inFechaOperacion)))
+								@inFechaOperacion
 							FROM @TMPFacturaPendiente AS [TFP]
 								INNER JOIN [dbo].[Factura] AS [F]
 								ON [F].[ID] = [TFP].[IDFactura]
