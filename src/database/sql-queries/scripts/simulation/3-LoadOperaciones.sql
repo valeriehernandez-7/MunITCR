@@ -8,25 +8,36 @@ GO
 
 BEGIN TRY
 	DECLARE
-		@inRDSFilePath NVARCHAR(2048), -- ruta de archivo de Operaciones.xml
 		@outResultCode INT, -- codigo resultante de la ejecucion de procedimientos almacenados
+		@loadPortalData BIT, -- flag para indicar valor de variables de simulacion
+		@inRDSFilePath NVARCHAR(2048), -- ruta de archivo .xml de operaciones
+		@fechaInicioSimulacion DATE, -- fecha inicio del rango de simulacion de operaciones
+		@fechaFinSimulacion DATE, -- fecha fin del rango de simulacion de operaciones
+		@fechaOperacion DATE, -- fecha actual en el procesamiento de operaciones
 		@minTMPID INT, -- PK del registro en iteracion
 		@maxTMPID INT, -- PK del ultimo registro por iterar
 		@minIDOperacion INT, -- PK de la operacion en iteracion de @TMPOperacion
-		@maxIDOperacion INT, -- PK de la ultima operacion por iterar en @TMPOperacion
-		@fechaOperacion DATE; -- fecha actual en el procesamiento de operaciones
+		@maxIDOperacion INT; -- PK de la ultima operacion por iterar en @TMPOperacion
+		
 
 	SET @outResultCode = 0; /* OK */
+	SET @loadPortalData = 1; /* 1: Operaciones-0.xml data  ||  0: Operaciones-1.xml data */
 
-	IF (@inRDSFilePath IS NULL) /* @inRDSFilePath default value */
+	IF (@loadPortalData = 1)
 		BEGIN
 			/* Archivo con todas las operaciones de marzo a agosto, 
 			se ejecuta antes de la formalizacion de AP */
 			SET @inRDSFilePath = 'D:\S3\Operaciones-0.xml';
-
+			SET @fechaInicioSimulacion = '2022-03-01';
+			SET @fechaFinSimulacion = '2022-08-31';
+		END;
+	ELSE IF (@loadPortalData = 0)
+		BEGIN
 			/* Archivo con solo con pagos de septiembre a octubre, 
 			se ejecuta despues de la formalizacion de AP */
-			--SET @inRDSFilePath = 'D:\S3\Operaciones-1.xml';
+			SET @inRDSFilePath = 'D:\S3\Operaciones-1.xml';
+			SET @fechaInicioSimulacion = '2022-09-01';
+			SET @fechaFinSimulacion = '2022-10-31';
 		END;
 
 	DECLARE
@@ -123,15 +134,15 @@ BEGIN TRY
 		[Referencia] BIGINT
 	);
 
-	/* Agrega las fechas de todas las operaciones 
-	del archivo Operaciones.xml */
-	INSERT INTO @TMPOperacion (
-		[Fecha]
-	) SELECT 
-		DOC.Fecha.value ('@Fecha', 'DATE')
-	FROM @data.nodes('Datos/Operacion') AS DOC(Fecha);
-
-	SELECT * FROM @TMPOperacion; -- TO-DO: DELETE
+	/* Obtiene las fechas de los meses de simulacion de operaciones */
+	WHILE (@fechaInicioSimulacion <= @fechaFinSimulacion)
+		BEGIN
+			INSERT INTO @TMPOperacion ([Fecha])
+			VALUES(@fechaInicioSimulacion);
+			SET @fechaInicioSimulacion = DATEADD(DAY, 1, @fechaInicioSimulacion);
+		END;
+	/* Mostrar fechas de operacion */
+	SELECT [O].[Fecha] AS [Fecha Operacion] FROM @TMPOperacion AS [O];
 	
 	/* Obtener las fechas de operacion para la iteracion */
 	SELECT 
