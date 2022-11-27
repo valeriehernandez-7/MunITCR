@@ -654,7 +654,7 @@ BEGIN TRY
 			/* Procesar ordenes de reconexion de consumo de agua
 			a aquellas propiedades que pagaron la factura que genero su orden de corte
 			de servicio de agua */
-			--EXECUTE [SP_FacturacionOrdenReconexion] @fechaOperacion, @outResultCode OUTPUT;
+			EXECUTE [SP_FacturacionOrdenReconexion] @fechaOperacion, @outResultCode OUTPUT;
 
 			/* Generar facturas del mes a la propiedad cuyo dia respecto 
 			de fecha de creacion coincide con el dia de la fecha de operacion */
