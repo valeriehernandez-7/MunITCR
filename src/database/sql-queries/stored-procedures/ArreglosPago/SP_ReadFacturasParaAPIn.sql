@@ -28,17 +28,24 @@ BEGIN
 		IF (@inPropiedadLote IS NOT NULL)
 			BEGIN					
 				/*  */				
+				/* Show all "facturas pendientes" "no anuladas" 
+				"asociadas a arreglos de pago" of Property using @inPropiedadLote */
 				SELECT 
-					SUM(F.MontoPagar) AS Monto  
-				FROM [dbo].[Factura] AS F
-				LEFT JOIN [dbo].[Propiedad] AS P 
-				ON 
-					[P].[ID]=[F].[IDPropiedad]
-				WHERE 
-					DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
-					AND [P].Lote = @inPropiedadLote
-					AND [P].Activo = 1
-					AND [F].[Activo] = 1
+					[F].[Fecha] AS [Fecha],
+					[F].[FechaVencimiento] AS [FechaVencimiento],
+					[F].[MontoOriginal] AS [Subtotal],
+					([F].[MontoPagar] - [F].[MontoOriginal]) AS [Morosidades],
+					[F].[MontoPagar] AS [Total]
+				FROM [dbo].[Factura] AS [F]
+					INNER JOIN [dbo].[Propiedad] AS [P]
+					ON [P].[ID] = [F].[IDPropiedad]										 
+				WHERE [P].[Lote] = @inPropiedadLote
+				AND [P].[Activo] = 1
+				AND [F].[IDComprobantePago] IS NULL
+				AND [F].[PlanArregloPago] = 0
+				AND [F].[Activo] = 1
+				AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
+				ORDER BY [F].[Fecha];				
 
 				SET @outResultCode = 5200; /* OK */
 			END;
