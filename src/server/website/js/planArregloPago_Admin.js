@@ -26,6 +26,8 @@ function cant(){
       }  
       var fecha = TI.Fecha.substring(0,10); 
       var fin = TI.FechaFin.substring(0,10);
+      var total = TI.Total;
+      var amortizacionT = TI.amortizacionT;
       
       var tabla = "<tr><td> ";
       tabla += plazo + "</td><td>" + tasa + "</td><td>" + cuota + "</td>" 
