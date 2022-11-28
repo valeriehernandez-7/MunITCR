@@ -3,11 +3,13 @@ USE [MunITCR]
 GO
 
 /* 
-	@proc_name SP_ReadTasasInteresSolictudAPIn
+	@proc_name SP_ReadFacturasParaAPIn
 	@proc_description 
 	@proc_param inPropiedadLote 
 	@proc_param inFechaOperacion
 	@proc_param outResultCode Procedure return value
+	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
+	@author <a href="https://github.com/efmz200">Erick F. Madrigal Zavala</a>
 */
 CREATE OR ALTER PROCEDURE [SP_ReadFacturasParaAPIn]
 	@inPropiedadLote VARCHAR(32),
@@ -18,18 +20,16 @@ BEGIN
 	SET NOCOUNT ON;
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
-		DECLARE @TotalAPagar Money;
-				
+
 		IF (@inFechaOperacion IS NULL)
-				BEGIN
-					SET @inFechaOperacion = GETDATE();
-				END
+			BEGIN
+				SET @inFechaOperacion = GETDATE();
+			END
 
 		IF (@inPropiedadLote IS NOT NULL)
-			BEGIN					
-				/*  */				
+			BEGIN
 				/* Show all "facturas pendientes" "no anuladas" 
-				"asociadas a arreglos de pago" of Property using @inPropiedadLote */
+				"no asociadas a arreglos de pago" of Property using @inPropiedadLote */
 				SELECT 
 					[F].[Fecha] AS [Fecha],
 					[F].[FechaVencimiento] AS [FechaVencimiento],
@@ -38,14 +38,14 @@ BEGIN
 					[F].[MontoPagar] AS [Total]
 				FROM [dbo].[Factura] AS [F]
 					INNER JOIN [dbo].[Propiedad] AS [P]
-					ON [P].[ID] = [F].[IDPropiedad]										 
+					ON [P].[ID] = [F].[IDPropiedad]
 				WHERE [P].[Lote] = @inPropiedadLote
 				AND [P].[Activo] = 1
+				AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
 				AND [F].[IDComprobantePago] IS NULL
 				AND [F].[PlanArregloPago] = 0
 				AND [F].[Activo] = 1
-				AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
-				ORDER BY [F].[Fecha];				
+				ORDER BY [F].[Fecha];
 
 				SET @outResultCode = 5200; /* OK */
 			END;

@@ -4,7 +4,7 @@ function cant(){
     window.alert("Debe ingresar un lote");
     return
   }
-  var url = "http://localhost:8000/ReadTasasInteresSolictudAPIn?lote="+lote
+  var url = "http://localhost:8000/ArregloPagoSolicitud?lote="+lote
   const options = {
     method: "get",
     headers: {"Content-Type": "application/json"},
