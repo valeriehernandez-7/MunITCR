@@ -27,6 +27,86 @@
     </Pago>
     <PropiedadCambio />
   </Operacion>
+  <Operacion Fecha="2022-09-02">
+    <Personas />
+    <Propiedades />
+    <PersonasyPropiedades />
+    <Usuario />
+    <PropiedadesyUsuarios />
+    <Lecturas />
+    <Pago>
+      <Pago NumFinca="1013" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88700" />
+      <Pago NumFinca="1019" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88701" />
+      <Pago NumFinca="1165" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88702" />
+      <Pago NumFinca="1376" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88703" />
+      <Pago NumFinca="1915" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88704" />
+      <Pago NumFinca="2105" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88705" />
+      <Pago NumFinca="3049" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88706" />
+      <Pago NumFinca="3063" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88707" />
+      <Pago NumFinca="3304" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88708" />
+      <Pago NumFinca="3515" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88709" />
+      <Pago NumFinca="3617" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88710" />
+      <Pago NumFinca="3739" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88711" />
+      <Pago NumFinca="3889" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88712" />
+      <Pago NumFinca="4133" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88713" />
+      <Pago NumFinca="4138" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88714" />
+      <Pago NumFinca="4341" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88715" />
+      <Pago NumFinca="5327" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88716" />
+      <Pago NumFinca="5406" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88717" />
+      <Pago NumFinca="5826" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88718" />
+      <Pago NumFinca="6078" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88719" />
+      <Pago NumFinca="6311" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88720" />
+      <Pago NumFinca="6665" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88721" />
+      <Pago NumFinca="7087" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88722" />
+      <Pago NumFinca="7615" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88723" />
+      <Pago NumFinca="7658" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88724" />
+      <Pago NumFinca="8099" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88725" />
+      <Pago NumFinca="8232" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88726" />
+      <Pago NumFinca="8512" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88727" />
+      <Pago NumFinca="9495" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88728" />
+      <Pago NumFinca="9760" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88729" />
+    </Pago>
+    <PropiedadCambio />
+  </Operacion>
+  <Operacion Fecha="2022-09-03">
+    <Personas />
+    <Propiedades />
+    <PersonasyPropiedades />
+    <Usuario />
+    <PropiedadesyUsuarios />
+    <Lecturas />
+    <Pago>
+      <Pago NumFinca="8833" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88730" />
+      <Pago NumFinca="8817" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88731" />
+      <Pago NumFinca="6850" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88732" />
+      <Pago NumFinca="6891" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88733" />
+      <Pago NumFinca="6608" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88734" />
+      <Pago NumFinca="5587" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88735" />
+      <Pago NumFinca="5729" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88736" />
+      <Pago NumFinca="5333" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88737" />
+      <Pago NumFinca="4234" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88738" />
+      <Pago NumFinca="3751" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88739" />
+      <Pago NumFinca="3533" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88740" />
+      <Pago NumFinca="1712" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88741" />
+      <Pago NumFinca="1732" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88742" />
+      <Pago NumFinca="1276" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88743" />
+      <Pago NumFinca="1176" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88745" />
+    </Pago>
+    <PropiedadCambio />
+  </Operacion>
+  <Operacion Fecha="2022-09-04">
+    <Personas />
+    <Propiedades />
+    <PersonasyPropiedades />
+    <Usuario />
+    <PropiedadesyUsuarios />
+    <Lecturas />
+    <Pago>
+      <Pago NumFinca="1489" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88746" />
+      <Pago NumFinca="1608" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88747" />
+    </Pago>
+    <PropiedadCambio />
+  </Operacion>
   <Operacion Fecha="2022-09-12">
     <Personas />
     <Propiedades />
@@ -182,7 +262,7 @@
     </Pago>
     <PropiedadCambio />
   </Operacion>
-  <Operacion Fecha="2022-09-17">  <!-- OrdenCorte 2  -->
+  <Operacion Fecha="2022-09-17">
     <Personas />
     <Propiedades />
     <PersonasyPropiedades />
@@ -432,7 +512,38 @@
     <Usuario />
     <PropiedadesyUsuarios />
     <Lecturas />
-    <Pago />
+    <Pago>
+      <Pago NumFinca="1013" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88748" />
+      <Pago NumFinca="1019" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88749" />
+      <Pago NumFinca="1165" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88750" />
+      <Pago NumFinca="1376" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88751" />
+      <Pago NumFinca="1915" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88754" />
+      <Pago NumFinca="2105" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88755" />
+      <Pago NumFinca="3049" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88756" />
+      <Pago NumFinca="3063" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88757" />
+      <Pago NumFinca="3304" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88758" />
+      <Pago NumFinca="3515" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88759" />
+      <Pago NumFinca="3617" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88761" />
+      <Pago NumFinca="3739" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88763" />
+      <Pago NumFinca="3889" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88765" />
+      <Pago NumFinca="4133" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88766" />
+      <Pago NumFinca="4138" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88767" />
+      <Pago NumFinca="4341" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88768" />
+      <Pago NumFinca="5327" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88769" />
+      <Pago NumFinca="5406" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88770" />
+      <Pago NumFinca="5826" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88772" />
+      <Pago NumFinca="6078" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88773" />
+      <Pago NumFinca="6311" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88775" />
+      <Pago NumFinca="6665" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88776" />
+      <Pago NumFinca="7087" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88777" />
+      <Pago NumFinca="7615" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88778" />
+      <Pago NumFinca="7658" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88779" />
+      <Pago NumFinca="8099" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88780" />
+      <Pago NumFinca="8232" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88781" />
+      <Pago NumFinca="8512" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88782" />
+      <Pago NumFinca="9495" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88783" />
+      <Pago NumFinca="9760" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88784" />
+    </Pago>
     <PropiedadCambio />
   </Operacion>
   <Operacion Fecha="2022-10-03">
@@ -442,7 +553,23 @@
     <Usuario />
     <PropiedadesyUsuarios />
     <Lecturas />
-    <Pago />
+    <Pago>
+      <Pago NumFinca="8833" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88785" />
+      <Pago NumFinca="8817" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88786" />
+      <Pago NumFinca="6850" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88787" />
+      <Pago NumFinca="6891" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88788" />
+      <Pago NumFinca="6608" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88789" />
+      <Pago NumFinca="5587" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88790" />
+      <Pago NumFinca="5729" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88791" />
+      <Pago NumFinca="5333" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88792" />
+      <Pago NumFinca="4234" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88793" />
+      <Pago NumFinca="3751" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88794" />
+      <Pago NumFinca="3533" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88795" />
+      <Pago NumFinca="1712" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88796" />
+      <Pago NumFinca="1732" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88797" />
+      <Pago NumFinca="1276" TipoPago="Efectivo" NumeroReferenciaComprobantePago="88798" />
+      <Pago NumFinca="1176" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88799" />
+    </Pago>
     <PropiedadCambio />
   </Operacion>
   <Operacion Fecha="2022-10-04">
@@ -452,7 +579,10 @@
     <Usuario />
     <PropiedadesyUsuarios />
     <Lecturas />
-    <Pago />
+    <Pago>
+      <Pago NumFinca="1489" TipoPago="Tarjeta" NumeroReferenciaComprobantePago="88800" />
+      <Pago NumFinca="1608" TipoPago="Transferencia" NumeroReferenciaComprobantePago="88802" />
+    </Pago>
     <PropiedadCambio />
   </Operacion>
   <Operacion Fecha="2022-10-05">
