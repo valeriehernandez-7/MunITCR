@@ -18,16 +18,18 @@ function cant(){
       var TI = response [i];      
       var plazo = TI.Plazo ;
       var tasa = TI.Tasa;
-      var cuota = TI.Cuota ;    
+      var cuota = TI.Cuota ; 
+        
       if (cuota == null){
         window.alert("No hay planes de pago disponibles para este lote");
         return
       }  
+      var fecha = TI.Fecha.substring(0,10); 
       var fin = TI.FechaFin.substring(0,10);
       
       var tabla = "<tr><td> ";
       tabla += plazo + "</td><td>" + tasa + "</td><td>" + cuota + "</td>" 
-      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"solicitar("+ plazo +"," + tasa +","+ cuota + ",\'" + fin+"\');\" >"
+      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"solicitar("+ plazo +"," + tasa +","+ cuota + ",\'"+ lote +"\',\'"+ fecha + "\',\'" + fin+"\');\" >"
       
       tabla+= "<td>"+ boton + "</td></tr>"
       table.append(tabla);
@@ -65,9 +67,13 @@ function cant(){
       });
 }
 
-function solicitar(plazo,tasa,cuota,fin){
+function solicitar(plazo,tasa,cuota,lote,fecha,fin){
   total = cuota*plazo;
-  console.log(plazo,tasa,cuota,fin,total)
+  console.log(plazo,tasa,cuota,fecha,fin,total)
+  uss = (new URL(location.href)).searchParams.get('uss')
+  ip = (new URL(location.href)).searchParams.get('ip')
+  url="./planArregloPagoFormalizar_Admin.html?uss="+uss+"&ip="+ip+"&plazo="+plazo+"&tasa="+tasa+"&cuota="+cuota+"&fecha="+fecha+"&fin="+fin+"&total="+total+"&lote="+lote
+  location.replace(url)
   
 }
 function ret(){

@@ -46,6 +46,7 @@ BEGIN
 					PlazoMeses AS Plazo,
 					TasaInteresAnual*100 AS Tasa,
 					(@TotalAPagar/PlazoMeses + @TotalAPagar*(TasaInteresAnual/12)) AS Cuota,
+					@inFechaOperacion AS Fecha,
 					DATEADD(month, PlazoMeses, @inFechaOperacion) AS FechaFin
 				FROM [dbo].[TasaInteres]
 
