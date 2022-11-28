@@ -40,7 +40,7 @@ BEGIN
 				FROM [dbo].[MedioPago] AS [MP]
 				WHERE [MP].[Nombre] = @inMedioPago;
 
-				IF @inReferencia IS NULL
+				IF (@inReferencia IS NULL) OR EXISTS (SELECT 1 FROM [dbo].[ComprobantePago] AS [CP] WHERE [CP].[Referencia] = @inReferencia)
 					BEGIN
 						DECLARE @referenciaStr VARCHAR(16) = CONCAT(CONVERT(VARCHAR, GETDATE(), 112), '000000');
 						DECLARE @referenciaInt BIGINT = CAST(@referenciaStr AS BIGINT);
