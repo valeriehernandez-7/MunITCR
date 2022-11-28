@@ -40,7 +40,7 @@ function cant(){
     ).catch(e => {
       console.log(e);
     });
-    url = "http://localhost:8000/ReadFacturasParaAPIn?lote="+lote
+    url = "http://localhost:8000/ArregloPagoSolicitudFacturas?lote="+lote
     const options2 = {
       method: "get",
       headers: {"Content-Type": "application/json"},

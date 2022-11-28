@@ -12,7 +12,7 @@ $(document).ready(function(){
         tabla += fecha + "</td><td>" + fin + "</td><td>" + plazo + "</td><td>" + tasa + "</td><td>"+ total +"</td>" 
         tabla+= "</tr>"
         table2.append(tabla);
-    url = "http://localhost:8000/ReadFacturasParaAPIn?lote="+lote
+    url = "http://localhost:8000/ArregloPagoSolicitudFacturas?lote="+lote
     const options2 = {
       method: "get",
       headers: {"Content-Type": "application/json"},

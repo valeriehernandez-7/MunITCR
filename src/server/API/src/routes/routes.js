@@ -35,7 +35,7 @@ import {ReadPersona,
         ReadEventLog,
         ReadMedioPago,
         ArregloPagoSolicitud,
-        ReadFacturasParaAPIn,
+        ArregloPagoSolicitudFacturas,
         ReadEventType,
         ReadEntityType,
         ReadEventLogEventInEntityInFechaIn,
@@ -111,7 +111,7 @@ router.get('/ReadMedioPago',ReadMedioPago)
 router.get('/ArregloPagoSolicitud',ArregloPagoSolicitud)
 
 //listas de medios de pago
-router.get('/ReadFacturasParaAPIn',ReadFacturasParaAPIn)
+router.get('/ArregloPagoSolicitudFacturas',ArregloPagoSolicitudFacturas)
 
 //listas de tipos de eventos
 router.get('/ReadEventType',ReadEventType)
