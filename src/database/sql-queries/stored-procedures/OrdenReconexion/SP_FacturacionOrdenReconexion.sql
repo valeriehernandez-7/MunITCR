@@ -34,7 +34,7 @@ BEGIN
 				INSERT INTO @TMPPropiedadSinMorosidad (
 					[IDPropiedad]
 				) SELECT 
-					[P].[Lote]
+					[P].[ID]
 				FROM [dbo].[Propiedad] AS [P] 
 					INNER JOIN [dbo].[Factura] AS [F]
 					ON [F].[IDPropiedad] = [P].[ID]
