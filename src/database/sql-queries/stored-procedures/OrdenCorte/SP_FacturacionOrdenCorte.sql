@@ -32,9 +32,6 @@ BEGIN
 
 		IF (@inFechaOperacion IS NOT NULL) AND (@idCCReconexion IS NOT NULL)
 			BEGIN
-				DECLARE @diaFechaOperacion INT = DATEPART(DAY, @inFechaOperacion);
-				DECLARE @diaFechaFinMes INT = DATEPART(DAY, EOMONTH(@inFechaOperacion));
-				
 				DECLARE @TMPFacturaPendiente TABLE (
 					[ID] INT IDENTITY(1,1) PRIMARY KEY,
 					[IDFactura] INT
@@ -60,7 +57,7 @@ BEGIN
 				AND [PXCC].[FechaFin] IS NULL
 				AND [F].[PlanArregloPago] = 0
 				AND [F].[IDComprobantePago] IS NULL
-				AND [F].[FechaVencimiento] < @inFechaOperacion
+				AND [F].[FechaVencimiento] <= @inFechaOperacion
 				AND [F].[Activo] = 1
 				AND [DCC].[Activo] = 1
 				AND [PXCC].[FechaFin] IS NULL
@@ -134,7 +131,8 @@ BEGIN
 								)
 							FROM [dbo].[Factura] AS [F]
 								INNER JOIN @TMPFacturaPendiente AS [TFP]
-								ON  [TFP].[IDFactura] = [F].[ID];
+								ON  [TFP].[IDFactura] = [F].[ID]
+							WHERE [F].[Activo] = 1;
 
 							/*  */
 							INSERT INTO [dbo].[OrdenCorte] (

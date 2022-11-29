@@ -102,6 +102,24 @@ BEGIN
 									FROM [dbo].[Factura] AS [F]
 										INNER JOIN @TMPFactura AS [TF]
 										ON [TF].[IDFacturaPendiente] = [F].[ID];
+
+									/* Terminate the association between property and the concept
+									of default interest on the invoice paid */
+									UPDATE [dbo].[PropiedadXConceptoCobro]
+										SET [FechaFin] = @inFecha
+									FROM [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+										INNER JOIN [dbo].[Factura] AS [F]
+										ON [F].[IDPropiedad] = [PXCC].[IDPropiedad]
+										INNER JOIN @TMPFactura AS [TF]
+										ON [TF].[IDFacturaPendiente] = [F].[ID]
+										INNER JOIN [dbo].[DetalleCC] AS [DCC]
+										ON [DCC].[IDPropiedadXConceptoCobro] = [PXCC].[ID]
+										INNER JOIN [dbo].[ConceptoCobro] AS [CC]
+										ON [CC].[ID] = [PXCC].[IDConceptoCobro]
+										INNER JOIN [dbo].[CCInteresMoratorio] AS [CCIM]
+										ON [CCIM].[IDCC] = [CC].[ID]
+									WHERE [DCC].[IDFactura] = [F].[ID]
+									AND [PXCC].[FechaFin] IS NULL;
 									
 									SET @outResultCode = 5200; /* OK */
 								COMMIT TRANSACTION [createPago]

@@ -52,7 +52,7 @@ BEGIN
 					WHERE [PP].[ID] = [P].[ID]
 					AND [F].[PlanArregloPago] = 0
 					AND [F].[IDComprobantePago] IS NULL
-					AND [F].[FechaVencimiento] < @inFechaOperacion
+					AND [F].[FechaVencimiento] <= @inFechaOperacion
 					AND [F].[Activo] = 1
 					GROUP BY [PP].[ID]
 					) IS NULL

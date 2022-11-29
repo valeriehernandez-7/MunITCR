@@ -682,10 +682,12 @@ BEGIN TRY
 			--EXECUTE [SP_FacturacionArregloPago] @fechaOperacion, @outResultCode OUTPUT;
 
 			/* Procesar detalle de cobro por intereses moratorios en facturas vencidas 
-			en fecha de operacion y no asociadas a arreglo de pago. Ademas, 
-			Cancelar aquellos arreglos de pago relacionados a facturas que tengan 
-			1 mes o + pendiente */
-			--EXECUTE [SP_FacturacionInteresMoratorio&APCancelacion] @fechaOperacion, @outResultCode OUTPUT;
+			en fecha de operacion y no asociadas a arreglo de pago */
+			--EXECUTE [SP_FacturacionInteresMoratorio] @fechaOperacion, @outResultCode OUTPUT;
+
+			/* Cancelar aquellos arreglos de pago relacionados a propiedades con 
+			facturas que tengan 1 mes o mas vencidas */
+			--EXECUTE [SP_ArregloPagoRevision] @fechaOperacion, @outResultCode OUTPUT;
 
 			/* Avanzar a la siguiente fecha de operacion */
 			SET @minIDOperacion = @minIDOperacion + 1;
