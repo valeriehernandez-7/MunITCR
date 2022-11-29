@@ -153,6 +153,17 @@ export const ReadFacturaPagadaPlanArregloPagoPropiedadIn=  async (req, res) => {
                     execute('SP_ReadFacturaPagadaPlanArregloPagoPropiedadIn');
                     console.log(result)
         res.json(result.recordset);   
+}
+
+export const ReadFacturaPendientePlanArregloPagoPropiedadIn=  async (req, res) => {
+    const pool= await getConection() 
+    var lote = req.query.lote;
+    const result= await pool.request().
+                    input('inPropiedadLote', sql.VARCHAR(32), lote).
+                    output('outResultCode', sql.Int).
+                    execute('SP_ReadFacturaPendientePlanArregloPagoPropiedadIn');
+                    console.log(result)
+        res.json(result.recordset);   
 } 
 
 export const ReadMovimientoConsumoAgua=  async (req, res) => {

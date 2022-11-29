@@ -43,18 +43,21 @@ $( document ).ready(function() {
 function facturaPagadaAP(lote){
     var uss = (new URL(location.href)).searchParams.get('uss')
     var ip = (new URL(location.href)).searchParams.get('ip')
-    location.replace('./facturaPagadaAP.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+    var lote = (new URL(location.href)).searchParams.get('lote')
+    location.replace('./facturas_pagada_AP.html?uss='+uss+"&ip="+ip+"&lote="+lote);
 }
 
 function facturaNoPagadaAP(lote){
     var uss = (new URL(location.href)).searchParams.get('uss')
-    var ip = (new URL(location.href)).searchParams.get('ip')
-    location.replace('./facturaNoPagadaAP.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+    var ip = (new URL(location.href)).searchParams.get('ip')    
+    var lote = (new URL(location.href)).searchParams.get('lote')
+    location.replace('./facturas_pendientes_AP.html?uss='+uss+"&ip="+ip+"&lote="+lote);
 }	
 
 function ret(){
     var uss = (new URL(location.href)).searchParams.get('uss')
-    var ip = (new URL(location.href)).searchParams.get('ip')
+    var ip = (new URL(location.href)).searchParams.get('ip')    
+    var lote = (new URL(location.href)).searchParams.get('lote')
     location.replace('./propiedades_usuarioNoAdmin.html?uss='+uss+"&ip="+ip+"&lote="+lote);
 }
 function cerrar(){
