@@ -15,20 +15,22 @@ function cant(){
     table = $("#tablePlans ")
     $("tablePlansBody").remove()
     for (var i = 0; i < response.length; i++) {
-      var TI = response [i];      
-      var plazo = TI.Plazo ;
-      var tasa = TI.Tasa;
-      var cuota = TI.Cuota ; 
+      var TI = response [i];
+      var plazo = TI.PlazoMeses;
+      var tasa = TI.TasaInteresAnual;
+      var cuota = TI.Cuota;
         
       if (cuota == null){
-        window.alert("No hay planes de pago disponibles para este lote");
+        window.alert("No hay planes de pago disponibles para esta propiedad");
         return
-      }  
-      var fecha = TI.Fecha.substring(0,10); 
-      var fin = TI.FechaFin.substring(0,10);
-      var total = TI.Total;
-      var amortizacionT = TI.amortizacionT;
-      
+      }
+      var total = TI.Saldo;
+      var intereses = TI.Intereses;
+      var amortizacion = TI.Amortizacion;
+      var fecha = TI.FechaFormalizacion.substring(0,10);
+      var fin = TI.FechaVencimiento.substring(0,10);
+
+
       var tabla = "<tr><td> ";
       tabla += plazo + "</td><td>" + tasa + "</td><td>" + cuota + "</td>" 
       var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"solicitar("+ plazo +"," + tasa +","+ cuota + ",\'"+ lote +"\',\'"+ fecha + "\',\'" + fin+"\');\" >"
@@ -69,8 +71,7 @@ function cant(){
       });
 }
 
-function solicitar(plazo,tasa,cuota,lote,fecha,fin){
-  total = cuota*plazo;
+function solicitar(plazo,tasa,cuota,lote,fecha,fin) {
   console.log(plazo,tasa,cuota,fecha,fin,total)
   uss = (new URL(location.href)).searchParams.get('uss')
   ip = (new URL(location.href)).searchParams.get('ip')

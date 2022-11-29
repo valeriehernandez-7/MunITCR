@@ -9,6 +9,7 @@ GO
 	@proc_param inPlazoMeses 
 	@proc_param inCuota 
 	@proc_param inSaldo 
+	@proc_param inIntereses 
 	@proc_param inAmortizacion 
 	@proc_param inFechaFormalizacion 
 	@proc_param inFechaVencimiento 
@@ -21,6 +22,7 @@ CREATE OR ALTER PROCEDURE [SP_ArregloPagoFormalizacion]
 	@inPlazoMeses INT,
 	@inCuota MONEY,
 	@inSaldo MONEY,
+	@inIntereses MONEY,
 	@inAmortizacion MONEY,
 	@inFechaFormalizacion DATE,
 	@inFechaVencimiento DATE,
@@ -31,8 +33,8 @@ BEGIN
 	BEGIN TRY
 		SET @outResultCode = 0; /* Unassigned code */
 
-		IF (@inPropiedadLote IS NOT NULL) AND (@inPlazoMeses > 0)
-		AND (@inCuota > 0) AND (@inSaldo > 0) AND (@inAmortizacion > 0)
+		IF (@inPropiedadLote IS NOT NULL) AND (@inPlazoMeses > 0) AND (@inCuota > 0)
+		AND (@inSaldo > 0) AND (@inIntereses > 0) AND (@inAmortizacion > 0)
 			BEGIN
 				/* Get the PK of the property using @inPropiedadLote */
 				DECLARE @idPropiedad INT;
@@ -55,12 +57,8 @@ BEGIN
 				WHERE [TMAP].[Nombre] = 'Debito';
 
 				/* Get the PK of the interest rate using @inPlazoMeses */
-				DECLARE 
-					@idTasaInteres INT,
-					@valorTasaInteres FLOAT;
-				SELECT 
-					@idTasaInteres = [TI].[ID],
-					@valorTasaInteres = [TI].[TasaInteresAnual]
+				DECLARE @idTasaInteres INT;
+				SELECT @idTasaInteres = [TI].[ID]
 				FROM [dbo].[TasaInteres] AS [TI]
 				WHERE [TI].[PlazoMeses] = @inPlazoMeses;
 
@@ -98,15 +96,13 @@ BEGIN
 								[IDTasaInteres],
 								[MontoOriginal],
 								[MontoSaldo],
-								[MontoAcumuladoAmortizacion],
-								[MontoAcumuladoAplicado]
+								[MontoAcumuladoAmortizacion]
 							) VALUES (
 								SCOPE_IDENTITY(),
 								@idTasaInteres,
 								@inSaldo,
 								@inSaldo,
-								@inAmortizacion,
-								(@inAmortizacion + @inSaldo)
+								@inAmortizacion
 							);
 						
 							INSERT INTO [dbo].[MovimientoArregloPago] (
@@ -122,7 +118,7 @@ BEGIN
 								@inFechaFormalizacion,
 								@inCuota,
 								@inAmortizacion,
-								(@inAmortizacion * @inPlazoMeses)
+								@inIntereses
 							);
 						
 							UPDATE [dbo].[Factura]
