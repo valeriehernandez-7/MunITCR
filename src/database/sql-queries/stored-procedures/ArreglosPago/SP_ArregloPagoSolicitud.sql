@@ -60,11 +60,13 @@ BEGIN
 				IF (@MontoPagarAP IS NOT NULL)
 					BEGIN
 						SELECT 
-							[TI].[PlazoMeses] AS [Plazo],
-							([TI].[TasaInteresAnual] * 100) AS [Tasa],
-							(@MontoPagarAP / ((1 - (POWER((1 + ([TI].[TasaInteresAnual] / ((360 * 12) / 365))), -[TI].[PlazoMeses]))) / (([TI].[TasaInteresAnual] / ((360 * 12) / 365))))) AS [Cuota],
-							@inFechaOperacion AS [Fecha],
-							DATEADD(MONTH, [TI].[PlazoMeses], @inFechaOperacion) AS [FechaFin]
+							[TI].[PlazoMeses] AS [PlazoMeses],
+							([TI].[TasaInteresAnual] * 100) AS [TasaInteresAnual],
+							(ROUND(((@MontoPagarAP / ((1 - (POWER((1 + ([TI].[TasaInteresAnual] / ((360 * 12) / 365))), -[TI].[PlazoMeses]))) / (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))))), 2)) AS [Cuota],
+							@MontoPagarAP AS [Saldo],
+							(ROUND((@MontoPagarAP * (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))), 2)) AS [Amortizacion],
+							@inFechaOperacion AS [FechaFormalizacion],
+							DATEADD(MONTH, [TI].[PlazoMeses], @inFechaOperacion) AS [FechaVencimiento]
 						FROM [dbo].[TasaInteres] AS [TI];
 						SET @outResultCode = 5200; /* OK */
 					END;
