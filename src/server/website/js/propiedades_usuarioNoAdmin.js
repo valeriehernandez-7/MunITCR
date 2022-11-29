@@ -41,6 +41,7 @@ $( document ).ready(function() {
     });
 });
 
+
 function lecturas(lote){
   var uss = (new URL(location.href)).searchParams.get('uss')
   var ip = (new URL(location.href)).searchParams.get('ip') 
@@ -64,7 +65,7 @@ function comprobante(lote){
 function arreglo_pago(lote){
   var uss = (new URL(location.href)).searchParams.get('uss')
   var ip = (new URL(location.href)).searchParams.get('ip')
-  //location.replace('./comprobante_propiedad_NoAdmin.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+  location.replace('./planArregloPago_NoAdmin.html?uss='+uss+"&ip="+ip+"&lote="+lote);
 }
 
 function ret(){

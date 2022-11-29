@@ -26,6 +26,7 @@ import {ReadPersona,
         ReadPropiedadPersonaIn,
         ReadPropiedadInPersona,
         ReadUsuarioInXPropiedad,
+        ReadPropiedadXCCArregloPagoPropiedadIn,
         UpdateUsuario,
         UpdatePropiedad,
         UpdatePersonaXPropiedad,
@@ -155,6 +156,9 @@ router.post('/ReadPropiedadInPersona',ReadPropiedadInPersona)
 
 //lista de usuarios por propiedad
 router.post('/ReadUsuarioInXPropiedad',ReadUsuarioInXPropiedad)
+
+//lista de usuarios por propiedad
+router.post('/ReadPropiedadXCCArregloPagoPropiedadIn',ReadPropiedadXCCArregloPagoPropiedadIn)
 
 //lista de usuarios por propiedad
 router.post('/ReadUsuarioXPropiedadIn',ReadUsuarioXPropiedadIn)

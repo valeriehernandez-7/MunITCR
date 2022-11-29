@@ -405,6 +405,17 @@ export const ReadPropiedadInPersona =  async (req, res) => {
         res.json(result.recordset);    
     }
 
+export const ReadPropiedadXCCArregloPagoPropiedadIn =  async (req, res) => {
+    const pool= await getConection()
+    const lote = req.body.lote;
+    console.log(lote)
+    const result= await pool.request() 
+                .input('inPropiedadLote', sql.VARCHAR(32),lote)
+                .output('outResultCode', sql.Int)
+                .execute('SP_ReadPropiedadXCCArregloPagoPropiedadIn');
+        res.json(result.recordset);    
+    }
+
 export const ReadUsuarioInXPropiedad =  async (req, res) => {
     const pool= await getConection()
     const user = req.body.user;
