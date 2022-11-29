@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-  lote  = (new URL(location.href)).searchParams.get('amortizacion')
+  lote  = (new URL(location.href)).searchParams.get('lote')
   plazo = (new URL(location.href)).searchParams.get('plazo')
   cuota = (new URL(location.href)).searchParams.get('cuota')
   saldo = (new URL(location.href)).searchParams.get('saldo')
@@ -44,7 +44,7 @@ $(document).ready(function(){
   })
 
 function formalizar(){
-  lote  = (new URL(location.href)).searchParams.get('amortizacion')
+  lote  = (new URL(location.href)).searchParams.get('lote')
   plazo = (new URL(location.href)).searchParams.get('plazo')
   cuota = (new URL(location.href)).searchParams.get('cuota')
   saldo = (new URL(location.href)).searchParams.get('saldo')
@@ -62,11 +62,12 @@ function formalizar(){
     "fechaForm": fecha,
     "FechaFin": fin
   }
-  url = "http://localhost:8000/ReadFacturaPendientePlanArregloPagoPropiedadIn"
+  url = "http://localhost:8000/ArregloPagoFormalizacion"
   
   const options2 = {
     method: "post",
     headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body)
   };
   fetch(url, options2).then(response => response.json())
   .then(response => {

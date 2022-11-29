@@ -157,22 +157,35 @@ export const ReadFacturaPagadaPlanArregloPagoPropiedadIn=  async (req, res) => {
 
 export const ReadFacturaPendientePlanArregloPagoPropiedadIn=  async (req, res) => {
     const pool= await getConection() 
+    var lote = req.query.lote;
+    const result= await pool.request().
+                    input('inPropiedadLote', sql.VARCHAR(32), lote).
+                    output('outResultCode', sql.Int).
+                    execute('SP_ReadFacturaPendientePlanArregloPagoPropiedadIn');
+                    console.log(result)
+        res.json(result.recordset);   
+}
+
+export const ArregloPagoFormalizacion=  async (req, res) => {
+    const pool= await getConection() 
     const {lote,plazo,cuota,saldo,interes,amortizacion,fechaForm,FechaFin} = req.body;
+    console.log(lote,plazo,cuota,saldo,interes,amortizacion,fechaForm,FechaFin)
     const result= await pool.request()
                     .input('inPropiedadLote', sql.VARCHAR(32), lote)
                     .input('inPlazoMeses', sql.INT, plazo)
                     .input('inCuota', sql.Money, cuota)
                     .input('inSaldo', sql.Money, saldo)
-                    .input('inInteres', sql.Money, interes)
+                    .input('inIntereses', sql.Money, interes)
                     .input('inAmortizacion', sql.Money, amortizacion)
                     .input('inFechaFormalizacion', sql.Date, fechaForm)
                     .input('inFechaVencimiento', sql.Date, FechaFin)
                     .output('outResultCode', sql.Int)
-                    .execute('SP_ReadFacturaPendientePlanArregloPagoPropiedadIn');                    
+                    .execute('SP_ArregloPagoFormalizacion');  
+        console.log(result.output.outResultCode)                  
         res.json(result.output.outResultCode);   
 } 
 
-export const ArregloPagoFormalizacion=  async (req, res) => {
+export const error=  async (req, res) => {
     const pool= await getConection()
     const {tipo,entidad,fechaI,fechaF} = req.body;
     console.log(tipo,entidad,fechaI,fechaF)

@@ -57,12 +57,12 @@ function cant(){
         var Fecha = facturas.Fecha ;
         var Subtotal = facturas.Subtotal;
         var Morosidades = facturas.Morosidades;
-        var Total = facturas.Total;
+        var saldo = facturas.Total;
 
         var fin = facturas.FechaVencimiento.substring(0,10);
         
         var tabla = "<tr><td> ";
-        tabla += Fecha + "</td><td>" + fin + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>"+ Total +"</td>" 
+        tabla += Fecha + "</td><td>" + fin + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>"+ saldo +"</td>" 
         tabla+= "</tr>"
         table.append(tabla);
       }}
@@ -75,7 +75,7 @@ function solicitar(plazo,tasa,cuota,lote,total,intereses,amortizacion,fecha,fin)
   console.log(plazo,tasa,cuota,fecha,fin,total)
   uss = (new URL(location.href)).searchParams.get('uss')
   ip = (new URL(location.href)).searchParams.get('ip')
-  url="./planArregloPagoFormalizar_Admin.html?uss="+uss+"&ip="+ip+"&plazo="+plazo+"&tasa="+tasa+"&cuota="+cuota+"&fecha="+fecha+"&fin="+fin+"&total="+total+"&lote="+lote+"&intereses="+intereses+"&amortizacion="+amortizacion
+  url="./planArregloPagoFormalizar_Admin.html?uss="+uss+"&ip="+ip+"&plazo="+plazo+"&tasa="+tasa+"&cuota="+cuota+"&fecha="+fecha+"&fin="+fin+"&saldo="+total+"&lote="+lote+"&intereses="+intereses+"&amortizacion="+amortizacion
   location.replace(url)
   
 }
