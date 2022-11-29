@@ -73,7 +73,8 @@ function formalizar(){
   .then(response => {
     console.log(response)
     if (response == 5200){
-      alert("Se ha formalizado el plan de arreglo de pago")      
+      alert("Se ha formalizado el plan de arreglo de pago")
+      ret()     
     }
     else{
       alert("No se ha podido formalizar el plan de arreglo de pago")

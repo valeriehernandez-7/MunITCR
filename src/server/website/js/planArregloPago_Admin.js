@@ -7,7 +7,7 @@ function cant(){
   var url = "http://localhost:8000/ArregloPagoSolicitud?lote="+lote
   const options = {
     method: "get",
-    headers: {"Content-Type": "application/json"},
+    headers: {"Content-Type": "application/json"}
   };
   fetch(url, options).then(response => response.json())
   .then(response => {
@@ -45,11 +45,14 @@ function cant(){
     url = "http://localhost:8000/ArregloPagoSolicitudFacturas?lote="+lote
     const options2 = {
       method: "get",
-      headers: {"Content-Type": "application/json"},
-    };
+      headers: {"Content-Type": "application/json"}
+    }
     fetch(url, options2).then(response => response.json())
     .then(response => {
-      console.log(response)
+      if(response.length == 0){
+        alert("No se pueden aplicar arreglos de pago a esta propiedad")
+        return
+      }
       table = $("#tableBills ")
       $("tableBillsBody").remove()
       for (var i = 0; i < response.length; i++) {
@@ -67,7 +70,9 @@ function cant(){
         table.append(tabla);
       }}
       ).catch(e => {
+        alert("No se pueden aplicar arreglos de pago a esta propiedad")
         console.log(e);
+        return       
       });
 }
 
