@@ -31,6 +31,7 @@ import {ReadPersona,
         UpdatePropiedad,
         UpdatePersonaXPropiedad,
         ReadFacturaPagadaPropiedadIn,
+        ReadFacturaPagadaPlanArregloPagoPropiedadIn,
         ReadFacturaPendientePropiedadIn,
         ReadMovimientoConsumoAgua,
         ReadEventLog,
@@ -95,6 +96,9 @@ router.get('/ReadPropiedadXUsuario',ReadPropiedadXUsuario)
 
 //listas de faturas pagadas por propiedad
 router.get('/ReadFacturaPagadaPropiedadIn',ReadFacturaPagadaPropiedadIn)
+
+//listas de faturas pagadas por propiedad
+router.get('/ReadFacturaPagadaPlanArregloPagoPropiedadIn',ReadFacturaPagadaPlanArregloPagoPropiedadIn)
 
 //listas de faturas pendientes por propiedad
 router.get('/ReadFacturaPendientePropiedadIn',ReadFacturaPendientePropiedadIn)
