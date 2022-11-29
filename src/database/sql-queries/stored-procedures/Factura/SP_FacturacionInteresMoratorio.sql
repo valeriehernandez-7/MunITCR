@@ -54,7 +54,7 @@ BEGIN
 				AND [PXCC].[FechaFin] IS NULL
 				AND [F].[PlanArregloPago] = 0
 				AND [F].[IDComprobantePago] IS NULL
-				AND [F].[FechaVencimiento] <= @inFechaOperacion
+				AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 0
 				AND [F].[Activo] = 1
 				AND [P].[Activo] = 1
 				GROUP BY [F].[ID] 
@@ -84,7 +84,7 @@ BEGIN
 				AND [PXCC].[IDConceptoCobro] <> @idCCInteresMoratorio
 				AND [F].[PlanArregloPago] = 0
 				AND [F].[IDComprobantePago] IS NULL
-				AND [F].[FechaVencimiento] <= @inFechaOperacion
+				AND [F].[FechaVencimiento] = @inFechaOperacion
 				AND [F].[Activo] = 1
 				AND [P].[Activo] = 1
 				GROUP BY [F].[ID] 
