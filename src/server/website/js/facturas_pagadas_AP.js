@@ -23,6 +23,8 @@ $( document ).ready(function() {
         var Subtotal = factura.Subtotal;
         var Morosidades = factura.Morosidades;
         var Total = factura.Total;
+        var boton = "<button type='button' class='btn btn-primary' onclick='detalles()'>Ver</button>";
+
         var tabla = "<tr><td> ";
         tabla += fecha + "</td><td>" + comprobante + "</td><td>" + MediodePago + "</td><td>" + FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total + "</td></tr>"; 
         $("#tablaItems ").append(tabla);
