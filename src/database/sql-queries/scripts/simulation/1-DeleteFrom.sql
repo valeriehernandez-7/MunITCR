@@ -58,6 +58,7 @@ DBCC CHECKIDENT ('[dbo].[MovimientoArregloPago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[PropiedadXCCArregloPago];
+DBCC CHECKIDENT ('[dbo].[PropiedadXCCArregloPago]', RESEED, 0) WITH NO_INFOMSGS;
 GO
 
 DELETE FROM [dbo].[TasaInteres];
