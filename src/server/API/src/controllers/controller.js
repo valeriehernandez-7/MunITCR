@@ -50,6 +50,7 @@ export const ReadUsuario = async (req, res) => {
         res.json(result.recordset); 
 }
 
+
 export const ReadPersonaXPropiedad = async (req, res) => {
     var opcion =req.query.opcion
     console.log(opcion)
@@ -471,6 +472,17 @@ export const ReadPropiedadXCCArregloPagoPropiedadIn =  async (req, res) => {
                 .output('outResultCode', sql.Int)
                 .execute('SP_ReadPropiedadXCCArregloPagoPropiedadIn');
         res.json(result.recordset);    
+    }
+
+export const ReadDetalleCCXFacturaIn =  async (req, res) => {
+    const pool= await getConection()
+    const idFact = req.body.idFact;
+    console.log(idFact)
+    const result= await pool.request() 
+                .input('inIDFactura', sql.Int,idFact)
+                .output('outResultCode', sql.Int)
+                .execute('SP_ReadDetalleCCXFacturaIn');
+        res.json(result.recordsets);    
     }
 
 export const ReadUsuarioInXPropiedad =  async (req, res) => {
