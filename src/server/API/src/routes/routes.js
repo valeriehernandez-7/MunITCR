@@ -103,7 +103,7 @@ router.get('/ReadFacturaPagadaPropiedadIn',ReadFacturaPagadaPropiedadIn)
 router.get('/ReadFacturaPagadaPlanArregloPagoPropiedadIn',ReadFacturaPagadaPlanArregloPagoPropiedadIn)
 
 //listas de faturas pagadas por propiedad
-router.post('/ReadFacturaPendientePlanArregloPagoPropiedadIn',ReadFacturaPendientePlanArregloPagoPropiedadIn)
+router.get('/ReadFacturaPendientePlanArregloPagoPropiedadIn',ReadFacturaPendientePlanArregloPagoPropiedadIn)
 
 //listas de faturas pagadas por propiedad
 router.post('/ArregloPagoFormalizacion',ArregloPagoFormalizacion)

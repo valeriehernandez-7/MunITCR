@@ -19,16 +19,16 @@ $( document ).ready(function() {
       $("#tableBody > tbody").empty();
       for (var i = 0; i < response.length; i++) {
         var ap = response [i];      
-        var FormalizacionContrato = ap.FormalizacionContrato;
-        var VencimientoContrato = ap.VencimientoContrato;
+        var FormalizacionContrato = ap.FormalizacionContrato.substring(0,10);
+        var VencimientoContrato = ap.VencimientoContrato.substring(0,10); 
         var PlazoMeses = ap.PlazoMeses ;
         var TasaInteresAnual = ap.TasaInteresAnual ;
         var MontoDeuda = ap.MontoDeuda;
         var MontoAmortizacion = ap.MontoAmortizacion;
         var MontoCancelado = ap.MontoCancelado;
         var Saldo = ap.Saldo;
-        var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"facturaPagadaAP(\'"+ lote +"\');\" >"
-        var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"facturaNoPagadaAP(\'"+ lote + "\');\" >"
+        var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Ver \" onclick=\"facturaPagadaAP(\'"+ lote +"\');\" >"
+        var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Ver \" onclick=\"facturaNoPagadaAP(\'"+ lote + "\');\" >"
       
         var tabla = "<tr><td> ";
         tabla += FormalizacionContrato + "</td><td>" + VencimientoContrato + "</td><td>" + PlazoMeses + "</td><td>" + TasaInteresAnual + "</td><td>" + MontoDeuda + "</td><td>" + MontoAmortizacion + "</td><td>" + MontoCancelado + "</td><td>" + Saldo 
@@ -44,7 +44,7 @@ function facturaPagadaAP(lote){
     var uss = (new URL(location.href)).searchParams.get('uss')
     var ip = (new URL(location.href)).searchParams.get('ip')
     var lote = (new URL(location.href)).searchParams.get('lote')
-    location.replace('./facturas_pagada_AP.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+    location.replace('./facturas_pagadas_AP.html?uss='+uss+"&ip="+ip+"&lote="+lote);
 }
 
 function facturaNoPagadaAP(lote){

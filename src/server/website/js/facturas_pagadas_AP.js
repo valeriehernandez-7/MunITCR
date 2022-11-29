@@ -6,7 +6,7 @@ $( document ).ready(function() {
       headers: {"Content-Type": "application/json"},
     };
     console.log(options)
-    var url = "http://localhost:8000/SP_ReadFacturaPagadaPlanArregloPagoPropiedadIn?lote="+lote
+    var url = "http://localhost:8000/ReadFacturaPagadaPlanArregloPagoPropiedadIn?lote="+lote
     fetch(url, options).then(response => response.json())
     .then(response => {
       $("#tableBody > tbody").empty();
