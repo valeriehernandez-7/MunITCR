@@ -27,16 +27,30 @@ $( document ).ready(function() {
         var MontoAmortizacion = ap.MontoAmortizacion;
         var MontoCancelado = ap.MontoCancelado;
         var Saldo = ap.Saldo;
-        
+        var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"facturaPagadaAP(\'"+ lote +"\');\" >"
+        var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"facturaNoPagadaAP(\'"+ lote + "\');\" >"
+      
         var tabla = "<tr><td> ";
         tabla += FormalizacionContrato + "</td><td>" + VencimientoContrato + "</td><td>" + PlazoMeses + "</td><td>" + TasaInteresAnual + "</td><td>" + MontoDeuda + "</td><td>" + MontoAmortizacion + "</td><td>" + MontoCancelado + "</td><td>" + Saldo 
+        tabla += "</td><td>" + boton + "</td><td>" + boton2 + "</td></tr>";
         
-        tabla+=  "</td></tr>"
         $("#tablaItems ").append(tabla);
       }}).catch(e => {
         console.log(e);
       });
   });
+
+function facturaPagadaAP(lote){
+    var uss = (new URL(location.href)).searchParams.get('uss')
+    var ip = (new URL(location.href)).searchParams.get('ip')
+    location.replace('./facturaPagadaAP.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+}
+
+function facturaNoPagadaAP(lote){
+    var uss = (new URL(location.href)).searchParams.get('uss')
+    var ip = (new URL(location.href)).searchParams.get('ip')
+    location.replace('./facturaNoPagadaAP.html?uss='+uss+"&ip="+ip+"&lote="+lote);
+}	
 
 function ret(){
     var uss = (new URL(location.href)).searchParams.get('uss')
