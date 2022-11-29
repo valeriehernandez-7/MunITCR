@@ -126,6 +126,7 @@ BEGIN
 							FROM [dbo].[Factura] AS [F]
 							WHERE [F].[IDPropiedad] = @idPropiedad
 							AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaFormalizacion) > 1
+							AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaFormalizacion)
 							AND [F].[IDComprobantePago] IS NULL
 							AND [F].[PlanArregloPago] = 0
 							AND [F].[Activo] = 1;

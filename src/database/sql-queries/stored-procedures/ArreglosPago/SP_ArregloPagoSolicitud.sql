@@ -50,6 +50,7 @@ BEGIN
 						ON [P].[ID] = [F].[IDPropiedad]
 					WHERE 
 						DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
+						AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaOperacion)
 						AND [F].[IDComprobantePago] IS NULL
 						AND [F].[PlanArregloPago] = 0
 						AND [F].[Activo] = 1

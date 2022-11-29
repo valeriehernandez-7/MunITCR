@@ -54,6 +54,7 @@ BEGIN
 				WHERE [P].[Lote] = @inPropiedadLote
 				AND [P].[Activo] = 1
 				AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
+				AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaOperacion)
 				AND [F].[IDComprobantePago] IS NULL
 				AND [F].[PlanArregloPago] = 0
 				AND [F].[Activo] = 1

@@ -31,34 +31,65 @@ BEGIN
 			ON [CCIM].[IDCC] = [CC].[ID];
 		
 		IF (@inFechaOperacion IS NOT NULL) AND (@idCCInteresMoratorio IS NOT NULL)
-			BEGIN
+			BEGIN 
+				DECLARE @diaFechaOperacion INT = DATEPART(DAY, @inFechaOperacion);
+				DECLARE @diaFechaFinMes INT = DATEPART(DAY, EOMONTH(@inFechaOperacion));
 				/*  */
 				DECLARE @TMPFacturaIntereses TABLE (
 					[ID] INT IDENTITY(1,1) PRIMARY KEY,
 					[IDFactura] INT
 				);
 
-				INSERT INTO @TMPFacturaIntereses (
-					[IDFactura]
-				) SELECT
-					[F].[ID]
-				FROM [dbo].[Factura] AS [F]
-					INNER JOIN [dbo].[DetalleCC] AS [DCC]
-					ON [DCC].[IDFactura] = [F].[ID]
-					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-					ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
-					INNER JOIN [dbo].[Propiedad] AS [P]
-					ON [P].[ID] = [PXCC].[IDPropiedad]
-				WHERE [DCC].[Activo] = 1
-				AND [PXCC].[IDConceptoCobro] = @idCCInteresMoratorio
-				AND [PXCC].[FechaFin] IS NULL
-				AND [F].[PlanArregloPago] = 0
-				AND [F].[IDComprobantePago] IS NULL
-				AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 0
-				AND [F].[Activo] = 1
-				AND [P].[Activo] = 1
-				GROUP BY [F].[ID] 
-				ORDER BY [F].[ID];
+				IF (@diaFechaOperacion < @diaFechaFinMes)
+					BEGIN
+						INSERT INTO @TMPFacturaIntereses (
+							[IDFactura]
+						) SELECT
+							[F].[ID]
+						FROM [dbo].[Factura] AS [F]
+							INNER JOIN [dbo].[DetalleCC] AS [DCC]
+							ON [DCC].[IDFactura] = [F].[ID]
+							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+							ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+							INNER JOIN [dbo].[Propiedad] AS [P]
+							ON [P].[ID] = [PXCC].[IDPropiedad]
+						WHERE [DCC].[Activo] = 1
+						AND [PXCC].[IDConceptoCobro] = @idCCInteresMoratorio
+						AND [PXCC].[FechaFin] IS NULL
+						AND [F].[PlanArregloPago] = 0
+						AND [F].[IDComprobantePago] IS NULL
+						AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 0
+						AND DATEPART(DAY, [F].[FechaVencimiento]) = DATEPART(DAY, @inFechaOperacion)
+						AND [F].[Activo] = 1
+						AND [P].[Activo] = 1
+						GROUP BY [F].[ID] 
+						ORDER BY [F].[ID];
+					END;
+				ELSE
+					BEGIN
+						INSERT INTO @TMPFacturaIntereses (
+							[IDFactura]
+						) SELECT
+							[F].[ID]
+						FROM [dbo].[Factura] AS [F]
+							INNER JOIN [dbo].[DetalleCC] AS [DCC]
+							ON [DCC].[IDFactura] = [F].[ID]
+							INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+							ON [PXCC].[ID] = [DCC].[IDPropiedadXConceptoCobro]
+							INNER JOIN [dbo].[Propiedad] AS [P]
+							ON [P].[ID] = [PXCC].[IDPropiedad]
+						WHERE [DCC].[Activo] = 1
+						AND [PXCC].[IDConceptoCobro] = @idCCInteresMoratorio
+						AND [PXCC].[FechaFin] IS NULL
+						AND [F].[PlanArregloPago] = 0
+						AND [F].[IDComprobantePago] IS NULL
+						AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 0
+						AND DATEPART(DAY, [F].[FechaVencimiento]) >= @diaFechaFinMes
+						AND [F].[Activo] = 1
+						AND [P].[Activo] = 1
+						GROUP BY [F].[ID] 
+						ORDER BY [F].[ID];
+					END;
 
 				/*  */
 				DECLARE @TMPFacturaVencida TABLE (
