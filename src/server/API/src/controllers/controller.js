@@ -157,14 +157,36 @@ export const ReadFacturaPagadaPlanArregloPagoPropiedadIn=  async (req, res) => {
 
 export const ReadFacturaPendientePlanArregloPagoPropiedadIn=  async (req, res) => {
     const pool= await getConection() 
-    var lote = req.query.lote;
-    const result= await pool.request().
-                    input('inPropiedadLote', sql.VARCHAR(32), lote).
-                    output('outResultCode', sql.Int).
-                    execute('SP_ReadFacturaPendientePlanArregloPagoPropiedadIn');
-                    console.log(result)
-        res.json(result.recordset);   
+    const {lote,plazo,cuota,saldo,interes,amortizacion,fechaForm,FechaFin} = req.body;
+    const result= await pool.request()
+                    .input('inPropiedadLote', sql.VARCHAR(32), lote)
+                    .input('inPlazoMeses', sql.INT, plazo)
+                    .input('inCuota', sql.Money, cuota)
+                    .input('inSaldo', sql.Money, saldo)
+                    .input('inInteres', sql.Money, interes)
+                    .input('inAmortizacion', sql.Money, amortizacion)
+                    .input('inFechaFormalizacion', sql.Date, fechaForm)
+                    .input('inFechaVencimiento', sql.Date, FechaFin)
+                    .output('outResultCode', sql.Int)
+                    .execute('SP_ReadFacturaPendientePlanArregloPagoPropiedadIn');                    
+        res.json(result.output.outResultCode);   
 } 
+
+export const ArregloPagoFormalizacion=  async (req, res) => {
+    const pool= await getConection()
+    const {tipo,entidad,fechaI,fechaF} = req.body;
+    console.log(tipo,entidad,fechaI,fechaF)
+    console.log(typeof fechaF)
+    const result= await pool.request()
+                .input('inEventType', sql.VARCHAR(8),tipo)
+                .input('inEntityType', sql.VARCHAR(128),entidad)
+                .input('inFechaInicial', sql.Date,fechaI)
+                .input('inFechaFinal', sql.Date,fechaF)
+                .output('outResultCode', sql.Int)
+                .execute('SP_ArregloPagoFormalizacion');
+        console.log(result)
+        res.json(result.recordset);    
+}
 
 export const ReadMovimientoConsumoAgua=  async (req, res) => {
     const pool= await getConection() 
@@ -237,7 +259,7 @@ export const ReadEventLogEventInEntityInFechaIn=  async (req, res) => {
                 .execute('SP_ReadEventLogEventInEntityInFechaIn');
         console.log(result)
         res.json(result.recordset);    
-    }
+}
 
 export const ReadEventLog=  async (req, res) => {
     const pool= await getConection()

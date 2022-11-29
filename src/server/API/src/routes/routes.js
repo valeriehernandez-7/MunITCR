@@ -33,6 +33,7 @@ import {ReadPersona,
         ReadFacturaPagadaPropiedadIn,
         ReadFacturaPagadaPlanArregloPagoPropiedadIn,
         ReadFacturaPendientePlanArregloPagoPropiedadIn,
+        ArregloPagoFormalizacion,
         ReadFacturaPendientePropiedadIn,
         ReadMovimientoConsumoAgua,
         ReadEventLog,
@@ -102,7 +103,10 @@ router.get('/ReadFacturaPagadaPropiedadIn',ReadFacturaPagadaPropiedadIn)
 router.get('/ReadFacturaPagadaPlanArregloPagoPropiedadIn',ReadFacturaPagadaPlanArregloPagoPropiedadIn)
 
 //listas de faturas pagadas por propiedad
-router.get('/ReadFacturaPendientePlanArregloPagoPropiedadIn',ReadFacturaPendientePlanArregloPagoPropiedadIn)
+router.post('/ReadFacturaPendientePlanArregloPagoPropiedadIn',ReadFacturaPendientePlanArregloPagoPropiedadIn)
+
+//listas de faturas pagadas por propiedad
+router.get('/ArregloPagoFormalizacion',ArregloPagoFormalizacion)
 
 //listas de faturas pendientes por propiedad
 router.get('/ReadFacturaPendientePropiedadIn',ReadFacturaPendientePropiedadIn)

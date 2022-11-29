@@ -33,7 +33,7 @@ function cant(){
 
       var tabla = "<tr><td> ";
       tabla += plazo + "</td><td>" + tasa + "</td><td>" + cuota + "</td>" 
-      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"solicitar("+ plazo +"," + tasa +","+ cuota + ",\'"+ lote +"\',\'"+ fecha + "\',\'" + fin+"\');\" >"
+      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"solicitar("+ plazo +"," + tasa +","+ cuota + ","+ lote +","+ total +","+ intereses +","+ amortizacion +",\'"+ fecha + "\',\'" + fin+"\');\" >"
       
       tabla+= "<td>"+ boton + "</td></tr>"
       table.append(tabla);
@@ -71,11 +71,11 @@ function cant(){
       });
 }
 
-function solicitar(plazo,tasa,cuota,lote,fecha,fin) {
+function solicitar(plazo,tasa,cuota,lote,total,intereses,amortizacion,fecha,fin){
   console.log(plazo,tasa,cuota,fecha,fin,total)
   uss = (new URL(location.href)).searchParams.get('uss')
   ip = (new URL(location.href)).searchParams.get('ip')
-  url="./planArregloPagoFormalizar_Admin.html?uss="+uss+"&ip="+ip+"&plazo="+plazo+"&tasa="+tasa+"&cuota="+cuota+"&fecha="+fecha+"&fin="+fin+"&total="+total+"&lote="+lote
+  url="./planArregloPagoFormalizar_Admin.html?uss="+uss+"&ip="+ip+"&plazo="+plazo+"&tasa="+tasa+"&cuota="+cuota+"&fecha="+fecha+"&fin="+fin+"&total="+total+"&lote="+lote+"&intereses="+intereses+"&amortizacion="+amortizacion
   location.replace(url)
   
 }
