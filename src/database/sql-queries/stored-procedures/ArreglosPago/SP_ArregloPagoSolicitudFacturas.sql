@@ -26,42 +26,51 @@ BEGIN
 				SET @inFechaOperacion = GETDATE();
 			END
 
-		DECLARE @propiedadAPActivo INT;
-		SELECT @propiedadAPActivo = [P].[ID]
-		FROM [dbo].[Propiedad] AS [P]
-			INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-			ON [PXCC].[IDPropiedad] = [P].[ID]
-			INNER JOIN [dbo].[PropiedadXCCArregloPago] AS [PXAP]
-			ON [PXAP].[IDPropiedadXCC] = [PXCC].[ID]
-		WHERE [P].[Lote] = @inPropiedadLote
-		AND [P].[Lote] IS NOT NULL
-		AND [PXCC].[FechaInicio] <= @inFechaOperacion
-		AND [PXCC].[FechaFin] > @inFechaOperacion
-		AND [PXAP].[Activo] = 1;
-
-		IF (@inPropiedadLote IS NOT NULL) AND (@propiedadAPActivo IS NULL)
+		IF (@inPropiedadLote IS NOT NULL)
 			BEGIN
-				/* Show all "facturas pendientes vencidas" "no anuladas" 
-				"no asociadas a arreglos de pago" of Property using @inPropiedadLote */
-				SELECT 
-					[F].[Fecha] AS [Fecha],
-					[F].[FechaVencimiento] AS [FechaVencimiento],
-					[F].[MontoOriginal] AS [Subtotal],
-					([F].[MontoPagar] - [F].[MontoOriginal]) AS [Morosidades],
-					[F].[MontoPagar] AS [Total]
-				FROM [dbo].[Factura] AS [F]
-					INNER JOIN [dbo].[Propiedad] AS [P]
-					ON [P].[ID] = [F].[IDPropiedad]
+				DECLARE @idPropiedad INT;
+				SELECT @idPropiedad = [P].[ID]
+				FROM [dbo].[Propiedad] AS [P]
 				WHERE [P].[Lote] = @inPropiedadLote
-				AND [P].[Activo] = 1
-				AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
-				AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaOperacion)
-				AND [F].[IDComprobantePago] IS NULL
-				AND [F].[PlanArregloPago] = 0
-				AND [F].[Activo] = 1
-				ORDER BY [F].[Fecha];
+				AND [P].[Activo] = 1;
 
-				SET @outResultCode = 5200; /* OK */
+				DECLARE @propiedadAPActivo INT;
+				SELECT @propiedadAPActivo = [P].[ID]
+				FROM [dbo].[Propiedad] AS [P]
+					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+					ON [PXCC].[IDPropiedad] = [P].[ID]
+					INNER JOIN [dbo].[PropiedadXCCArregloPago] AS [PXAP]
+					ON [PXAP].[IDPropiedadXCC] = [PXCC].[ID]
+				WHERE [P].[ID] = @idPropiedad
+				AND [P].[ID] IS NOT NULL
+				AND [PXCC].[FechaInicio] <= @inFechaOperacion
+				AND [PXCC].[FechaFin] > @inFechaOperacion
+				AND [PXAP].[Activo] = 1;
+
+
+				IF (@propiedadAPActivo IS NULL) AND (@idPropiedad IS NOT NULL)
+					BEGIN
+						/* Show all "facturas pendientes vencidas" "no anuladas" 
+						"no asociadas a arreglos de pago" of Property using @inPropiedadLote */
+						SELECT 
+							[F].[Fecha] AS [Fecha],
+							[F].[FechaVencimiento] AS [FechaVencimiento],
+							[F].[MontoOriginal] AS [Subtotal],
+							([F].[MontoPagar] - [F].[MontoOriginal]) AS [Morosidades],
+							[F].[MontoPagar] AS [Total]
+						FROM [dbo].[Factura] AS [F]
+							INNER JOIN [dbo].[Propiedad] AS [P]
+							ON [P].[ID] = [F].[IDPropiedad]
+						WHERE [P].[ID] = @idPropiedad
+						AND [P].[Activo] = 1
+						AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
+						AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaOperacion)
+						AND [F].[IDComprobantePago] IS NULL
+						AND [F].[PlanArregloPago] = 0
+						AND [F].[Activo] = 1
+						ORDER BY [F].[Fecha];
+						SET @outResultCode = 5200; /* OK */
+					END;
 			END;
 		ELSE
 			BEGIN

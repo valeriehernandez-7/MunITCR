@@ -26,52 +26,74 @@ BEGIN
 				SET @inFechaOperacion = GETDATE();
 			END
 
-		DECLARE @propiedadAPActivo INT;
-		SELECT @propiedadAPActivo = [P].[ID]
-		FROM [dbo].[Propiedad] AS [P]
-			INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
-			ON [PXCC].[IDPropiedad] = [P].[ID]
-			INNER JOIN [dbo].[PropiedadXCCArregloPago] AS [PXAP]
-			ON [PXAP].[IDPropiedadXCC] = [PXCC].[ID]
-		WHERE [P].[Lote] = @inPropiedadLote
-		AND [P].[Lote] IS NOT NULL
-		AND [PXCC].[FechaInicio] <= @inFechaOperacion
-		AND [PXCC].[FechaFin] > @inFechaOperacion
-		AND [PXAP].[Activo] = 1;
-
-
-		IF (@inPropiedadLote IS NOT NULL) AND (@propiedadAPActivo IS NULL)
+		IF (@inPropiedadLote IS NOT NULL)
 			BEGIN
-				/* Get the total ammount from pending bills with more than 1 month of delay */
-				DECLARE @MontoPagarAP MONEY;
-				SET @MontoPagarAP = (
-					SELECT SUM([F].[MontoPagar]) AS [Monto]
-					FROM [dbo].[Factura] AS [F]
-						INNER JOIN [dbo].[Propiedad] AS [P]
-						ON [P].[ID] = [F].[IDPropiedad]
-					WHERE 
-						DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
-						AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaOperacion)
-						AND [F].[IDComprobantePago] IS NULL
-						AND [F].[PlanArregloPago] = 0
-						AND [F].[Activo] = 1
-						AND [P].[Lote] = @inPropiedadLote
-						AND [P].[Activo] = 1
-				);
+				DECLARE 
+					@idPropiedad INT,
+					@fechaRegistroPropiedad DATE;
+				SELECT 
+					@idPropiedad = [P].[ID],
+					@fechaRegistroPropiedad = [P].[FechaRegistro]
+				FROM [dbo].[Propiedad] AS [P]
+				WHERE [P].[Lote] = @inPropiedadLote
+				AND [P].[Activo] = 1;
 
-				IF (@MontoPagarAP IS NOT NULL)
+				DECLARE @fechaFormalizacionAP DATE;
+				SET @fechaFormalizacionAP = 
+					DATEFROMPARTS(
+						DATEPART(YEAR, @inFechaOperacion), 
+						DATEPART(MONTH, @inFechaOperacion), 
+						DATEPART(DAY, @fechaRegistroPropiedad)
+					);
+				SET @fechaFormalizacionAP = DATEADD(MONTH, 1, @fechaFormalizacionAP);
+
+				DECLARE @propiedadAPActivo INT;
+				SELECT @propiedadAPActivo = [P].[ID]
+				FROM [dbo].[Propiedad] AS [P]
+					INNER JOIN [dbo].[PropiedadXConceptoCobro] AS [PXCC]
+					ON [PXCC].[IDPropiedad] = [P].[ID]
+					INNER JOIN [dbo].[PropiedadXCCArregloPago] AS [PXAP]
+					ON [PXAP].[IDPropiedadXCC] = [PXCC].[ID]
+				WHERE [P].[ID] = @idPropiedad
+				AND [P].[ID] IS NOT NULL
+				AND [PXCC].[FechaInicio] <= @inFechaOperacion
+				AND [PXCC].[FechaFin] > @inFechaOperacion
+				AND [PXAP].[Activo] = 1;
+
+
+				IF (@propiedadAPActivo IS NULL) AND (@idPropiedad IS NOT NULL) AND (@fechaFormalizacionAP IS NOT NULL)
 					BEGIN
-						SELECT 
-							[TI].[PlazoMeses] AS [PlazoMeses],
-							([TI].[TasaInteresAnual] * 100) AS [TasaInteresAnual],
-							(ROUND(((@MontoPagarAP / ((1 - (POWER((1 + ([TI].[TasaInteresAnual] / ((360 * 12) / 365))), -[TI].[PlazoMeses]))) / (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))))), 2)) AS [Cuota],
-							@MontoPagarAP AS [Saldo],
-							(ROUND((@MontoPagarAP * (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))), 2)) AS [Intereses],
-							(ROUND(((ROUND(((@MontoPagarAP / ((1 - (POWER((1 + ([TI].[TasaInteresAnual] / ((360 * 12) / 365))), -[TI].[PlazoMeses]))) / (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))))), 2)) - (ROUND((@MontoPagarAP * (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))), 2))), 2)) AS [Amortizacion],
-							@inFechaOperacion AS [FechaFormalizacion],
-							DATEADD(MONTH, [TI].[PlazoMeses], @inFechaOperacion) AS [FechaVencimiento]
-						FROM [dbo].[TasaInteres] AS [TI];
-						SET @outResultCode = 5200; /* OK */
+						/* Get the total ammount from pending bills with more than 1 month of delay */
+						DECLARE @MontoPagarAP MONEY;
+						SET @MontoPagarAP = (
+							SELECT SUM([F].[MontoPagar]) AS [Monto]
+							FROM [dbo].[Factura] AS [F]
+								INNER JOIN [dbo].[Propiedad] AS [P]
+								ON [P].[ID] = [F].[IDPropiedad]
+							WHERE 
+								DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
+								AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaOperacion)
+								AND [F].[IDComprobantePago] IS NULL
+								AND [F].[PlanArregloPago] = 0
+								AND [F].[Activo] = 1
+								AND [P].[ID] = @idPropiedad
+								AND [P].[Activo] = 1
+						);
+
+						IF (@MontoPagarAP IS NOT NULL)
+							BEGIN
+								SELECT 
+									[TI].[PlazoMeses] AS [PlazoMeses],
+									([TI].[TasaInteresAnual] * 100) AS [TasaInteresAnual],
+									(ROUND(((@MontoPagarAP / ((1 - (POWER((1 + ([TI].[TasaInteresAnual] / ((360 * 12) / 365))), -[TI].[PlazoMeses]))) / (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))))), 2)) AS [Cuota],
+									@MontoPagarAP AS [Saldo],
+									(ROUND((@MontoPagarAP * (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))), 2)) AS [Intereses],
+									(ROUND(((ROUND(((@MontoPagarAP / ((1 - (POWER((1 + ([TI].[TasaInteresAnual] / ((360 * 12) / 365))), -[TI].[PlazoMeses]))) / (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))))), 2)) - (ROUND((@MontoPagarAP * (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))), 2))), 2)) AS [Amortizacion],
+									@fechaFormalizacionAP AS [FechaFormalizacion],
+									DATEADD(MONTH, [TI].[PlazoMeses], @fechaFormalizacionAP) AS [FechaVencimiento]
+								FROM [dbo].[TasaInteres] AS [TI];
+								SET @outResultCode = 5200; /* OK */
+							END;
 					END;
 			END;
 		ELSE

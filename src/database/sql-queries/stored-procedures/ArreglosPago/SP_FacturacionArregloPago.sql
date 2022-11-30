@@ -61,7 +61,6 @@ BEGIN
 						AND [PXCC].[FechaInicio] <= @inFechaOperacion
 						AND [PXCC].[FechaFin] >= @inFechaOperacion
 						AND [PXCCAP].[Activo] = 1
-						GROUP BY [P].[ID]
 						ORDER BY [P].[ID];
 					END;
 				ELSE
@@ -83,7 +82,6 @@ BEGIN
 						AND [PXCC].[FechaInicio] <= @inFechaOperacion
 						AND [PXCC].[FechaFin] >= @inFechaOperacion
 						AND [PXCCAP].[Activo] = 1
-						GROUP BY [P].[ID]
 						ORDER BY [P].[ID];
 					END;
 				
