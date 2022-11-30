@@ -180,6 +180,7 @@ export const ArregloPagoFormalizacion=  async (req, res) => {
                     .input('inAmortizacion', sql.Money, amortizacion)
                     .input('inFechaFormalizacion', sql.Date, fechaForm)
                     .input('inFechaVencimiento', sql.Date, FechaFin)
+                    .input('inFechaOperacion', sql.Date, null)
                     .output('outResultCode', sql.Int)
                     .execute('SP_ArregloPagoFormalizacion');  
         console.log(result.output.outResultCode)                  
