@@ -195,7 +195,7 @@ export const error=  async (req, res) => {
     const result= await pool.request()
                 .input('inEventType', sql.VARCHAR(8),tipo)
                 .input('inEntityType', sql.VARCHAR(128),entidad)
-                .input('inFechaInicial', sql.Date,fechaI)
+                .input('inFechaInicial', sql.Date,'2022-08-31')
                 .input('inFechaFinal', sql.Date,fechaF)
                 .output('outResultCode', sql.Int)
                 .execute('SP_ArregloPagoFormalizacion');
@@ -297,7 +297,7 @@ export const ArregloPagoSolicitud =  async (req, res) => {
     var lote = req.query.lote;
     const result= await pool.request()
                     .input('inPropiedadLote', sql.VARCHAR(32),lote)
-                    .input('inFechaOperacion', sql.DATE,null)
+                    .input('inFechaOperacion', sql.DATE,'2022-08-31')
                     .output('outResultCode', sql.Int).
                     execute('SP_ArregloPagoSolicitud');
         res.json(result.recordset);    
@@ -308,7 +308,7 @@ export const ArregloPagoSolicitudFacturas =  async (req, res) => {
     var lote = req.query.lote;
     const result= await pool.request()
                     .input('inPropiedadLote', sql.VARCHAR(32),lote)
-                    .input('inFechaOperacion', sql.DATE,null)
+                    .input('inFechaOperacion', sql.DATE,'2022-08-31')
                     .output('outResultCode', sql.Int).
                     execute('SP_ArregloPagoSolicitudFacturas');
         res.json(result.recordset);    
