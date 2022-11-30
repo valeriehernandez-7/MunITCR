@@ -30,9 +30,11 @@ $(document).ready(function(){
       //se debe cambiar el otro boton
       if (valor==1)
         tabla+= "<td>"+ boton + boton2 + "</td></tr>"
-      else
-        var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"del("+ Propietario +"," + Propiedad +"\');\" >"
+      else{
+        var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"del("+ Propietario +",\'" + Propiedad +"\');\" >"
         tabla+= "<td>"+ boton + boton2 + "</td></tr>"
+      }
+        
       $("#tablaItems ").append(tabla);
     }
 
@@ -75,7 +77,7 @@ function del(nombre,lote){
   var ip = (new URL(location.href)).searchParams.get('ip')
   var url = "http://localhost:8000/DeletePersonaXPropiedad"
   body = {
-    "user": nombre,
+    "id": nombre,
     "lote": lote,
     "uss": uss,
     "ip": ip
@@ -87,6 +89,7 @@ function del(nombre,lote){
   };
   fetch(url, options).then(response => response.json())
   .then(response => {
+    console.log(response)
     if(response == 5200){
       alert("Se eliminó la relación")
       location.replace('./listaPerXProp.html?uss='+uss+"&ip="+ip);

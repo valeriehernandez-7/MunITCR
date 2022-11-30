@@ -27,9 +27,11 @@ $(document).ready(function(){
       //se debe cambiar el otro boton
       if (valor==1)
         tabla+= "<td>"+ boton + boton2 + "</td></tr>"
-      else
-        boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"del(\'"+ Propietario +"\'," + Propiedad +"\');\" >"
+      else{
+        boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"del(\'"+ Propietario +"\',\'" + Propiedad +"\');\" >"
         tabla+= "<td>"+ boton + boton2 + "</td></tr>"
+      }
+        
       $("#tablaItems ").append(tabla);
     }
 
