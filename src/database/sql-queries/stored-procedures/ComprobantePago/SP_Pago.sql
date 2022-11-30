@@ -78,6 +78,7 @@ BEGIN
 							ON [P].[ID] = [F].[IDPropiedad]
 						WHERE [P].[ID] = @idPropiedad 
 						AND [F].[IDComprobantePago] IS NULL 
+						AND [F].[PlanArregloPago] = 0
 						AND [F].[Activo] = 1
 						ORDER BY [F].[Fecha];
 

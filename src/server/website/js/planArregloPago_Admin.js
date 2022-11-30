@@ -33,7 +33,7 @@ function cant(){
 
       var tabla = "<tr><td> ";
       tabla += plazo + "</td><td>" + tasa + "</td><td>" + cuota + "</td>" 
-      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicar \" onclick=\"solicitar("+ plazo +"," + tasa +","+ cuota + ","+ lote +","+ total +","+ intereses +","+ amortizacion +",\'"+ fecha + "\',\'" + fin+"\');\" >"
+      var boton = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Solicitar \" onclick=\"solicitar("+ plazo +"," + tasa +","+ cuota + ","+ lote +","+ total +","+ intereses +","+ amortizacion +",\'"+ fecha + "\',\'" + fin+"\');\" >"
       
       tabla+= "<td>"+ boton + "</td></tr>"
       table.append(tabla);
