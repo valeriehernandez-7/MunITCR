@@ -1,31 +1,45 @@
+
 $( document ).ready(function() {
     var lote = (new URL(location.href)).searchParams.get('lote')   
-    
+    var idFact = (new URL(location.href)).searchParams.get('idFact')
+    var body = {
+        idFact : idFact
+    }
     const options = {
-      method: "get",
+      method: "post",
       headers: {"Content-Type": "application/json"},
+      body : JSON.stringify(body)
+
     };
-    console.log(options)
-    var url = "http://localhost:8000/ReadFacturaPendientePlanArregloPagoPropiedadIn?lote="+lote
+    var url = "http://localhost:8000/ReadDetalleCCXFacturaIn"
     fetch(url, options).then(response => response.json())
     .then(response => {
-      $("#tableBody > tbody").empty();
-      for (var i = 0; i < response[1].length; i++) {
-        var detalle = response[1][i];      
-        console.log(detalle)
-        
-        var ConceptoCobro = detalle.ConceptoCobro
-        var Asociacion = detalle.Asociacion.substring(0,10);
-        var Desasociacion = detalle.Desasociacion;        
-        var PeriodoMontoCC = detalle.PeriodoMontoCC;
-        var TipoMontoCC = detalle.TipoMontoCC ;
-        var TipoConceptoCobro = detalle.TipoConceptoCobro ;
-        var MontoConceptoCobro = detalle.MontoConceptoCobro ;
-        var tabla = "<tr><td> ";
-        var idFact = detalle.IDFactura;
-        var boton = "<button type='button' class='btn btn-primary' onclick='detalles("+ lote + "," + idFact +")'>Ver</button>";
-        tabla +=  FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total +"</td><td>" + boton + "</td></tr>"; 
-        $("#tablaItems ").append(tabla);
+        console.log(response)
+        var deta = response[0]
+        var Fecha = deta.Fecha.substring(0,10);
+        var FechaVencimiento = deta.FechaVencimiento.substring(0,10);
+        var Subtotal = deta.Subtotal
+        var Morosidades = deta.Morosidades
+        var Total = deta.Total
+        var tab = "<tr><td> ";
+        tab +=  Fecha + "</td><td>" + FechaVencimiento + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total + "</td></tr>"; 
+        $("#tablePlans ").append(tab);
+        for (var i = 0; i < response[1].length; i++) {
+            var detalle = response[1][i];      
+            console.log(detalle)
+            
+            var ConceptoCobro = detalle.ConceptoCobro
+            var Asociacion = detalle.Asociacion.substring(0,10);
+            var Desasociacion = detalle.Desasociacion;        
+            var PeriodoMontoCC = detalle.PeriodoMontoCC;
+            var TipoMontoCC = detalle.TipoMontoCC ;
+            var TipoConceptoCobro = detalle.TipoConceptoCobro ;
+            var MontoConceptoCobro = detalle.MontoConceptoCobro ;
+            var idFact = detalle.IDFactura;
+            var boton = "<button type='button' class='btn btn-primary' onclick='detalles("+ lote + "," + idFact +")'>Ver</button>";
+            var tabla = "<tr><td> ";
+            tabla +=  FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total +"</td><td>" + boton + "</td></tr>"; 
+            $("#tableBills ").append(tabla);
       }}).catch(e => {
         console.log(e);
       });
