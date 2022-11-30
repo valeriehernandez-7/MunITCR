@@ -29,6 +29,7 @@ BEGIN
                 @ActualProp INT,
                 @ActualAP INT,
                 @ActualCC INT,
+                @ActualMap INT,
                 @Cuota Money,
                 @IDMin INT,
                 @IDMax INT;
@@ -69,29 +70,19 @@ BEGIN
                 BEGIN
                     SELECT @ActualProp = [TMP].[IDPropiedad],
                         @ActualAP = [TMP].[IDPropiedadAP],
-                        @ActualCC = [TMP].[IDCC]
+                        @ActualCC = [TMP].[IDCC],
+                        @ActualMap = [MAP].[ID]
                     FROM @TMPPropiedadesAP AS TMP
                     WHERE @IDMIN = [TMP].[ID]
 
+                    -- obtención de la cuota a pagar en el arreglo de pago
                     SELECT @Cuota =(
                         SELECT [MAP].[MontoCuota]
                         FROM [dbo].[MovimientoArregloPago] AS MAP
                         WHERE [MAP].[IDPropiedadXCCArregloPago] = @ActualAP
                     )
-
-                    INSERT INTO [dbo].[PropiedadXConceptoCobro](
-                        IDPropiedad,
-                        IDConceptoCobro,
-                        FechaInicio,
-                        FechaFin
-                    )VALUES(
-                        @ActualProp,
-                        @IDConceptoCobro,
-                        @inFechaOperacion,
-                        DATEADD(month,'1',@inFechaOperacion)
-                    )
-
                     
+                    --Update del monto a pagar en la factura
                     UPDATE [dbo].[Factura]
                         SET [MontoOriginal] = [MontoOriginal] + @Cuota,
                             [MontoPagar] = [MontoPagar] + @Cuota
@@ -99,6 +90,7 @@ BEGIN
                             IDPropiedad = @ActualProp AND
                             Fecha = @inFechaOperacion
 
+                    --insert de un nuevo detalle CC por AP a la factura
                     INSERT INTO [dbo].[DetalleCC](
                         [IDFactura],
                         [IDPropiedadXConceptoCobro],
@@ -109,6 +101,15 @@ BEGIN
                             @Cuota
                         );
 
+                    -- insert del detalle CC arreglo pago
+                    INSERT INTO [dbo].[DetalleCCArregloPago](
+                        [IDDetalleCC],
+                        [IDMovimientoArregloPago],
+                        )VALUES(
+                            SCOPE_IDENTITY(),
+                            @ActualMap
+                        );
+                    -- Update del saldo del arreglo de pago
                     UPDATE [dbo].[PropiedadXCCArregloPago] 
                         SET [MontoSaldo] =(
                             [MontoSaldo] - @Cuota --ESTO SE PUEDE HACER? LA VERDAD NO ESTOY SEGURO XD
