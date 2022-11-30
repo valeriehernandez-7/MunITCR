@@ -15,9 +15,9 @@ $( document ).ready(function() {
     fetch(url, options).then(response => response.json())
     .then(response => {
         console.log(response)
-        var deta = response[0]
+        var deta = response[0][0]
         var Fecha = deta.Fecha.substring(0,10);
-        var FechaVencimiento = deta.FechaVencimiento.substring(0,10);
+        var FechaVencimiento = deta.FechaVencimiento.substring(0,10) ;
         var Subtotal = deta.Subtotal
         var Morosidades = deta.Morosidades
         var Total = deta.Total
@@ -38,7 +38,7 @@ $( document ).ready(function() {
             var idFact = detalle.IDFactura;
             var boton = "<button type='button' class='btn btn-primary' onclick='detalles("+ lote + "," + idFact +")'>Ver</button>";
             var tabla = "<tr><td> ";
-            tabla +=  FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total +"</td><td>" + boton + "</td></tr>"; 
+            tabla +=  ConceptoCobro + "</td><td>" + Asociacion + "</td><td>" + Desasociacion + "</td><td>" + PeriodoMontoCC + "</td><td>" + TipoMontoCC +"</td><td>" + TipoConceptoCobro +"</td><td>"+ MontoConceptoCobro + "</td></tr>"; 
             $("#tableBills ").append(tabla);
       }}).catch(e => {
         console.log(e);
