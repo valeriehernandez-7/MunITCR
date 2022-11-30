@@ -150,7 +150,8 @@ BEGIN
 									WHERE [F].[Activo] = 1
 									AND [DCC].[Activo] = 1
 									AND [PXCC].[FechaFin] IS NULL
-									GROUP BY [F].[ID], [PXCC].[ID], ([F].[MontoOriginal] * [CCIM].[MontoPorcentual]);
+									GROUP BY [F].[ID], [PXCC].[ID], ([F].[MontoOriginal] * [CCIM].[MontoPorcentual])
+									ORDER BY [F].[ID];
 
 									/*  */
 									UPDATE [dbo].[Factura]
@@ -185,7 +186,8 @@ BEGIN
 									FROM @TMPFacturaVencida AS [TFV]
 										INNER JOIN [dbo].[Factura] AS [F]
 										ON [F].[ID] = [TFV].[IDFactura]
-									WHERE [F].[Activo] = 1;
+									WHERE [F].[Activo] = 1
+									ORDER BY [F].[ID];
 
 									/*  */
 									INSERT INTO [dbo].[DetalleCC] (
@@ -194,7 +196,7 @@ BEGIN
 										[Monto]
 									) SELECT
 										[F].[ID],
-										[PXCC].[ID],
+										MAX([PXCC].[ID]),
 										([F].[MontoOriginal] * [CCIM].[MontoPorcentual]) AS [DCCMonto]
 									FROM @TMPFacturaVencida AS [TFV]
 										INNER JOIN [dbo].[Factura] AS [F]
@@ -207,7 +209,8 @@ BEGIN
 										ON [CCIM].[IDCC] = [CC].[ID]
 									WHERE [F].[Activo] = 1
 									AND [PXCC].[FechaFin] IS NULL
-									GROUP BY [F].[ID], [PXCC].[ID], ([F].[MontoOriginal] * [CCIM].[MontoPorcentual]);
+									GROUP BY [F].[ID], ([F].[MontoOriginal] * [CCIM].[MontoPorcentual])
+									ORDER BY [F].[ID];
 
 									/*  */
 									UPDATE [dbo].[Factura]
