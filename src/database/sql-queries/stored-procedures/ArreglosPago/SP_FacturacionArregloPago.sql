@@ -22,6 +22,7 @@ BEGIN
 		DECLARE @TMPPropiedadesAP TABLE (
 					[ID] INT IDENTITY(1,1) PRIMARY KEY,
 					[IDPropiedad] INT,
+                    [IDCC] INT,
 					[IDPropiedadAP] INT
 				);
         DECLARE @IDConceptoCobro INT,
@@ -40,9 +41,11 @@ BEGIN
 
         INSERT INTO @TMPPropiedadesAP(
             IDPropiedad,
-            IDPropiedadAP
+            IDPropiedadAP,
+            IDCC
         ) SELECT
                 [P].[ID],
+                [PCCC].[ID],
                 [PAP].[ID]
         FROM [dbo].[Propiedad] AS P
         LEFT JOIN [dbo].[PropiedadXConceptoCobro] AS PXCC
@@ -58,57 +61,61 @@ BEGIN
 
 		BEGIN TRANSACTION [FacturacionArregloPago]
 			/* TRANSACTION LINES */
-
-            WHILE (@IDMin<@IDMax)
+            if (@inFechaOperacion IS NOT NULL AND 
+                DAY(@inFechaOperacion ) = 30 OR 
+                (DAY(@inFechaOperacion ) = 28 AND MONTH(@inFechaOperacion ) = 2 ))
             BEGIN
-                SELECT @ActualProp = [TMP].[IDPropiedad],
-                    @ActualAP = [TMP].[IDPropiedadAP]
-                FROM @TMPPropiedadesAP AS TMP
-                WHERE @IDMIN = [TMP].[ID]
+                WHILE (@IDMin<@IDMax)
+                BEGIN
+                    SELECT @ActualProp = [TMP].[IDPropiedad],
+                        @ActualAP = [TMP].[IDPropiedadAP],
+                        @ActualCC = [TMP].[IDCC]
+                    FROM @TMPPropiedadesAP AS TMP
+                    WHERE @IDMIN = [TMP].[ID]
 
-                SELECT @Cuota =(
-                    SELECT [MAP].[MontoCuota]
-                    FROM [dbo].[MovimientoArregloPago] AS MAP
-                    WHERE [MAP].[IDPropiedadXCCArregloPago] = @ActualAP
-                )
+                    SELECT @Cuota =(
+                        SELECT [MAP].[MontoCuota]
+                        FROM [dbo].[MovimientoArregloPago] AS MAP
+                        WHERE [MAP].[IDPropiedadXCCArregloPago] = @ActualAP
+                    )
 
-                INSERT INTO [dbo].[PropiedadXConceptoCobro](
-                    IDPropiedad,
-                    IDConceptoCobro,
-                    FechaInicio,
-                    FechaFin
-                )VALUES(
-                    @ActualProp,
-                    @IDConceptoCobro,
-                    @inFechaOperacion,
-                    DATEADD(month,'1',@inFechaOperacion)
-                )
-
-                SET @ActualCC = SCOPE_IDENTITY();
-
-                UPDATE [dbo].[Factura]
-                    SET [MontoOriginal] = [MontoOriginal] + @Cuota,
-                        [MontoPagar] = [MontoPagar] + @Cuota
-                    WHERE
-                        IDPropiedad = @ActualProp AND
-                        Fecha = @inFechaOperacion
-                INSERT INTO [dbo].[DetalleCC](
-                    [IDFactura],
-                    [IDPropiedadXConceptoCobro],
-                    [Monto]
+                    INSERT INTO [dbo].[PropiedadXConceptoCobro](
+                        IDPropiedad,
+                        IDConceptoCobro,
+                        FechaInicio,
+                        FechaFin
                     )VALUES(
-                        SCOPE_IDENTITY(),
-                        @ActualCC,
-                        @Cuota
-                    );
+                        @ActualProp,
+                        @IDConceptoCobro,
+                        @inFechaOperacion,
+                        DATEADD(month,'1',@inFechaOperacion)
+                    )
 
-                UPDATE [dbo].[PropiedadXCCArregloPago] 
-                    SET [MontoSaldo] =(
-                        [MontoSaldo]-@Cuota --ESTO SE PUEDE HACER? LA VERDAD NO ESTOY SEGURO XD
-                    )WHERE [ID] = @ActualAP
-                SET @IDMin = @IDMin + 1
+                    
+                    UPDATE [dbo].[Factura]
+                        SET [MontoOriginal] = [MontoOriginal] + @Cuota,
+                            [MontoPagar] = [MontoPagar] + @Cuota
+                        WHERE
+                            IDPropiedad = @ActualProp AND
+                            Fecha = @inFechaOperacion
+
+                    INSERT INTO [dbo].[DetalleCC](
+                        [IDFactura],
+                        [IDPropiedadXConceptoCobro],
+                        [Monto]
+                        )VALUES(
+                            SCOPE_IDENTITY(),
+                            @ActualCC,
+                            @Cuota
+                        );
+
+                    UPDATE [dbo].[PropiedadXCCArregloPago] 
+                        SET [MontoSaldo] =(
+                            [MontoSaldo] - @Cuota --ESTO SE PUEDE HACER? LA VERDAD NO ESTOY SEGURO XD
+                        )WHERE [ID] = @ActualAP
+                    SET @IDMin = @IDMin + 1
+                END
             END
-
 			SET @outResultCode = 5200; /* OK */
 		COMMIT TRANSACTION [FacturacionArregloPago]
 	END TRY
