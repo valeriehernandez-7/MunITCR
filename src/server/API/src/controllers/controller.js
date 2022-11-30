@@ -178,7 +178,7 @@ export const ArregloPagoFormalizacion=  async (req, res) => {
                     .input('inSaldo', sql.Money, saldo)
                     .input('inIntereses', sql.Money, interes)
                     .input('inAmortizacion', sql.Money, amortizacion)
-                    .input('inFechaFormalizacion', sql.Date, fechaForm)
+                    .input('inFechaFormalizacion', sql.Date, '2022-08-31')
                     .input('inFechaVencimiento', sql.Date, FechaFin)
                     .input('inFechaOperacion', sql.Date, null)
                     .output('outResultCode', sql.Int)
