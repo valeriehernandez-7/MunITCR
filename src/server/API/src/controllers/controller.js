@@ -180,7 +180,7 @@ export const ArregloPagoFormalizacion=  async (req, res) => {
                     .input('inAmortizacion', sql.Money, amortizacion)
                     .input('inFechaFormalizacion', sql.Date, '2022-08-31')
                     .input('inFechaVencimiento', sql.Date, FechaFin)
-                    .input('inFechaOperacion', sql.Date, null)
+                    .input('inFechaOperacion', sql.Date, '2022-08-31')
                     .output('outResultCode', sql.Int)
                     .execute('SP_ArregloPagoFormalizacion');  
         console.log(result.output.outResultCode)                  
@@ -195,7 +195,7 @@ export const error=  async (req, res) => {
     const result= await pool.request()
                 .input('inEventType', sql.VARCHAR(8),tipo)
                 .input('inEntityType', sql.VARCHAR(128),entidad)
-                .input('inFechaInicial', sql.Date,'2022-08-31')
+                .input('inFechaInicial', sql.Date,fechaI)
                 .input('inFechaFinal', sql.Date,fechaF)
                 .output('outResultCode', sql.Int)
                 .execute('SP_ArregloPagoFormalizacion');
