@@ -57,7 +57,7 @@ BEGIN
 				WHERE [P].[ID] = @idPropiedad
 				AND [P].[ID] IS NOT NULL
 				AND [PXCC].[FechaInicio] <= @inFechaOperacion
-				AND [PXCC].[FechaFin] > @inFechaOperacion
+				AND [PXCC].[FechaFin] >= @fechaFormalizacionAP
 				AND [PXAP].[Activo] = 1;
 
 

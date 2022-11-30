@@ -13,6 +13,7 @@ GO
 	@proc_param inAmortizacion 
 	@proc_param inFechaFormalizacion 
 	@proc_param inFechaVencimiento 
+	@proc_param inFechaOperacion 
 	@proc_param outResultCode Procedure return value
 	@author <a href="https://github.com/valeriehernandez-7">Valerie M. Hernández Fernández</a>
 	@author <a href="https://github.com/efmz200">Erick F. Madrigal Zavala</a>
@@ -26,6 +27,7 @@ CREATE OR ALTER PROCEDURE [SP_ArregloPagoFormalizacion]
 	@inAmortizacion MONEY,
 	@inFechaFormalizacion DATE,
 	@inFechaVencimiento DATE,
+	@inFechaOperacion DATE,
 	@outResultCode INT OUTPUT
 AS
 BEGIN
@@ -35,6 +37,7 @@ BEGIN
 
 		IF (@inPropiedadLote IS NOT NULL) AND (@inPlazoMeses > 0) AND (@inCuota > 0)
 		AND (@inSaldo > 0) AND (@inIntereses > 0) AND (@inAmortizacion > 0)
+		AND (@inFechaFormalizacion IS NOT NULL) AND (@inFechaVencimiento IS NOT NULL)
 			BEGIN
 				/* Get the PK of the property using @inPropiedadLote */
 				DECLARE @idPropiedad INT;
@@ -62,21 +65,23 @@ BEGIN
 				FROM [dbo].[TasaInteres] AS [TI]
 				WHERE [TI].[PlazoMeses] = @inPlazoMeses;
 
-				/* Date of formalization of the payment arrangement contract */
-				IF (@inFechaFormalizacion IS NULL)
+				/* Operation date of formalization of the payment arrangement contract */
+				IF (@inFechaOperacion IS NULL)
 					BEGIN
-						SET @inFechaFormalizacion = GETDATE();
+						SET @inFechaOperacion = GETDATE();
 					END;
-				
-				/* Expiration date of the payment arrangement contract */
-				IF (@inFechaVencimiento IS NULL)
-					BEGIN
-						SET @inFechaVencimiento = DATEADD(MONTH, @inPlazoMeses, @inFechaFormalizacion);
-					END;
+
+				/* Get the bill expiration date based on system parameters */
+				DECLARE @diasVencimiento INT;
+				SELECT @diasVencimiento = [PI].[Valor]
+				FROM [dbo].[ParametroInteger] AS [PI]
+					INNER JOIN [dbo].[Parametro] AS [PS]
+					ON [PS].[ID] = [PI].[IDParametro]
+				WHERE [PS].[Descripcion] = 'Cantidad de dias para calculo de fecha de vencimiento';
 				
 				IF (@idPropiedad IS NOT NULL) AND (@idCCArregloPago IS NOT NULL)
 				AND (@idTipoMovimientoArregloPago IS NOT NULL) AND (@idTasaInteres IS NOT NULL)
-				AND (@inFechaFormalizacion IS NOT NULL) AND (@inFechaVencimiento IS NOT NULL)
+				AND (@inFechaOperacion IS NOT NULL) AND (@diasVencimiento > 0)
 					BEGIN
 						BEGIN TRANSACTION [createArregloPagoFormalizacion]
 							INSERT INTO [dbo].[PropiedadXConceptoCobro] (
@@ -125,8 +130,8 @@ BEGIN
 								SET [PlanArregloPago] = 1
 							FROM [dbo].[Factura] AS [F]
 							WHERE [F].[IDPropiedad] = @idPropiedad
-							AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaFormalizacion) > 1
-							AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaFormalizacion)
+							AND DATEDIFF(MONTH, [F].[FechaVencimiento], @inFechaOperacion) > 1
+							AND DATEPART(DAY, [F].[FechaVencimiento]) <= DATEPART(DAY, @inFechaOperacion)
 							AND [F].[IDComprobantePago] IS NULL
 							AND [F].[PlanArregloPago] = 0
 							AND [F].[Activo] = 1;

@@ -28,11 +28,24 @@ BEGIN
 
 		IF (@inPropiedadLote IS NOT NULL)
 			BEGIN
-				DECLARE @idPropiedad INT;
-				SELECT @idPropiedad = [P].[ID]
+				DECLARE 
+					@idPropiedad INT,
+					@fechaRegistroPropiedad DATE;
+				SELECT 
+					@idPropiedad = [P].[ID],
+					@fechaRegistroPropiedad = [P].[FechaRegistro]
 				FROM [dbo].[Propiedad] AS [P]
 				WHERE [P].[Lote] = @inPropiedadLote
 				AND [P].[Activo] = 1;
+
+				DECLARE @fechaFormalizacionAP DATE;
+				SET @fechaFormalizacionAP = 
+					DATEFROMPARTS(
+						DATEPART(YEAR, @inFechaOperacion), 
+						DATEPART(MONTH, @inFechaOperacion), 
+						DATEPART(DAY, @fechaRegistroPropiedad)
+					);
+				SET @fechaFormalizacionAP = DATEADD(MONTH, 1, @fechaFormalizacionAP);
 
 				DECLARE @propiedadAPActivo INT;
 				SELECT @propiedadAPActivo = [P].[ID]
@@ -44,11 +57,11 @@ BEGIN
 				WHERE [P].[ID] = @idPropiedad
 				AND [P].[ID] IS NOT NULL
 				AND [PXCC].[FechaInicio] <= @inFechaOperacion
-				AND [PXCC].[FechaFin] > @inFechaOperacion
+				AND [PXCC].[FechaFin] >= @fechaFormalizacionAP
 				AND [PXAP].[Activo] = 1;
 
 
-				IF (@propiedadAPActivo IS NULL) AND (@idPropiedad IS NOT NULL)
+				IF (@propiedadAPActivo IS NULL) AND (@idPropiedad IS NOT NULL) AND (@fechaFormalizacionAP IS NOT NULL)
 					BEGIN
 						/* Show all "facturas pendientes vencidas" "no anuladas" 
 						"no asociadas a arreglos de pago" of Property using @inPropiedadLote */
