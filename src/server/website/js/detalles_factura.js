@@ -59,9 +59,9 @@ function ret() {
         location.replace('./facturas_propiedad_NoAdmin.html?uss='+uss+"&ip="+ip + "&lote="+lote);
     }
     if(opcion == 2){
-        location.replace('./facturas_pendiente_AP.html?uss='+uss+"&ip="+ip + "&lote="+lote);
+        location.replace('./facturas_pendientes_AP.html?uss='+uss+"&ip="+ip + "&lote="+lote);
     }
     if(opcion == 3){
-        location.replace('./acturas_pagadas_AP.html?uss='+uss+"&ip="+ip + "&lote="+lote);
+        location.replace('./facturas_pagadas_AP.html?uss='+uss+"&ip="+ip + "&lote="+lote);
     }    
   }
