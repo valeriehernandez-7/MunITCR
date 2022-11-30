@@ -52,8 +52,7 @@ export const ReadUsuario = async (req, res) => {
 
 
 export const ReadPersonaXPropiedad = async (req, res) => {
-    var opcion =req.query.opcion
-    console.log(opcion)
+    var opcion =req.query.opcion 
     const pool= await getConection()
     const result= await pool.request().
                     input('inEsAsociacion', sql.Bit, parseInt(opcion)).
@@ -125,8 +124,7 @@ export const ReadPropiedadLote=  async (req, res) => {
 
 export const ReadPropiedadXUsuario=  async (req, res) => {
     const pool= await getConection() 
-    var opcion =req.query.opcion
-    console.log(opcion)
+    var opcion =req.query.opcion 
     const result= await pool.request()
                     .input('inEsAsociacion', sql.Bit, parseInt(opcion))
                     .output('outResultCode', sql.Int)
@@ -140,8 +138,7 @@ export const ReadFacturaPagadaPropiedadIn=  async (req, res) => {
     const result= await pool.request().
                     input('inPropiedadLote', sql.VARCHAR(32), lote).
                     output('outResultCode', sql.Int).
-                    execute('SP_ReadFacturaPagadaPropiedadIn');
-                    console.log(result)
+                    execute('SP_ReadFacturaPagadaPropiedadIn'); 
         res.json(result.recordset);   
 } 
 
@@ -151,8 +148,7 @@ export const ReadFacturaPagadaPlanArregloPagoPropiedadIn=  async (req, res) => {
     const result= await pool.request().
                     input('inPropiedadLote', sql.VARCHAR(32), lote).
                     output('outResultCode', sql.Int).
-                    execute('SP_ReadFacturaPagadaPlanArregloPagoPropiedadIn');
-                    console.log(result)
+                    execute('SP_ReadFacturaPagadaPlanArregloPagoPropiedadIn'); 
         res.json(result.recordset);   
 }
 
@@ -162,15 +158,13 @@ export const ReadFacturaPendientePlanArregloPagoPropiedadIn=  async (req, res) =
     const result= await pool.request().
                     input('inPropiedadLote', sql.VARCHAR(32), lote).
                     output('outResultCode', sql.Int).
-                    execute('SP_ReadFacturaPendientePlanArregloPagoPropiedadIn');
-                    console.log(result)
+                    execute('SP_ReadFacturaPendientePlanArregloPagoPropiedadIn'); 
         res.json(result.recordset);   
 }
 
 export const ArregloPagoFormalizacion=  async (req, res) => {
     const pool= await getConection() 
-    const {lote,plazo,cuota,saldo,interes,amortizacion,fechaForm,FechaFin} = req.body;
-    console.log(lote,plazo,cuota,saldo,interes,amortizacion,fechaForm,FechaFin)
+    const {lote,plazo,cuota,saldo,interes,amortizacion,fechaForm,FechaFin} = req.body; 
     const result= await pool.request()
                     .input('inPropiedadLote', sql.VARCHAR(32), lote)
                     .input('inPlazoMeses', sql.INT, plazo)
@@ -182,24 +176,20 @@ export const ArregloPagoFormalizacion=  async (req, res) => {
                     .input('inFechaVencimiento', sql.Date, FechaFin)
                     .input('inFechaOperacion', sql.Date, '2022-08-31')
                     .output('outResultCode', sql.Int)
-                    .execute('SP_ArregloPagoFormalizacion');  
-        console.log(result.output.outResultCode)                  
+                    .execute('SP_ArregloPagoFormalizacion');                
         res.json(result.output.outResultCode);   
 } 
 
 export const error=  async (req, res) => {
     const pool= await getConection()
-    const {tipo,entidad,fechaI,fechaF} = req.body;
-    console.log(tipo,entidad,fechaI,fechaF)
-    console.log(typeof fechaF)
+    const {tipo,entidad,fechaI,fechaF} = req.body; 
     const result= await pool.request()
                 .input('inEventType', sql.VARCHAR(8),tipo)
                 .input('inEntityType', sql.VARCHAR(128),entidad)
                 .input('inFechaInicial', sql.Date,fechaI)
                 .input('inFechaFinal', sql.Date,fechaF)
                 .output('outResultCode', sql.Int)
-                .execute('SP_ArregloPagoFormalizacion');
-        console.log(result)
+                .execute('SP_ArregloPagoFormalizacion'); 
         res.json(result.recordset);    
 }
 
@@ -209,8 +199,7 @@ export const ReadMovimientoConsumoAgua=  async (req, res) => {
     const result= await pool.request().
                     input('inPropiedadLote', sql.VARCHAR(32), lote).
                     output('outResultCode', sql.Int).
-                    execute('SP_ReadMovimientoConsumoAgua');
-                    console.log(result)
+                    execute('SP_ReadMovimientoConsumoAgua'); 
         res.json(result.recordset);   
 } 
 
@@ -221,8 +210,7 @@ export const ReadFacturaPendientePropiedadIn=  async (req, res) => {
     if (cant == 0)
     {
         cant = null
-    }
-    console.log(cant,lote)
+    } 
     const result= await pool.request().
                     input('inPropiedadLote', sql.VARCHAR(32), lote).
                     input('inFacturas', sql.Int, cant).
@@ -262,9 +250,7 @@ export const ReadEntityType=  async (req, res) => {
 
 export const ReadEventLogEventInEntityInFechaIn=  async (req, res) => {
     const pool= await getConection()
-    const {tipo,entidad,fechaI,fechaF} = req.body;
-    console.log(tipo,entidad,fechaI,fechaF)
-    console.log(typeof fechaF)
+    const {tipo,entidad,fechaI,fechaF} = req.body; 
     const result= await pool.request()
                 .input('inEventType', sql.VARCHAR(8),tipo)
                 .input('inEntityType', sql.VARCHAR(128),entidad)
@@ -272,7 +258,7 @@ export const ReadEventLogEventInEntityInFechaIn=  async (req, res) => {
                 .input('inFechaFinal', sql.Date,fechaF)
                 .output('outResultCode', sql.Int)
                 .execute('SP_ReadEventLogEventInEntityInFechaIn');
-        console.log(result)
+         
         res.json(result.recordset);    
 }
 
@@ -333,8 +319,7 @@ export const CreatePersona=  async (req, res) => {
 
 export const Pago=  async (req, res) => {
     const pool= await getConection()
-    const {lote,cant,medio} = req.body;
-    console.log(lote,cant,medio)
+    const {lote,cant,medio} = req.body; 
     const result= await pool.request()
                 .input('inPropiedadLote', sql.VARCHAR(32),lote)
                 .input('inFacturas', sql.Int,cant)
@@ -393,8 +378,7 @@ export const CreatePersonaXPropiedad =  async (req, res) => {
 
 export const CreateUsuarioXPropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {iden,lote,fecha,uss,ip} = req.body;
-    console.log(iden,lote,fecha,uss,ip)
+    const {iden,lote,fecha,uss,ip} = req.body; 
     const result= await pool.request() 
                 .input('inUsuarioUsername', sql.VARCHAR(16),iden)
                 .input('inPropiedadLote', sql.VARCHAR(32),lote)
@@ -408,8 +392,7 @@ export const CreateUsuarioXPropiedad =  async (req, res) => {
 
 export const UpdateUsuarioXPropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {oldusr,oldlote,iden,lote,fecha,asoc,uss,ip} = req.body;
-    console.log(oldusr,oldlote,iden,lote,fecha,asoc,uss,ip)
+    const {oldusr,oldlote,iden,lote,fecha,asoc,uss,ip} = req.body; 
     const result= await pool.request() 
                 .input('inOldUsuarioUsername', sql.VARCHAR(16),oldusr)
                 .input('inOldPropiedadLote', sql.VARCHAR(16),oldlote)
@@ -466,8 +449,7 @@ export const ReadPropiedadInPersona =  async (req, res) => {
 
 export const ReadPropiedadXCCArregloPagoPropiedadIn =  async (req, res) => {
     const pool= await getConection()
-    const lote = req.body.lote;
-    console.log(lote)
+    const lote = req.body.lote; 
     const result= await pool.request() 
                 .input('inPropiedadLote', sql.VARCHAR(32),lote)
                 .output('outResultCode', sql.Int)
@@ -477,8 +459,7 @@ export const ReadPropiedadXCCArregloPagoPropiedadIn =  async (req, res) => {
 
 export const ReadDetalleCCXFacturaIn =  async (req, res) => {
     const pool= await getConection()
-    const idFact = req.body.idFact;
-    console.log(idFact)
+    const idFact = req.body.idFact; 
     const result= await pool.request() 
                 .input('inIDFactura', sql.Int,idFact)
                 .output('outResultCode', sql.Int)
@@ -542,8 +523,7 @@ export const UpdatePropiedad =  async (req, res) => {
 
 export const UpdatePersonaXPropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {oldId,oldLote,id,lote,fechaAsoc,fechaDesasoc,uss,ip,opcion} = req.body;
-    console.log(typeof(oldId),oldLote,id,lote,fechaAsoc,fechaDesasoc) 
+    const {oldId,oldLote,id,lote,fechaAsoc,fechaDesasoc,uss,ip,opcion} = req.body; 
     const result= await pool.request()
                 .input('inOldPersonaIdentificacion', sql.VARCHAR(64),oldId)
                 .input('inOldPropiedadLote', sql.VARCHAR(32),oldLote)
@@ -554,15 +534,13 @@ export const UpdatePersonaXPropiedad =  async (req, res) => {
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
-                .execute('SP_UpdatePersonaXPropiedad');
-                console.log(result.output.outResultCode)
+                .execute('SP_UpdatePersonaXPropiedad'); 
         res.json(result.output.outResultCode); 
     } 
 
 export const UpdatePersonaXPropiedadDesasociacion =  async (req, res) => {
     const pool= await getConection()
-    const {id,lote,inFechaRelacionPxP,fechaDesasoc,uss,ip} = req.body;
-    console.log(id,lote,inFechaRelacionPxP,fechaDesasoc) 
+    const {id,lote,inFechaRelacionPxP,fechaDesasoc,uss,ip} = req.body; 
     const result= await pool.request()
                 .input('inPersonaIdentificacion', sql.VARCHAR(64),id)
                 .input('inPropiedadLote', sql.VARCHAR(32),lote)
@@ -570,43 +548,37 @@ export const UpdatePersonaXPropiedadDesasociacion =  async (req, res) => {
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
-                .execute('SP_UpdatePersonaXPropiedadDesasociacion');
-                console.log(result.output.outResultCode)
+                .execute('SP_UpdatePersonaXPropiedadDesasociacion'); 
         res.json(result.output.outResultCode); 
     } 
 
 export const DeletePersona =  async (req, res) => {
     const pool= await getConection()
-    const {id,uss,ip} = req.body;
-    console.log(id)
+    const {id,uss,ip} = req.body; 
     const result= await pool.request()
                 .input('inIdentificacion', sql.VARCHAR(64),id)
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
-                .execute('SP_DeletePersona');
-                console.log(result.output.outResultCode)
+                .execute('SP_DeletePersona'); 
         res.json(result.output.outResultCode); 
     } 
 
 export const DeleteUsuario =  async (req, res) => {
     const pool= await getConection()
-    const {user,uss,ip} = req.body;
-    console.log(user,uss,ip)
+    const {user,uss,ip} = req.body; 
     const result= await pool.request()
                 .input('inUsername', sql.VARCHAR(16),user)
                 .input('inEventUser', sql.VARCHAR(16),uss)
                 .input('inEventIP', sql.VARCHAR(64),ip)
                 .output('outResultCode', sql.Int)
-                .execute('SP_DeleteUsuario');
-                console.log(result.output.outResultCode)
+                .execute('SP_DeleteUsuario'); 
         res.json(result.output.outResultCode); 
     } 
 
 export const DeletePropiedad =  async (req, res) => {
     const pool= await getConection()
-    const {lote,uss,ip} = req.body;
-    console.log(lote,uss,ip)
+    const {lote,uss,ip} = req.body; 
     const result= await pool.request()
                 .input('inPropiedadLote', sql.VARCHAR(32),lote.toString())
                 .input('inEventUser', sql.VARCHAR(16),uss)
