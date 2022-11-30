@@ -615,5 +615,31 @@ export const DeletePropiedad =  async (req, res) => {
         res.json(result.output.outResultCode); 
     } 
 
+export const DeletePersonaXPropiedad =  async (req, res) => {
+    const pool= await getConection()
+    const {id,lote,uss,ip} = req.body;
+    const result= await pool.request()
+                .input('inPersonaIdentificacion', sql.VARCHAR(64),id)
+                .input('inPropiedadLote', sql.VARCHAR(32),lote)
+                .input('inEventUser', sql.VARCHAR(16),uss)
+                .input('inEventIP', sql.VARCHAR(64),ip)
+                .output('outResultCode', sql.Int)
+                .execute('SP_DeletePersonaXPropiedad');
+        res.json(result.output.outResultCode); 
+    } 
+
+export const DeleteUsuarioXPropiedad =  async (req, res) => {
+    const pool= await getConection()
+    const {user,lote,uss,ip} = req.body;
+    const result= await pool.request()
+            .input('inPersonaIdentificacion', sql.VARCHAR(64),user)
+            .input('inPropiedadLote', sql.VARCHAR(32),lote)
+            .input('inEventUser', sql.VARCHAR(16),uss)
+            .input('inEventIP', sql.VARCHAR(64),ip)
+            .output('outResultCode', sql.Int)
+            .execute('SP_DeleteUsuarioXPropiedad');
+    res.json(result.output.outResultCode); 
+} 
+
 
 

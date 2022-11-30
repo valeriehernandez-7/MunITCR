@@ -48,7 +48,9 @@ import {ReadPersona,
         DeletePersona,
         DeleteUsuario,
         DeletePropiedad,
-        Pago
+        Pago,
+        DeletePersonaXPropiedad,
+        DeleteUsuarioXPropiedad
         } from '../controllers/controller'
 
 //lista de personas     
@@ -204,6 +206,12 @@ router.post('/DeleteUsuario',DeleteUsuario)
 
 //Delete propiedad
 router.post('/DeletePropiedad',DeletePropiedad)
+
+//Delete persona/propiedad
+router.post('/DeletePersonaXPropiedad',DeletePersonaXPropiedad)
+
+//Delete usuario/propiedad
+router.post('/DeleteUsuarioXPropiedad',DeleteUsuarioXPropiedad)
 
 
 export default router

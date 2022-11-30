@@ -28,7 +28,8 @@ $(document).ready(function(){
       if (valor==1)
         tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       else
-        tabla+= "<td>"+ boton + "</td></tr>"
+        boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"del(\'"+ Propietario +"\'," + Propiedad +"\');\" >"
+        tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       $("#tablaItems ").append(tabla);
     }
 
@@ -65,17 +66,38 @@ function edit(nombre,lote,fechaI,fechaF){
   }  
   location.replace(url);
 }
-function desasoc2(nombre,lote,fechaI,fechaF){
-  var d = new Date();
 
-  var month = d.getMonth()+1;
-  var day = d.getDate();
-
-  var output = d.getFullYear() + '-' +
-      (month<10 ? '0' : '') + month + '-' +
-      (day<10 ? '0' : '') + day;
-  console.log(output)
+function del(nombre,lote){  
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  var url = "http://localhost:8000/DeleteUsuarioXPropiedad"
+  body = {
+    "user": nombre,
+    "lote": lote,
+    "uss": uss,
+    "ip": ip
   }
+  const options = {
+    method: "post",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body)
+  };
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+    if(response == 5200){
+      alert("Se eliminó la relación")
+      location.replace('./listaUsersXProp.html?uss='+uss+"&ip="+ip);
+    }else{
+      alert("No se pudo eliminar la relación")
+    }
+  }).catch(e => {
+      console.log(e);
+  });
+}
+  
+
+
+
 function desasoc (id,lote){
   var url = "http://localhost:8000/UpdateUsuarioXPropiedad"
   var d = new Date();

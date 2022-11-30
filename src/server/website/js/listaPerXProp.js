@@ -31,7 +31,8 @@ $(document).ready(function(){
       if (valor==1)
         tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       else
-        tabla+= "<td>"+ boton + "</td></tr>"
+        var boton2 = " <input class=\"buttons\" type=\"submit\" id=\"addBtn\" value=\" Eliminar \" onclick=\"del("+ Propietario +"," + Propiedad +"\');\" >"
+        tabla+= "<td>"+ boton + boton2 + "</td></tr>"
       $("#tablaItems ").append(tabla);
     }
 
@@ -68,6 +69,35 @@ function edit(nombre,lote,fechaI,fechaF){
   }  
   location.replace(url);
 }
+
+function del(nombre,lote){  
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip')
+  var url = "http://localhost:8000/DeletePersonaXPropiedad"
+  body = {
+    "user": nombre,
+    "lote": lote,
+    "uss": uss,
+    "ip": ip
+  }
+  const options = {
+    method: "post",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(body)
+  };
+  fetch(url, options).then(response => response.json())
+  .then(response => {
+    if(response == 5200){
+      alert("Se eliminó la relación")
+      location.replace('./listaPerXProp.html?uss='+uss+"&ip="+ip);
+    }else{
+      alert("No se pudo eliminar la relación")
+    }
+  }).catch(e => {
+      console.log(e);
+  });
+}
+
 function desasoc (nombre,lote,fechaI,fechaF){
   var url = "http://localhost:8000/UpdatePersonaXPropiedad"  
   var uss = (new URL(location.href)).searchParams.get('uss')
