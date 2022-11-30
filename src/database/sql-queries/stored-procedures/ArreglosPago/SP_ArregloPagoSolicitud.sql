@@ -35,6 +35,7 @@ BEGIN
 			ON [PXAP].[IDPropiedadXCC] = [PXCC].[ID]
 		WHERE [P].[Lote] = @inPropiedadLote
 		AND [P].[Lote] IS NOT NULL
+		AND [PXCC].[FechaInicio] <= @inFechaOperacion
 		AND [PXCC].[FechaFin] > @inFechaOperacion
 		AND [PXAP].[Activo] = 1;
 

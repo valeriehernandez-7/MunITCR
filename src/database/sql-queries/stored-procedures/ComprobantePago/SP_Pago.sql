@@ -120,6 +120,7 @@ BEGIN
 										INNER JOIN [dbo].[CCInteresMoratorio] AS [CCIM]
 										ON [CCIM].[IDCC] = [CC].[ID]
 									WHERE [DCC].[IDFactura] = [F].[ID]
+									AND [PXCC].[FechaInicio] <= @inFechaOperacion
 									AND [PXCC].[FechaFin] IS NULL;
 									
 									SET @outResultCode = 5200; /* OK */

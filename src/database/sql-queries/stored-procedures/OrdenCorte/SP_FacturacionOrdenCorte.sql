@@ -54,12 +54,12 @@ BEGIN
 					INNER JOIN [dbo].[CCConsumoAgua] AS [CCCA]
 					ON [CCCA].[IDCC] = [CC].[ID]
 				WHERE [P].[Activo] = 1
-				AND [PXCC].[FechaFin] IS NULL
 				AND [F].[PlanArregloPago] = 0
 				AND [F].[IDComprobantePago] IS NULL
 				AND [F].[FechaVencimiento] <= @inFechaOperacion
 				AND [F].[Activo] = 1
 				AND [DCC].[Activo] = 1
+				AND [PXCC].[FechaInicio] <= @inFechaOperacion
 				AND [PXCC].[FechaFin] IS NULL
 				GROUP BY [P].[ID]
 				HAVING COUNT([F].[ID]) > 1
@@ -79,6 +79,7 @@ BEGIN
 					ON [CCR].[IDCC] = [CC].[ID]
 				WHERE [F].[Activo] = 1
 				AND [P].[Activo] = 1
+				AND [PXCC].[FechaInicio] <= @inFechaOperacion
 				AND [PXCC].[FechaFin] IS NULL;
 
 				IF EXISTS (SELECT 1 FROM @TMPFacturaPendiente)

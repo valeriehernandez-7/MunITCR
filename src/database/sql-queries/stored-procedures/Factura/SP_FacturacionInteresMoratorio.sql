@@ -55,6 +55,7 @@ BEGIN
 							ON [P].[ID] = [PXCC].[IDPropiedad]
 						WHERE [DCC].[Activo] = 1
 						AND [PXCC].[IDConceptoCobro] = @idCCInteresMoratorio
+						AND [PXCC].[FechaInicio] <= @inFechaOperacion
 						AND [PXCC].[FechaFin] IS NULL
 						AND [F].[PlanArregloPago] = 0
 						AND [F].[IDComprobantePago] IS NULL
@@ -80,6 +81,7 @@ BEGIN
 							ON [P].[ID] = [PXCC].[IDPropiedad]
 						WHERE [DCC].[Activo] = 1
 						AND [PXCC].[IDConceptoCobro] = @idCCInteresMoratorio
+						AND [PXCC].[FechaInicio] <= @inFechaOperacion
 						AND [PXCC].[FechaFin] IS NULL
 						AND [F].[PlanArregloPago] = 0
 						AND [F].[IDComprobantePago] IS NULL
@@ -149,6 +151,7 @@ BEGIN
 										ON [CCIM].[IDCC] = [CC].[ID]
 									WHERE [F].[Activo] = 1
 									AND [DCC].[Activo] = 1
+									AND [PXCC].[FechaInicio] <= @inFechaOperacion
 									AND [PXCC].[FechaFin] IS NULL
 									GROUP BY [F].[ID], [PXCC].[ID], ([F].[MontoOriginal] * [CCIM].[MontoPorcentual])
 									ORDER BY [F].[ID];
@@ -208,6 +211,7 @@ BEGIN
 										INNER JOIN [dbo].[CCInteresMoratorio] AS [CCIM]
 										ON [CCIM].[IDCC] = [CC].[ID]
 									WHERE [F].[Activo] = 1
+									AND [PXCC].[FechaInicio] <= @inFechaOperacion
 									AND [PXCC].[FechaFin] IS NULL
 									GROUP BY [F].[ID], ([F].[MontoOriginal] * [CCIM].[MontoPorcentual])
 									ORDER BY [F].[ID];

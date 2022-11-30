@@ -73,7 +73,8 @@ BEGIN
 								ON [CC].[ID] = [PXCC].[IDConceptoCobro]
 								INNER JOIN [dbo].[CCReconexion] AS [CCR]
 								ON [CCR].[IDCC] = [CC].[ID]
-							WHERE [PXCC].[FechaFin] IS NULL;
+							WHERE [PXCC].[FechaInicio] <= @inFechaOperacion
+							AND [PXCC].[FechaFin] IS NULL;
 
 							/*  */
 							UPDATE [dbo].[OrdenCorte]
