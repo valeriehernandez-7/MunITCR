@@ -57,7 +57,7 @@ function cant(){
       $("tableBillsBody").remove()
       for (var i = 0; i < response.length; i++) {
         var facturas = response [i];      
-        var Fecha = facturas.Fecha ;
+        var Fecha = facturas.Fecha.substring(0,10);
         var Subtotal = facturas.Subtotal;
         var Morosidades = facturas.Morosidades;
         var saldo = facturas.Total;
