@@ -158,13 +158,6 @@ BEGIN TRY
 			SELECT @fechaOperacion = [O].[Fecha]
 			FROM @TMPOperacion AS [O]
 			WHERE [O].[ID] = @minIDOperacion;
-			
-			/* Mostrar fecha de operacion cada que termine el mes de
-			 operaciones para supervisar el funcionamiento de la simulacion*/
-			IF (@fechaOperacion = EOMONTH(@fechaOperacion))
-				BEGIN
-					SELECT @fechaOperacion AS [Fecha de Operacion];
-				END;
 
 			/* <Personas/Persona> : Procesar personas */
 			IF @data.exist('/Datos/Operacion[@Fecha = sql:variable("@fechaOperacion")]/Personas/Persona') = 1
@@ -688,6 +681,13 @@ BEGIN TRY
 			/* Cancelar aquellos arreglos de pago relacionados a propiedades con 
 			facturas que tengan 1 mes o mas vencidas */
 			--EXECUTE [SP_ArregloPagoRevision] @fechaOperacion, @outResultCode OUTPUT;
+
+			/* Mostrar fecha de operacion cada que termine el mes de
+			 operaciones para supervisar el funcionamiento de la simulacion*/
+			IF (@fechaOperacion = EOMONTH(@fechaOperacion))
+				BEGIN
+					SELECT @fechaOperacion AS [Fecha de Operacion];
+				END;
 
 			/* Avanzar a la siguiente fecha de operacion */
 			SET @minIDOperacion = @minIDOperacion + 1;
