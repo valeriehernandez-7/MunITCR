@@ -90,7 +90,7 @@ BEGIN
 									(ROUND((@MontoPagarAP * (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))), 2)) AS [Intereses],
 									(ROUND(((ROUND(((@MontoPagarAP / ((1 - (POWER((1 + ([TI].[TasaInteresAnual] / ((360 * 12) / 365))), -[TI].[PlazoMeses]))) / (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))))), 2)) - (ROUND((@MontoPagarAP * (([TI].[TasaInteresAnual] / ((360 * 12) / 365)))), 2))), 2)) AS [Amortizacion],
 									@fechaFormalizacionAP AS [FechaFormalizacion],
-									DATEADD(MONTH, [TI].[PlazoMeses], @fechaFormalizacionAP) AS [FechaVencimiento]
+									DATEADD(MONTH, ([TI].[PlazoMeses] - 1), @fechaFormalizacionAP) AS [FechaVencimiento]
 								FROM [dbo].[TasaInteres] AS [TI];
 								SET @outResultCode = 5200; /* OK */
 							END;
