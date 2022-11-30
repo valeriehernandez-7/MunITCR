@@ -23,13 +23,25 @@ $( document ).ready(function() {
         var Subtotal = factura.Subtotal;
         var Morosidades = factura.Morosidades;
         var Total = factura.Total;
+        var idFact = factura.IDFactura;
+        var boton = "<button type='button' class='btn btn-primary' onclick='detalles("+ lote + "," + idFact +")'>Ver</button>";
+
         var tabla = "<tr><td> ";
-        tabla += fecha + "</td><td>" + comprobante + "</td><td>" + MediodePago + "</td><td>" + FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total + "</td></tr>"; 
+        tabla += fecha + "</td><td>" + comprobante + "</td><td>" + MediodePago + "</td><td>" + FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total + "</td><td>" +boton+ "</td></tr>"; 
         $("#tablaItems ").append(tabla);
       }}).catch(e => {
         console.log(e);
       });
   });
+
+function detalles(lote,idFact){
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./detalles_factura.html?uss='+uss+"&ip="+ip+"&lote="+lote+"&idFact="+idFact+"&opcion=1");  
+}
+
+
+
 function add(){
     var uss = (new URL(location.href)).searchParams.get('uss')
     var ip = (new URL(location.href)).searchParams.get('ip') 

@@ -20,12 +20,20 @@ $( document ).ready(function() {
         var Morosidades = factura.Morosidades;
         var Total = factura.Total;
         var tabla = "<tr><td> ";
-        tabla +=  FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total + "</td></tr>"; 
+        var idFact = factura.IDFactura;
+        var boton = "<button type='button' class='btn btn-primary' onclick='detalles("+ lote + "," + idFact +")'>Ver</button>";
+        tabla +=  FechadeFactura + "</td><td>" + FechaVencimientoFactura + "</td><td>" + Subtotal + "</td><td>" + Morosidades + "</td><td>" + Total +"</td><td>" + boton + "</td></tr>"; 
         $("#tablaItems ").append(tabla);
       }}).catch(e => {
         console.log(e);
       });
   });
+
+function detalles(lote,idFact){
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./detalles_factura.html?uss='+uss+"&ip="+ip+"&lote="+lote+"&idFact="+idFact+"&opcion=2");  
+}
 function add(){
     var uss = (new URL(location.href)).searchParams.get('uss')
     var ip = (new URL(location.href)).searchParams.get('ip') 

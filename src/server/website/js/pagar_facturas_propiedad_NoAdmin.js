@@ -23,8 +23,11 @@ $( document ).ready(function() {
         var moro = factura.Morosidades;
         var sub = factura.Subtotal;
         var total = factura.Total
+        var idFact = factura.IDFactura;
+        var boton = "<button type='button' class='btn btn-primary' onclick='detalles("+ lote + "," + idFact +")'>Ver</button>";
+
         var tabla = "<tr><td> ";
-        tabla += fecha + "</td><td>" + fechaV + "</td><td>" + sub + "</td><td>" + moro + "</td><td>" + total + "</td></tr>"; 
+        tabla += fecha + "</td><td>" + fechaV + "</td><td>" + sub + "</td><td>" + moro + "</td><td>" + total + "</td><td>" + boton + "</td></tr>"; 
        
         $("#tablaItems ").append(tabla);
       }}).catch(e => {
@@ -56,6 +59,11 @@ function add(){
     location.replace('./UsersXprop.html?uss='+uss+"&ip="+ip);
 }
 
+function detalles(lote,idFact){
+  var uss = (new URL(location.href)).searchParams.get('uss')
+  var ip = (new URL(location.href)).searchParams.get('ip') 
+  location.replace('./detalles_factura.html?uss='+uss+"&ip="+ip+"&lote="+lote+"&idFact="+idFact+"&opcion=0");  
+}
 
 function pagar(){
   var texto="Seguro que desea pagar las facturas:\n";
