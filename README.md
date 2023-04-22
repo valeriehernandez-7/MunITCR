@@ -19,5 +19,5 @@ Project
 II 2022
 
 ### Students
-- [Valerie M. Hernández Fernández](https://github.com/valeriehernandez-7) - 2020010829
-- [Erick F. Madrigal Zavala](https://github.com/efmz200) - 2018146983
+- [Valerie M. Hernández Fernández](https://github.com/valeriehernandez-7)
+- [Erick F. Madrigal Zavala](https://github.com/efmz200)
